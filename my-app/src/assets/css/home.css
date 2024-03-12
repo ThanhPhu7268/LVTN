@@ -1,0 +1,260 @@
+.body-container {
+    max-width: 1300px;
+    margin: auto;
+}
+
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 60px;
+}
+
+.support-wrap {
+    display: flex;
+    align-items: center;
+}
+
+.support-icon img {
+    width: 60px;
+    height: auto;
+    margin-right: 6px;
+    transition: transform 0.3s ease;
+}
+
+.support-icon img:hover {
+    animation: shake 0.5s;
+}
+
+@keyframes shake {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    10% {
+        transform: rotate(-10deg);
+    }
+
+    20% {
+        transform: rotate(10deg);
+    }
+
+    30% {
+        transform: rotate(-10deg);
+    }
+
+    40% {
+        transform: rotate(10deg);
+    }
+
+    50% {
+        transform: rotate(-10deg);
+    }
+
+    60% {
+        transform: rotate(10deg);
+    }
+
+    70% {
+        transform: rotate(-10deg);
+    }
+
+    80% {
+        transform: rotate(10deg);
+    }
+
+    90% {
+        transform: rotate(-10deg);
+    }
+
+    100% {
+        transform: rotate(0deg);
+    }
+}
+
+.support-content h5 {
+    font-size: 18px;
+    font-weight: normal;
+    margin-bottom: 10px;
+}
+
+.support-content p {
+    font-size: 14px;
+    color: #888888;
+}
+
+/* phan dau tien trong home */
+.btn-text {
+    border: 1px solid #333;
+    color: #010101;
+    display: inline-block;
+    font-size: 16px;
+    line-height: 1;
+    padding: 19px 50px 21px;
+    text-transform: uppercase;
+    text-decoration: none;
+}
+
+.content {
+    margin-left: 160px;
+    max-width: 600px;
+    text-align: center;
+    margin-top: 100px;
+}
+
+.content h1 {
+    font-weight: 800;
+    color: #222;
+}
+
+.content p {
+    margin: 10px 0 30px;
+    font-weight: 500;
+    color: #333;
+}
+
+.content .btn {
+    padding: 15px 80px;
+    font-size: 15px;
+}
+
+/*.btn-text:hover {
+    border-top-right-radius: 100px;
+    border-bottom-left-radius: 100px;
+    background-position: -100% 0;
+    background-image: linear-gradient(45deg, #8b7e8d, #5f5a5c);
+}
+*/
+.btn-text::before {
+    bottom: 0;
+    content: "";
+    height: 100%;
+    left: 0;
+    position: absolute;
+    transition: all .5s cubic-bezier(.645, .045, .355, 1);
+    width: 100%;
+    z-index: -1;
+}
+
+.btn-text::after {
+    background: #cac8cb;
+    left: auto;
+    right: 0;
+    width: 0;
+    bottom: 0;
+    content: "";
+    height: 100%;
+    position: absolute;
+    transition: all .5s cubic-bezier(.645, .045, .355, 1);
+    z-index: -1;
+}
+
+.btn-text:hover::before {
+    transform: translateX(100%);
+}
+
+.btn-text:hover::after {
+    width: 100%;
+    color: white;
+}
+
+.feature-img {
+    width: 100%;
+    margin-right: 120px;
+    bottom: 0;
+    right: 10%;
+}
+
+.contet-container {
+    position: relative;
+    display: flex;
+    margin-bottom: 40px;
+    height: 560px;
+    max-width: 100%;
+    background-color: rgba(131, 126, 127, 0.664);
+    justify-content: space-between;
+}
+
+.animated-text {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 5s ease, transform 5s ease;
+}
+
+.animated-text.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.animated-img {
+    opacity: 0;
+    transform: translateX(100px);
+    transition: opacity 4s ease, transform 4s ease;
+}
+
+.animated-img.show {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* phần title */
+.section-title .h2,
+.section-title h2 {
+    display: inline-block;
+    font-size: 30px;
+    font-weight: 700;
+    margin: 0;
+    position: relative;
+}
+
+.section-title .h2:before,
+.section-title h2:before {
+    background-color: #000;
+    content: "";
+    height: 2px;
+    left: -100px;
+    position: absolute;
+    top: 17px;
+    width: 80px;
+}
+
+.section-title .h2:after,
+.section-title h2:after {
+    background-color: #000;
+    content: "";
+    height: 2px;
+    position: absolute;
+    right: -100px;
+    top: 17px;
+    width: 80px;
+}
+
+.brand-pt {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    justify-content: space-evenly;
+    max-width: 100%;
+}
+
+.brand-pt img {
+    width: auto;
+    flex: 20%;
+    max-width: 210px;
+    /* Điều chỉnh kích thước tùy ý */
+    height: 58px !important;
+    margin-bottom: 10px;
+    padding: 8px 30px;
+    border: 1px solid rgba(224, 224, 224, 1);
+    border-radius: 10px;
+    /* Border ban đầu là trong suốt */
+    transition: border-color 0.3s, box-shadow 0.3s;
+    /* Hiệu ứng transition */
+}
+
+.brand-pt img:hover {
+    border-color: #161515;
+    /* Màu sắc border khi hover */
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+    /* Đổ bóng khi hover */
+}

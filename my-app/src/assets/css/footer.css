@@ -1,0 +1,38 @@
+.footer_good {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2px;
+    margin-bottom: 0;
+    margin: auto;
+    padding: 30px;
+    border-top: 1px solid #444141;
+}
+
+.footer_title {
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+.footer_grid {
+    background-color: #ffffff;
+    padding: 20px;
+}
+
+.footer_title {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.footer_content {
+    margin-top: 10px;
+}
+
+.footer_content p {
+    margin: 5px 0;
+}
+
+.footer_content a {
+    color: rgb(0, 0, 0);
+    text-decoration: none;
+}
