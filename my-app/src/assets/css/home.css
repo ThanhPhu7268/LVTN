@@ -1,5 +1,4 @@
 .body-container {
-    max-width: 1300px;
     margin: auto;
 }
 
@@ -198,18 +197,23 @@
 }
 
 /* phần title */
+.text-center {
+    background-color: #000;
+}
+
 .section-title .h2,
 .section-title h2 {
     display: inline-block;
     font-size: 30px;
     font-weight: 700;
     margin: 0;
+    color: #ffffff;
     position: relative;
 }
 
 .section-title .h2:before,
 .section-title h2:before {
-    background-color: #000;
+    background-color: #ffffff;
     content: "";
     height: 2px;
     left: -100px;
@@ -220,7 +224,7 @@
 
 .section-title .h2:after,
 .section-title h2:after {
-    background-color: #000;
+    background-color: #ffffff;
     content: "";
     height: 2px;
     position: absolute;
@@ -229,32 +233,39 @@
     width: 80px;
 }
 
-.brand-pt {
+/*carousell*/
+.brands-carousel {
+    /* Tùy chỉnh kích thước và định vị của carousel */
+    width: 100%;
+    margin: 0 auto;
+    background-color: #000;
+    /* Thêm border cho carousel */
+    padding: 10px;
+}
+
+.brand-item {
     display: flex;
-    flex-wrap: wrap;
-    gap: 5px;
-    justify-content: space-evenly;
-    max-width: 100%;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin-right: 10px;
+    margin: 0 10px;
+    transition: transform 0.3s;
 }
 
-.brand-pt img {
-    width: auto;
-    flex: 20%;
-    max-width: 210px;
-    /* Điều chỉnh kích thước tùy ý */
-    height: 58px !important;
-    margin-bottom: 10px;
-    padding: 8px 30px;
-    border: 1px solid rgba(224, 224, 224, 1);
-    border-radius: 10px;
-    /* Border ban đầu là trong suốt */
-    transition: border-color 0.3s, box-shadow 0.3s;
-    /* Hiệu ứng transition */
+.brand-item:hover {
+    transform: scale(1.05);
 }
 
-.brand-pt img:hover {
-    border-color: #161515;
-    /* Màu sắc border khi hover */
-    box-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
-    /* Đổ bóng khi hover */
+.brand-item img {
+    /* Tùy chỉnh kích thước và định dạng hình ảnh */
+    width: 80%;
+    height: auto;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 0px;
+}
+
+.brand-item:last-child {
+    margin-right: 0;
 }
