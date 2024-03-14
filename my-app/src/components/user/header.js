@@ -1,6 +1,7 @@
 import React from "react";
 import '../../assets/css/hearder.css'
 import { useState } from "react";
+import Link from "antd/es/typography/Link";
 
 export default function HeaderHome() {
     const [selectedItem, setSelectedItem] = useState(null);
@@ -72,7 +73,7 @@ export default function HeaderHome() {
                 </ul>
                 <div className="nav-login-cart">
                     {/* <button>Login</button> */}
-                    <i className="fa-solid fa-cart-shopping" style={{ fontSize: '35px' }}></i>
+                    <Link to="/Cart"><i className="fa-solid fa-cart-shopping" style={{ fontSize: '35px' }}></i></Link>
                     <div className="cart-count">0</div>
                 </div>
             </div>

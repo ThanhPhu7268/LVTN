@@ -24,19 +24,19 @@ const PanelHome = () => {
             speed={1500} // Tốc độ chuyển đổi (mili giây)
         >
             <div>
-                <img src="./img/banner/banner5.avif" style={{ width: "100%", height: "100%" }} />
+                <img src="./img/banner/banner5.avif" alt="banner cua trang chu" style={{ width: "100%", height: "100%" }} />
             </div>
             <div>
-                <img src="./img/banner/banner3.avif" style={{ width: "100%", height: "100%" }} />
+                <img src="./img/banner/banner3.avif" alt="banner cua trang chu" style={{ width: "100%", height: "100%" }} />
             </div>
             <div>
-                <img src='./img/banner/banner1.jpg' style={{ width: "100%", height: "100%" }} />
+                <img src='./img/banner/banner1.jpg' alt="banner cua trang chu" style={{ width: "100%", height: "100%" }} />
             </div>
             <div>
-                <img src="./img/banner/banner4.jpg" style={{ width: "100%", height: "100%" }} />
+                <img src="./img/banner/banner4.jpg" alt="banner cua trang chu" style={{ width: "100%", height: "100%" }} />
             </div>
             <div>
-                <img src="./img/banner/banner2.jpg" style={{ width: "100%", height: "100%" }} />
+                <img src="./img/banner/banner2.jpg" alt="banner cua trang chu" style={{ width: "100%", height: "100%" }} />
             </div>
         </Carousel>
     );

@@ -1,0 +1,44 @@
+* {
+    font-family: 'Poppins';
+}
+
+.bar-cart {
+    background-color: #ffffff;
+    padding: 20px;
+    margin: 30px;
+    border-radius: 5px;
+    border: 0.2px solid #b4b1b1;
+}
+
+.payment-form {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    border: 0.2px solid #b4b1b1;
+    float: right;
+    /* Thêm thuộc tính float: right; */
+    margin-right: 20px;
+    /* Thêm khoảng cách từ form đến cạnh phải */
+}
+
+.payment-form label {
+    font-weight: bold;
+    color: #333;
+}
+
+.payment-form input,
+.payment-form .ant-select-selector {
+    width: 100%;
+}
+
+.payment-form .ant-form-item-explain-error {
+    color: red;
+}
+
+.btn-submit {
+    width: 90%;
+    display: block;
+    margin: 0 auto;
+}
