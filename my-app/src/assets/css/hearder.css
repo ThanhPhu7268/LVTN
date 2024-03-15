@@ -130,6 +130,12 @@ header {
     font-weight: 500;
     padding: 0px 19px;
     color: #ffffff;
+    transition: 0.3 s;
+}
+
+.span-id:hover {
+    color: red;
+    transition: cubic-bezier();
 }
 
 .fa-location-dot:before,

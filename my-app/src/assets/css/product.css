@@ -1,0 +1,44 @@
+.product-page {
+    padding: 24px;
+    background-color: #f0f2f5;
+}
+
+.sider-bar {
+    flex: 0 0 200px;
+    max-width: 300px;
+    min-width: 200px;
+    width: 300px;
+    margin-right: 30px;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.filter-sider {
+    background-color: #fff;
+    padding: 16px;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    margin-right: 20px;
+}
+
+.img-conten {
+    padding: 5px;
+}
+
+.filter-options {
+    margin-bottom: 16px;
+}
+
+.filter-option-button {
+    width: 100%;
+    margin-bottom: 8px;
+}
+
+.filter-option-button:last-child {
+    margin-bottom: 0;
+}
+
+.pagination {
+    margin: 30px;
+    text-align: center;
+}

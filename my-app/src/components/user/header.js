@@ -16,14 +16,12 @@ export default function HeaderHome() {
                     <input type="text" placeholder="Search..." />
                     <button><i className="fa-solid fa-magnifying-glass"></i></button>
                 </div>
-                <div className="span-id" style={{ marginRight: '10px' }}>
-                    {/* <div><i class="fa-solid fa-magnifying-glass"></i></div> */}
-                    <div><i class="fa-regular fa-user"></i>Login</div>
-                </div>
+
+                <Link href="/login"><div className="span-id"> <i class="fa-regular fa-user" style={{ fontSize: '22px' }}></i>Login</div></Link>
             </section>
             <div className="header-container">
                 <div className="header-logo">
-                    <a><img alt="" src="./img/logo/logo.png"></img></a>
+                    <Link href="/"><img alt="" src="./img/logo/logo.png"></img></Link>
                 </div>
                 <ul className="nav-menu">
                     <li className={selectedItem === 0 ? 'active' : ''}>
@@ -73,7 +71,7 @@ export default function HeaderHome() {
                 </ul>
                 <div className="nav-login-cart">
                     {/* <button>Login</button> */}
-                    <Link to="/Cart"><i className="fa-solid fa-cart-shopping" style={{ fontSize: '35px' }}></i></Link>
+                    <Link href="/Cart"><i className="fa-solid fa-cart-shopping" style={{ fontSize: '35px', color: 'black' }}></i></Link>
                     <div className="cart-count">0</div>
                 </div>
             </div>
