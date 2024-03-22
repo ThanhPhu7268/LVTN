@@ -4,12 +4,16 @@
   "description": "\"Back-end cua website\"",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon ./src/server.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@paypal/react-paypal-js": "^8.2.0",
+    "@paypal/sdk-client": "^4.0.185",
     "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.18.3",
     "mysql2": "^3.9.2",

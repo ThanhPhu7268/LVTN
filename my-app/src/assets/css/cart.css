@@ -1,5 +1,5 @@
 * {
-    font-family: 'Poppins';
+    font-family: sans-serif;
 }
 
 .bar-cart {
@@ -41,4 +41,89 @@
     width: 90%;
     display: block;
     margin: 0 auto;
+}
+
+.product-card {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    /* Canh chỉnh các phần tử theo chiều dọc */
+    margin-bottom: 20px;
+    border: 1px solid #e8e8e8;
+    border-radius: 5px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.product-infomation-container {
+    display: flex;
+    flex-grow: 1;
+    align-items: center;
+    /* Canh chỉnh các phần tử theo chiều dọc */
+}
+
+.product-image {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 5px 0 0 5px;
+}
+
+.product-details {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    flex-grow: 1;
+}
+
+.product-name {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.product-price,
+.product-total-price {
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.product-quantity {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.product-quantity>.ant-input-number {
+    margin-left: 10px;
+}
+
+.product-total-price {
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.product-total-price::before {
+    content: "Tổng giá: ";
+    font-weight: bold;
+}
+
+.product-total-price::after {
+    content: " đ";
+}
+
+.product-actions {
+    display: flex;
+    align-items: center;
+}
+
+.product-actions>button {
+    margin-left: auto;
+}
+
+
+:where(.css-dev-only-do-not-override-1k979oh).ant-image .ant-image-img {
+    width: 200px;
+    height: auto;
 }

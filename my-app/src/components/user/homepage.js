@@ -5,10 +5,10 @@ import BrandsCarousel from './brands';
 export default function HomePage() {
     return (
         <div>
-            <div className="body-container">
+            <div className="body-container" >
                 <PanelHome />
                 <div>
-                    <div className="container">
+                    <div className="container" style={{ maxWidth: '1300px' }}>
                         <div className="support-icon">
                             <i class="fa-solid fa-truck-fast"></i>
                         </div>
@@ -44,9 +44,9 @@ export default function HomePage() {
                 </div>
                 <BrandsCarousel />
                 <div class="section-title text-center" style={{ padding: '50px', marginTop: '0px' }}>
-                    <h2>SẢN PHẨM NỔI BẬT</h2>
+                    <h2>OUTSTANDING PRODUCT</h2>
                 </div>
             </div>
-        </div>
+        </div >
     )
 }

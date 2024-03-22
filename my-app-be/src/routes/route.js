@@ -1,13 +1,13 @@
-const products = require('./products')
-const category = require('./category')
+const products = require('./product')
+const cart = require('./cart')
 const account = require('./account')
-const order = require('./order')
+// const order = require('./order')
 
 function route(app) {
-    app.use('/api/accounts', account)
+    app.use('/api/account', account)
     app.use('/api/products', products)
-    app.use('/api/category', category)
-    app.use('/api/order', order)
+    app.use('/api/cart', cart)
+    // app.use('/api/order', order)
 }
 
 module.exports = route

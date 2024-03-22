@@ -1,23 +1,25 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import '../../assets/css/home.css';
+import axios from 'axios';
 
 
 const BrandsCarousel = () => {
-    const brands = [
-        './img/brand/ca.webp',
-        './img/brand/cs.webp',
-        './img/brand/dk.webp',
-        './img/brand/gk.webp',
-        './img/brand/hb.webp',
-        './img/brand/lg.webp',
-        './img/brand/seiko.webp',
-        './img/brand/om.webp',
-        './img/brand/logo-tissot.webp',
-        './img/brand/om.webp',
-    ];
+    const [products, setProducts] = useState([]);
 
+    useEffect(() => {
+        getProducts()
+    })
+
+    const getProducts = async () => {
+        try {
+            const response = await axios.get(`http://localhost:8080/api/products/brand`);
+            setProducts(response.data);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    }
     const responsive = {
         desktop: {
             breakpoint: { max: 3000, min: 1024 },
@@ -41,9 +43,9 @@ const BrandsCarousel = () => {
             </div>
 
             <Carousel responsive={responsive} className="brands-carousel">
-                {brands.map((brand, index) => (
+                {products.map((brand, index) => (
                     <div key={index} className="brand-item">
-                        <img src={brand} alt={`Brand ${index + 1}`} />
+                        <img src={brand.thuonghieuhinhanh} alt={`Brand ${index + 1}`} />
                     </div>
                 ))}
             </Carousel>

@@ -1,14 +1,40 @@
 import React from "react";
 import '../../assets/css/hearder.css'
 import { useState } from "react";
-import Link from "antd/es/typography/Link";
+import { Link, useNavigate } from "react-router-dom";
+import { Menu, Dropdown } from "antd";
+import { DownOutlined } from "@ant-design/icons";
 
 export default function HeaderHome() {
     const [selectedItem, setSelectedItem] = useState(null);
+    const navigate = useNavigate();
 
     const handleItemClick = (index) => {
         setSelectedItem(index);
     };
+
+    const handleLogout = () => {
+        localStorage.removeItem('user');
+        navigate('/'); // Use useNavigate to navigate to the home page
+    };
+
+    const userJSON = localStorage.getItem('user');
+    const user = JSON.parse(userJSON);
+
+    const menu = (
+        <Menu>
+            <Menu.Item key="1">
+                <Link to="/user">Thông tin cá nhân</Link>
+            </Menu.Item>
+            <Menu.Item key="2">
+                <Link to="/history">Lịch sử mua hàng</Link>
+            </Menu.Item>
+            <Menu.Item key="3">
+                <button onClick={handleLogout}>Đăng xuất</button>
+            </Menu.Item>
+        </Menu>
+    );
+
     return (
         <header>
             <section className="section-nav">
@@ -16,31 +42,46 @@ export default function HeaderHome() {
                     <input type="text" placeholder="Search..." />
                     <button><i className="fa-solid fa-magnifying-glass"></i></button>
                 </div>
-
-                <Link href="/login"><div className="span-id"> <i class="fa-regular fa-user" style={{ fontSize: '22px' }}></i>Login</div></Link>
+                {user ? (
+                    <div className="dropdown">
+                        <div className="span-id">
+                            <Dropdown overlay={menu} trigger={['click']}>
+                                <a className="ant-dropdown-link" onClick={(e) => e.preventDefault()}>
+                                    {user.taikhoanten}<DownOutlined />
+                                </a>
+                            </Dropdown>
+                        </div>
+                    </div>
+                ) : (
+                    <Link to="/login">
+                        <div className="span-id">
+                            <i className="fa-regular fa-user" style={{ fontSize: "22px" }}></i> Login
+                        </div>
+                    </Link>
+                )}
             </section>
             <div className="header-container">
                 <div className="header-logo">
-                    <Link href="/"><img alt="" src="./img/logo/logo.png"></img></Link>
+                    <Link to='/' ><img alt="" src="./img/logo/logo.png"></img></Link>
                 </div>
                 <ul className="nav-menu">
                     <li className={selectedItem === 0 ? 'active' : ''}>
-                        <a
-                            href="#"
+                        <Link
+                            to='/'
                             onClick={() => handleItemClick(0)}
                             style={{ color: selectedItem === 0 ? 'red' : 'black' }}
                         >
                             Home
-                        </a>
+                        </Link>
                     </li>
                     <li className={selectedItem === 1 ? 'active' : ''}>
-                        <a
-                            href="#"
+                        <Link
+                            to='/product'
                             onClick={() => handleItemClick(1)}
                             style={{ color: selectedItem === 1 ? 'red' : 'black' }}
                         >
                             Men
-                        </a>
+                        </Link>
                     </li>
                     <li className={selectedItem === 2 ? 'active' : ''}>
                         <a
@@ -71,7 +112,7 @@ export default function HeaderHome() {
                 </ul>
                 <div className="nav-login-cart">
                     {/* <button>Login</button> */}
-                    <Link href="/Cart"><i className="fa-solid fa-cart-shopping" style={{ fontSize: '35px', color: 'black' }}></i></Link>
+                    <Link to="/Cart"><i className="fa-solid fa-cart-shopping" style={{ fontSize: '35px', color: 'black' }}></i></Link>
                     <div className="cart-count">0</div>
                 </div>
             </div>

@@ -170,3 +170,80 @@ header {
     margin-left: 20px;
     margin-right: 5px;
 }
+
+/* Dropdown Styles */
+.dropdown {
+    position: relative;
+}
+
+.dropdown .ant-dropdown-link {
+    display: flex;
+    align-items: center;
+    color: #ffffff;
+    font-size: 18px;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 0px 19px;
+    transition: 0.3s;
+}
+
+.dropdown .ant-dropdown-link:hover {
+    color: red;
+}
+
+.dropdown .ant-dropdown-link i {
+    margin-left: 20px;
+    margin-right: 5px;
+}
+
+.dropdown .ant-dropdown-menu {
+    font-size: 14px;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    background-color: #ffffff;
+    text-decoration: none;
+}
+
+.dropdown .ant-dropdown-menu-item a {
+    color: #000000;
+    display: block;
+    padding: 8px 16px;
+    transition: 0.3s;
+    text-decoration: none;
+}
+
+.ant-dropdown-menu-item a {
+    text-decoration: none;
+}
+
+.dropdown .ant-dropdown-menu-item a:hover {
+    color: red;
+    background-color: #f5f5f5;
+}
+
+.dropdown .ant-dropdown-menu-item button {
+    color: #ffffff;
+    background-color: #ff6b6b;
+
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+
+    /* Thêm thuộc tính này để loại bỏ đường viền khi button được nhấn */
+}
+
+.ant-dropdown-menu-item button {
+    outline: none;
+    border: none;
+    border-radius: 4px;
+    background-color: white;
+}
+
+.ant-dropdown-menu-item button:hover {
+    background-color: #f5f5f5;
+}
+
+.dropdown .ant-dropdown-menu-item button:hover {
+    color: red;
+    background-color: #ffa9a9;
+}

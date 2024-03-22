@@ -1,11 +1,37 @@
-import '../../assets/css/login.css'
 import React from 'react';
 import { Form, Input, Button } from 'antd';
-import { Link } from 'react-router-dom';
-
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const LoginForm = () => {
-    const onFinish = (values) => {
+    const navigate = useNavigate();
+
+    const onFinish = async (values) => {
+        try {
+            const response = await axios.get(
+                `http://localhost:8080/api/account/${values.username}`
+            );
+            let user = response.data;
+            if (user.length > 0) {
+                if (user[0].matkhau === values.password) {
+                    alert('Login thành công');
+                    localStorage.setItem('user', JSON.stringify(user[0]));
+
+                    // Kiểm tra vai trò và chuyển hướng
+                    if (user[0].taikhoanvaitro === '1') {
+                        navigate('/admin'); // Chuyển hướng đến trang admin
+                    } else {
+                        navigate('/'); // Chuyển hướng đến trang chủ (khách hàng)
+                    }
+                } else {
+                    alert('Sai mật khẩu');
+                }
+            } else {
+                alert('Login không thành công');
+            }
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
         console.log('Received values of form: ', values);
     };
 
@@ -39,7 +65,7 @@ const LoginForm = () => {
                 </Form.Item>
 
                 <div className="login-footer">
-                    Don't have an account? <a href="/register"> Sign up</a>
+                    Don't have an account? <Link to="/register"> Sign up</Link>
                 </div>
             </Form>
         </div>
