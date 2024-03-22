@@ -14,32 +14,16 @@ const Cart = () => {
     console.log('Form values:', values);
   };
 
-  const [cartItems, setCartItems] = useState([
-    {
-      id: 1,
-      name: 'Sản phẩm 1',
-      image: 'https://wscdn.vn/upload/image/OP990-45ADGK-GL-X-1-389108085-1244847867.webp',
-      price: 50,
-      quantity: 2
-    },
-    {
-      id: 2,
-      name: 'Sản phẩm 2',
-      image: 'https://wscdn.vn/upload/image/uploads/images/OP990-45ADGS-GL-D-1-1655171724651.webp',
-      price: 70,
-      quantity: 1
-    },
-    {
-      id: 3,
-      name: 'Sản phẩm 3',
-      image: 'https://wscdn.vn/upload/image/uploads/images/OP990-45ADDGR-GL-T-2-1664954194331.webp',
-      price: 90,
-      quantity: 3
-    }
-  ]);
+  let cart = JSON.parse(window.localStorage.getItem('cart'))
+
+  const [cartItems, setCartItems] = useState([]);
+
+  useEffect(() => {
+    setCartItems(cart)
+  }, []);
 
   const handleDeleteItem = (product) => {
-    const updatedItems = cartItems.filter(item => item.id !== product.id);
+    const updatedItems = cartItems.filter(item => item.idproduct !== product.id);
     setCartItems(updatedItems);
   };
 
@@ -103,11 +87,11 @@ const Cart = () => {
         <Table dataSource={cartItems} pagination={false}>
           <Column
             title="Hình ảnh"
-            dataIndex="image"
+            dataIndex="productImg"
             key="image"
-            render={(image) => <Image src={image} width={100} />}
+            render={(productImg) => <Image src={productImg} width={100} />}
           />
-          <Column title="Tên sản phẩm" dataIndex="name" key="name" />
+          <Column title="Tên sản phẩm" dataIndex="productName" key="name" />
           <Column
             title="Giá"
             dataIndex="price"

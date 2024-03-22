@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Input, Button } from 'antd';
+import { Form, Input, Button, Empty } from 'antd';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
@@ -23,6 +23,22 @@ const LoginForm = () => {
                     } else {
                         navigate('/'); // Chuyển hướng đến trang chủ (khách hàng)
                     }
+                    const response = await axios.get(
+                        `http://localhost:8080/api/cart/cartProducts?id=${user[0].idkhachhang}`
+                    );
+                    localStorage.setItem('cart', JSON.stringify(response.data));
+                    if (response.data.length !== 0) {
+                        await axios.delete(`http://localhost:8080/api/cart/${response.data[0].idcart}`)
+                            .then(response => {
+                                console.log('Item deleted successfully');
+                                // Thực hiện các hành động khác sau khi xóa thành công, nếu cần
+                            })
+                            .catch(error => {
+                                console.error('Error deleting item:', error);
+                                // Xử lý lỗi nếu có
+                            });
+                    }
+
                 } else {
                     alert('Sai mật khẩu');
                 }
