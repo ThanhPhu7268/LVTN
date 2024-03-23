@@ -4,16 +4,11 @@ import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import '../../assets/css/cartform.css';
 import HeaderHome from './header';
 
-
 const { Column } = Table;
 
 const Cart = () => {
   const [form] = Form.useForm();
   const [totalPrice, setTotalPrice] = useState(0);
-  const handleFinish = (values) => {
-    console.log('Form values:', values);
-  };
-
   const [cartItems, setCartItems] = useState([
     {
       id: 1,
@@ -37,12 +32,6 @@ const Cart = () => {
       quantity: 3
     }
   ]);
-
-  const handleDeleteItem = (product) => {
-    const updatedItems = cartItems.filter(item => item.id !== product.id);
-    setCartItems(updatedItems);
-  };
-
   const [paymentMethod, setPaymentMethod] = useState('COD');
 
   const handleQuantityChange = (record, quantity) => {
@@ -57,7 +46,7 @@ const Cart = () => {
 
   useEffect(() => {
     calculateTotalPrice();
-  }, [cartItems]); // Chỉ gọi calculateTotalPrice khi cartItems thay đổi
+  }, [cartItems]);
 
   const calculateTotalPrice = () => {
     let totalUSD = 0;
@@ -65,7 +54,7 @@ const Cart = () => {
       const priceUSD = item.price;
       totalUSD += priceUSD * item.quantity;
     });
-    setTotalPrice(totalUSD); // Cập nhật giá trị của state
+    setTotalPrice(totalUSD);
   };
 
   const createOrder = (data, actions) => {
@@ -73,7 +62,7 @@ const Cart = () => {
       purchase_units: [
         {
           amount: {
-            value: totalPrice.toString(), // Truyền tổng giá tạm tính vào
+            value: totalPrice.toString(), // Cập nhật với giá trị mới nhất của totalPrice
             currency_code: "USD"
           }
         }
@@ -89,6 +78,15 @@ const Cart = () => {
 
   const handlePaymentMethodChange = (e) => {
     setPaymentMethod(e.target.value);
+  };
+
+  const handleFinish = (values) => {
+    console.log('Form values:', values);
+  };
+
+  const handleDeleteItem = (product) => {
+    const updatedItems = cartItems.filter(item => item.id !== product.id);
+    setCartItems(updatedItems);
   };
 
   const onFinish = (values) => {
