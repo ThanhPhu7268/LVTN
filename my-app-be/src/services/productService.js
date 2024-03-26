@@ -76,6 +76,18 @@ class productService {
             });
         })
     }
+    //Tìm theo loại máy
+    findProductByMachine(loaimay) {
+        return new Promise((resolve, reject) => {
+            con.query(`SELECT * FROM sanpham where idloaimay = ${loaimay}`, function (error, result, fields) {
+                if (error) {
+                    reject(error);
+                    return;
+                }
+                resolve(result);
+            });
+        })
+    }
 
     create(tenSP, giaBan, moTa, soLuongCon, maLoai, anhdaidien) {
         return new Promise((resolve, reject) => {

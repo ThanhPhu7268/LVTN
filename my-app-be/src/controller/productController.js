@@ -36,6 +36,12 @@ class products {
         res.json(data)
     }
 
+    async findProductByMachine(req, res) {
+        let loaimay = req.params.loaimay
+        let data = await productService.findProductByMachine(loaimay)
+        res.json(data)
+    }
+
     async create(req, res) {
         let product = req.body
         let avatar = req.file.filename

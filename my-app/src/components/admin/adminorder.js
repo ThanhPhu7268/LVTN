@@ -5,7 +5,7 @@ import AdminSidebar from './adminsidebar';
 const { Header, Content } = Layout;
 const { Option } = Select;
 
-const AdminPage = () => {
+const AdminOrder = () => {
     const [orderList, setOrderList] = useState([
         {
             id: 1,
@@ -153,4 +153,4 @@ const AdminPage = () => {
     );
 };
 
-export default AdminPage;
+export default AdminOrder;
