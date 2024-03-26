@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Form, Input, Button } from 'antd';
+import { Form, Input, Button, message } from 'antd';
 import '../../assets/css/login.css';
 import axios from 'axios';
 
@@ -12,9 +12,9 @@ const RegistrationForm = () => {
             const response = await axios.get(`http://localhost:8080/api/account/${values.username}`);
             let user = response.data;
             if (user.length > 0) {
-                console.log('Tai khoan da ton tai');
+                message.warning('Tài khoản đã tồn tại!');
             } else {
-                alert('Ban da tao tai khoan thanh Cong')
+                message.success('Bạn đã tạo tài khoản thành công!');
                 axios.post(`http://localhost:8080/api/account`, values, {
                     headers: {
                         'Content-Type': 'application/json'

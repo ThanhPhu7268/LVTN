@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Menu, Dropdown } from "antd";
 import { DownOutlined } from "@ant-design/icons";
+import axios from 'axios';
 
 export default function HeaderHome() {
     const [selectedItem, setSelectedItem] = useState(null);
@@ -13,8 +14,26 @@ export default function HeaderHome() {
         setSelectedItem(index);
     };
 
-    const handleLogout = () => {
+    const handleLogout = async () => {
         localStorage.removeItem('user');
+        let cart = JSON.parse(window.localStorage.getItem('cart'))
+        if (cart) {
+            for (const product of cart) {
+                await axios.post(`http://localhost:8080/api/cart`, product, {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                    .then(response => {
+                        console.log(response.data);
+                    })
+                    .catch(error => {
+                        console.error(error);
+                    });
+            }
+        }
+        localStorage.removeItem('cart');
+
         navigate('/'); // Use useNavigate to navigate to the home page
     };
 
@@ -53,9 +72,10 @@ export default function HeaderHome() {
                         </div>
                     </div>
                 ) : (
-                    <Link to="/login">
-                        <div className="span-id">
-                            <i className="fa-regular fa-user" style={{ fontSize: "22px" }}></i> Login
+                    <Link to="/login" style={{ textDecoration: 'none' }}>
+                        <div className="span-id" >
+                            <i className="fa-regular fa-user" style={{ fontSize: "22px" }}></i>
+                            Login
                         </div>
                     </Link>
                 )}
@@ -113,7 +133,7 @@ export default function HeaderHome() {
                 <div className="nav-login-cart">
                     {/* <button>Login</button> */}
                     <Link to="/Cart"><i className="fa-solid fa-cart-shopping" style={{ fontSize: '35px', color: 'black' }}></i></Link>
-                    <div className="cart-count">0</div>
+                    {/* <div className="cart-count">0</div> */}
                 </div>
             </div>
         </header >

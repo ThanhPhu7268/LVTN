@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Input, Button } from 'antd';
+import { Form, Input, Button, Empty, message } from 'antd';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
@@ -14,7 +14,7 @@ const LoginForm = () => {
             let user = response.data;
             if (user.length > 0) {
                 if (user[0].matkhau === values.password) {
-                    alert('Login thành công');
+                    message.success('Đăng nhập thành công!');
                     localStorage.setItem('user', JSON.stringify(user[0]));
 
                     // Kiểm tra vai trò và chuyển hướng
@@ -23,11 +23,27 @@ const LoginForm = () => {
                     } else {
                         navigate('/'); // Chuyển hướng đến trang chủ (khách hàng)
                     }
+                    const response = await axios.get(
+                        `http://localhost:8080/api/cart/cartProducts?id=${user[0].idkhachhang}`
+                    );
+                    localStorage.setItem('cart', JSON.stringify(response.data));
+                    if (response.data.length !== 0) {
+                        await axios.delete(`http://localhost:8080/api/cart/${response.data[0].idcart}`)
+                            .then(response => {
+                                console.log('Item deleted successfully');
+                                // Thực hiện các hành động khác sau khi xóa thành công, nếu cần
+                            })
+                            .catch(error => {
+                                console.error('Error deleting item:', error);
+                                // Xử lý lỗi nếu có
+                            });
+                    }
+
                 } else {
-                    alert('Sai mật khẩu');
+                    message.error('Sai Mật Khẩu!');
                 }
             } else {
-                alert('Login không thành công');
+                message.warning('Đăng nhập không thành công!');
             }
         } catch (error) {
             console.error('Error fetching data:', error);

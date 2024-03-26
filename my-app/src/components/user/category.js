@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Input, Button, Table, Image, InputNumber, Radio, Row, Col } from 'antd';
+import { Form, Input, Button, Table, Image, InputNumber, Radio, Row, Col, message } from 'antd';
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import '../../assets/css/cartform.css';
 import HeaderHome from './header';
@@ -9,30 +9,20 @@ const { Column } = Table;
 const Cart = () => {
   const [form] = Form.useForm();
   const [totalPrice, setTotalPrice] = useState(0);
-  const [cartItems, setCartItems] = useState([
-    {
-      id: 1,
-      name: 'Sản phẩm 1',
-      image: 'https://wscdn.vn/upload/image/OP990-45ADGK-GL-X-1-389108085-1244847867.webp',
-      price: 50,
-      quantity: 2
-    },
-    {
-      id: 2,
-      name: 'Sản phẩm 2',
-      image: 'https://wscdn.vn/upload/image/uploads/images/OP990-45ADGS-GL-D-1-1655171724651.webp',
-      price: 70,
-      quantity: 1
-    },
-    {
-      id: 3,
-      name: 'Sản phẩm 3',
-      image: 'https://wscdn.vn/upload/image/uploads/images/OP990-45ADDGR-GL-T-2-1664954194331.webp',
-      price: 90,
-      quantity: 3
-    }
-  ]);
+  const [cartItems, setCartItems] = useState([]);
   const [paymentMethod, setPaymentMethod] = useState('COD');
+  const [isPayPalVisible, setIsPayPalVisible] = useState(false);
+
+  useEffect(() => {
+    const cart = JSON.parse(window.localStorage.getItem('cart'));
+    setCartItems(cart || []);
+  }, []);
+
+  const handleDeleteItem = (productId) => {
+    const updatedItems = cartItems.filter(item => item.idproduct !== productId);
+    setCartItems(updatedItems);
+    window.localStorage.setItem('cart', JSON.stringify(updatedItems));
+  };
 
   const handleQuantityChange = (record, quantity) => {
     const updatedItems = cartItems.map(item => {
@@ -62,7 +52,7 @@ const Cart = () => {
       purchase_units: [
         {
           amount: {
-            value: totalPrice.toString(), // Cập nhật với giá trị mới nhất của totalPrice
+            value: totalPrice.toString(),
             currency_code: "USD"
           }
         }
@@ -72,40 +62,49 @@ const Cart = () => {
 
   const onApprove = (data, actions) => {
     return actions.order.capture().then((details) => {
+      message.success('Đặt hàng thành công!');
+      setCartItems([]);
+      window.localStorage.removeItem('cart');
       console.log(details);
     });
   };
 
   const handlePaymentMethodChange = (e) => {
     setPaymentMethod(e.target.value);
-  };
-
-  const handleFinish = (values) => {
-    console.log('Form values:', values);
-  };
-
-  const handleDeleteItem = (product) => {
-    const updatedItems = cartItems.filter(item => item.id !== product.id);
-    setCartItems(updatedItems);
+    if (e.target.value === 'PayPal') {
+      setIsPayPalVisible(true);
+    } else {
+      setIsPayPalVisible(false);
+    }
   };
 
   const onFinish = (values) => {
-    // Xử lý đặt hàng
     console.log(values);
+    message.success('Đặt hàng thành công!');
+    setCartItems([]);
+    window.localStorage.removeItem('cart');
+  };
+
+  const isPaymentDetailsFilled = () => {
+    if (paymentMethod === 'PayPal') {
+      const fieldsToCheck = ['fullName', 'phoneNumber', 'address'];
+      return fieldsToCheck.every(field => form.getFieldValue(field));
+    }
+    return true;
   };
 
   return (
     <div>
       <HeaderHome />
-      <Form form={form} onFinish={handleFinish} layout="vertical" className='container-formcart'>
+      <Form form={form} onFinish={onFinish} layout="vertical" className='container-formcart'>
         <Table dataSource={cartItems} pagination={false}>
           <Column
             title="Hình ảnh"
-            dataIndex="image"
+            dataIndex="productImg"
             key="image"
-            render={(image) => <Image src={image} width={100} />}
+            render={(productImg) => <Image src={productImg} width={100} />}
           />
-          <Column title="Tên sản phẩm" dataIndex="name" key="name" />
+          <Column title="Tên sản phẩm" dataIndex="productName" key="name" />
           <Column
             title="Giá"
             dataIndex="price"
@@ -136,7 +135,7 @@ const Cart = () => {
             title=""
             key="delete"
             render={(text, record) => (
-              <Button type="link" danger onClick={() => handleDeleteItem(record)}>
+              <Button type="link" danger onClick={() => handleDeleteItem(record.idproduct)}>
                 Xoá
               </Button>
             )}
@@ -183,6 +182,7 @@ const Cart = () => {
               </Row>
             </>
           )}
+
           <Form.Item
             label="Phương thức thanh toán"
             name="paymentMethod"
@@ -190,15 +190,23 @@ const Cart = () => {
           >
             <Radio.Group value={paymentMethod} onChange={handlePaymentMethodChange}>
               <Radio value="COD">Thanh toán khi nhận hàng (COD)</Radio>
-
-              <PayPalScriptProvider value="online" options={{ "client-id": "AcOG8gBNAy9KzZ5DbNaawBqbADMz8iVB_evLQtrpPwHq7k23E76NZYyqv-0Pj5PvcnRCUBjpMcKICaWX" }}>
-                <PayPalButtons
-                  createOrder={createOrder}
-                  onApprove={onApprove}
-                />
-              </PayPalScriptProvider>
+              <Radio value="PayPal">Thanh toán bằng PayPal</Radio>
             </Radio.Group>
           </Form.Item>
+
+          {isPayPalVisible && isPaymentDetailsFilled() && (
+            <PayPalScriptProvider value="online" options={{ "client-id": "AcOG8gBNAy9KzZ5DbNaawBqbADMz8iVB_evLQtrpPwHq7k23E76NZYyqv-0Pj5PvcnRCUBjpMcKICaWX" }}>
+              <PayPalButtons
+                createOrder={createOrder}
+                onApprove={onApprove}
+              />
+            </PayPalScriptProvider>
+          )}
+
+          {!isPaymentDetailsFilled() && paymentMethod === 'PayPal' && (
+            <div style={{ color: 'red' }}>Vui lòng điền đầy đủ thông tin trước khi thanh toán bằng PayPal.</div>
+          )}
+
           <div className="btn-dathang-container">
             <Form.Item>
               <Button type="primary" htmlType="submit" className='btn-dathang'>

@@ -1,24 +1,59 @@
 import React, { useState } from 'react';
 import { Layout, Table, Button, Modal, Select, Space } from 'antd';
+import AdminSidebar from './adminsidebar';
 
 const { Header, Content } = Layout;
 const { Option } = Select;
 
-const AdminOrder = () => {
+const AdminPage = () => {
     const [orderList, setOrderList] = useState([
         {
             id: 1,
             orderName: 'Đơn hàng 1',
             products: ['Sản phẩm A', 'Sản phẩm B'],
-            totalAmount: 1000000,
+            totalAmount: 470,
             paymentStatus: 'Ship COD',
+            orderStatus: 'Đang xử lý',
         },
         {
             id: 2,
             orderName: 'Đơn hàng 2',
             products: ['Sản phẩm C', 'Sản phẩm D'],
-            totalAmount: 2000000,
+            totalAmount: 240,
+            paymentStatus: 'Ship COD',
+            orderStatus: 'Đang giao',
+        },
+        {
+            id: 3,
+            orderName: 'Đơn hàng 2',
+            products: ['Sản phẩm C', 'Sản phẩm D'],
+            totalAmount: 240,
             paymentStatus: 'Đã thanh toán online',
+            orderStatus: 'Đang giao',
+        },
+        {
+            id: 4,
+            orderName: 'Đơn hàng 3',
+            products: ['Sản phẩm C', 'Sản phẩm D'],
+            totalAmount: 240,
+            paymentStatus: 'Đã thanh toán online',
+            orderStatus: 'Đã giao',
+        },
+        {
+            id: 5,
+            orderName: 'Đơn hàng 2',
+            products: ['Sản phẩm C', 'Sản phẩm D'],
+            totalAmount: 240,
+            paymentStatus: 'Đã thanh toán online',
+            orderStatus: 'Đang xử lí',
+        },
+        {
+            id: 6,
+            orderName: 'Đơn hàng 2',
+            products: ['Sản phẩm C', 'Sản phẩm D'],
+            totalAmount: 240,
+            paymentStatus: 'Đã thanh toán online',
+            orderStatus: 'Đã giao',
         },
         // ...Thêm đơn hàng khác vào danh sách
     ]);
@@ -26,28 +61,6 @@ const AdminOrder = () => {
     const [selectedOrder, setSelectedOrder] = useState(null);
     const [modalVisible, setModalVisible] = useState(false);
     const [status, setStatus] = useState('');
-
-    const columns = [
-        { title: 'ID', dataIndex: 'id', key: 'id' },
-        { title: 'Tên đơn hàng', dataIndex: 'orderName', key: 'orderName' },
-        { title: 'Sản phẩm', dataIndex: 'products', key: 'products', render: renderProducts },
-        { title: 'Tổng giá tiền', dataIndex: 'totalAmount', key: 'totalAmount' },
-        { title: 'Trạng thái thanh toán', dataIndex: 'paymentStatus', key: 'paymentStatus' },
-        {
-            title: 'Hành động',
-            key: 'action',
-            render: (text, record) => (
-                <Space>
-                    <Button type="primary" onClick={() => handleChangeStatus(record)}>
-                        Thay đổi trạng thái
-                    </Button>
-                    <Button type="danger" onClick={() => handleDeleteOrder(record)}>
-                        Xoá đơn hàng
-                    </Button>
-                </Space>
-            ),
-        },
-    ];
 
     const renderProducts = (products) => {
         return (
@@ -59,15 +72,38 @@ const AdminOrder = () => {
         );
     };
 
-    const handleChangeStatus = (order) => {
+    const columns = [
+        { title: 'ID', dataIndex: 'id', key: 'id' },
+        { title: 'Tên đơn hàng', dataIndex: 'orderName', key: 'orderName' },
+        { title: 'Sản phẩm', dataIndex: 'products', key: 'products', render: renderProducts },
+        { title: 'Tổng giá tiền', dataIndex: 'totalAmount', key: 'totalAmount' },
+        { title: 'Trạng thái thanh toán', dataIndex: 'paymentStatus', key: 'paymentStatus' },
+        { title: 'Trạng thái đơn hàng', dataIndex: 'orderStatus', key: 'orderStatus' },
+        {
+            title: 'Hành động',
+            key: 'action',
+            render: (text, record) => (
+                <Space>
+                    <Button type="primary" onClick={() => handleChangeOrderStatus(record)}>
+                        Thay đổi trạng thái
+                    </Button>
+                    <Button type="danger" onClick={() => handleDeleteOrder(record)}>
+                        Xoá đơn hàng
+                    </Button>
+                </Space>
+            ),
+        },
+    ];
+
+    const handleChangeOrderStatus = (order) => {
         setSelectedOrder(order);
         setModalVisible(true);
-        setStatus(order.paymentStatus);
+        setStatus(order.orderStatus);
     };
 
-    const handleUpdateStatus = () => {
+    const handleUpdateOrderStatus = () => {
         const updatedOrderList = orderList.map((order) =>
-            order.id === selectedOrder.id ? { ...order, paymentStatus: status } : order
+            order.id === selectedOrder.id ? { ...order, orderStatus: status } : order
         );
         setOrderList(updatedOrderList);
         setSelectedOrder(null);
@@ -87,6 +123,7 @@ const AdminOrder = () => {
     return (
         <Layout style={{ minHeight: '100vh' }}>
             {/* ... */}
+            <AdminSidebar />
             <Layout>
                 <Header style={{ background: '#fff', padding: 0 }}>
                     <div>
@@ -99,9 +136,9 @@ const AdminOrder = () => {
 
                     {/* Modal thay đổi trạng thái */}
                     <Modal
-                        title="Thay đổi trạng thái"
+                        title="Thay đổi trạng thái đơn hàng"
                         visible={modalVisible}
-                        onOk={handleUpdateStatus}
+                        onOk={handleUpdateOrderStatus}
                         onCancel={handleModalCancel}
                     >
                         <Select value={status} onChange={setStatus}>
@@ -116,4 +153,4 @@ const AdminOrder = () => {
     );
 };
 
-export default AdminOrder;
+export default AdminPage;

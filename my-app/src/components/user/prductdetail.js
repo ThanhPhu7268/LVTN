@@ -1,26 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import '../../assets/css/productdetail.css';
-import { Card, Row, Col, Modal, Rate, Button, Image } from 'antd';
+import { Card, Row, Col, Modal, Rate, Button, Image, message } from 'antd';
 import HeaderHome from './header';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 
 const ProductDetailPage = () => {
-    // const user = JSON.parse(window.localStorage.getItem('user'))
+    const user = JSON.parse(window.localStorage.getItem('user'))
     const { id } = useParams();
     const [data, setData] = useState([])
-    const [product, setProduct] = useState({
-        quantity: '',
-        idcart: '',
-        idproduct: ''
-    })
 
     const handleAddToCart = () => {
         console.log('Add to Cart')
     };
     useEffect(() => {
         getProduct(id)
-        // findIdCartByIdUser(userId);
+        // findIdCartByIdUser();
     }, []);
 
     const getProduct = async (id) => {
@@ -50,34 +45,53 @@ const ProductDetailPage = () => {
         // Handle buy now event
         console.log('Buy now');
     };
+    let cart = JSON.parse(window.localStorage.getItem('cart'))
 
-    const addCartDetail = async (id) => {
-        await axios.post(`http://localhost:8080/api/cart/${id}`, product, {
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-            .then(response => {
-                console.log(response.data);
-            })
-            .catch(error => {
-                console.error(error);
-            });
-    }
 
-    const findIdCartByIdUser = async () => {
-        try {
-            const user = JSON.parse(window.localStorage.getItem('user'))
-            const response = await axios.get(`http://localhost:8080/api/cart/${user.idkhachhang}`);
-            setProduct({
-                quantity: 1,
-                idcart: response.data[0].idgiohang,
-                idproduct: id
-            })
-        } catch (error) {
-            console.error('Error fetching data:', error);
+    const addCartDetail = async () => {
+        const user = JSON.parse(window.localStorage.getItem('user'))
+        const response = await axios.get(`http://localhost:8080/api/cart/${user.idkhachhang}`);
+        let product = {
+            quantity: 1,
+            idcart: response.data[0].idgiohang,
+            idproduct: id,
+            productName: data[0].sanphamten,
+            productImg: data[0].sanphamhinhdaidien,
+            price: data[0].sanphamgia
         }
+        let isHas = 0
+        if (cart) {
+            for (const key of cart) {
+                if (key.idproduct == product.idproduct) {
+                    key.quantity++
+                    isHas = 1
+                    break
+                }
+            }
+            if (isHas == 0) {
+                cart.push(product)
+            }
+        } else {
+            cart = new Array()
+            cart.push(product)
+        }
+        message.success('Đã Thêm Vào Giỏ Hàng!')
+        localStorage.setItem('cart', JSON.stringify(cart))
     }
+
+    // const findIdCartByIdUser = async () => {
+    //     try {
+    //         const user = JSON.parse(window.localStorage.getItem('user'))
+    //         const response = await axios.get(`http://localhost:8080/api/cart/${user.idkhachhang}`);
+    //         setProduct({
+    //             quantity: 1,
+    //             idcart: response.data[0].idgiohang,
+    //             idproduct: id
+    //         })
+    //     } catch (error) {
+    //         console.error('Error fetching data:', error);
+    //     }
+    // }
     return (
         <div>
             <HeaderHome />

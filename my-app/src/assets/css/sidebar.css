@@ -8,6 +8,8 @@
 .admin-sidebar {
     background: #ffffff;
     display: flex;
+    height: 100vh;
+    border-right: 0.1px solid #a8a1a1;
     flex-direction: column;
     justify-content: space-between;
 }
@@ -36,4 +38,29 @@
 .admin-sidebar-logo img {
     width: 80%;
     height: auto;
+}
+
+.admin-container {
+    display: flex;
+}
+
+.admin-container>div {
+    flex: 1;
+    margin-left: 16px;
+    margin-right: 16px;
+    /* Khoảng cách giữa AdminSidebar và bảng */
+}
+
+.admin-btnplus {
+    margin: 30px;
+    background-color: rgb(30, 224, 30);
+    height: 40px;
+}
+
+.admin-btnplus:hover {
+    background-color: rgb(30, 224, 30);
+}
+
+table {
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.342);
 }

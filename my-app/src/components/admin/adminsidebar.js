@@ -44,10 +44,8 @@ const AdminSidebar = () => {
             </div>
             <div>
                 <Menu mode="inline" className="admin-sidebar-menu">
-                    <Menu.Item key="5" icon={<LogoutOutlined />} className="admin-sidebar-menu-item">
-                        <Button className='logout-admin' type="text" onClick={handleLogout}>
-                            Đăng xuất
-                        </Button>
+                    <Menu.Item key="5" icon={<LogoutOutlined />} className="admin-sidebar-menu-item" onClick={handleLogout}>
+                        Đăng xuất
                     </Menu.Item>
                 </Menu>
             </div>

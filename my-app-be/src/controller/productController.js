@@ -11,6 +11,30 @@ class products {
         let data = await productService.findBrand()
         res.json(data)
     }
+    //tìm theo thương hiệu
+    async findProductByBrand(req, res) {
+        let thuonghieu = req.params.thuonghieu
+        let data = await productService.findProductByBrand(thuonghieu)
+        res.json(data)
+    }
+
+    async findProductByMaterial(req, res) {
+        let chatlieu = req.params.chatlieu
+        let data = await productService.findProductByMaterial(chatlieu)
+        res.json(data)
+    }
+
+    async findProductByType(req, res) {
+        let kieumat = req.params.kieumat
+        let data = await productService.findProductByType(kieumat)
+        res.json(data)
+    }
+
+    async findProductBySize(req, res) {
+        let kichthuoc = req.params.kichthuoc
+        let data = await productService.findProductBySize(kichthuoc)
+        res.json(data)
+    }
 
     async create(req, res) {
         let product = req.body
@@ -47,6 +71,8 @@ class products {
         let data = await productService.findOneById(id)
         res.json(data)
     }
+
+
 
 }
 
