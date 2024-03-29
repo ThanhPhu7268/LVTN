@@ -2,6 +2,8 @@ import React from 'react';
 import PanelHome from './panelhome';
 import '../../assets/css/home.css';
 import BrandsCarousel from './brands';
+import NewProduct from './producthot';
+
 export default function HomePage() {
     return (
         <div>
@@ -39,13 +41,15 @@ export default function HomePage() {
                         </div>
                     </div>
                 </div>
-                <div class="section-title text-center" style={{ padding: '50px' }}>
+                <div class="section-title text--center" style={{ padding: '50px' }}>
                     <h2>FAMOUS BRANDS</h2>
                 </div>
                 <BrandsCarousel />
-                <div class="section-title text-center" style={{ padding: '50px', marginTop: '0px' }}>
-                    <h2>OUTSTANDING PRODUCT</h2>
+                <div class="section-title text--center" style={{ padding: '50px', marginTop: '0px' }}>
+                    <h2 style={{ marginBottom: '50px' }}>OUTSTANDING PRODUCT</h2>
+                    <NewProduct />
                 </div>
+
             </div>
         </div >
     )

@@ -14,10 +14,10 @@ class productService {
             });
         })
     }
-    //render thương hiệu ra 
-    findBrand() {
+
+    findProductByBrand() {
         return new Promise((resolve, reject) => {
-            con.query(`SELECT * FROM thuonghieu;  
+            con.query(`select * from sanpham s, thuonghieu t where s.idthuonghieu = t.idthuonghieu;  
             `, function (error, result, fields) {
                 if (error) {
                     reject(error);
@@ -26,81 +26,31 @@ class productService {
                 resolve(result);
             });
         })
+    }
+    // findOneById(product) {
+    //     return new Promise((resolve, reject) => {
+    //         con.query(`SELECT * FROM sanpham where sanpham.idsanpham = ${product}`, function (error, result, fields) {
+    //             if (error) {
+    //                 reject(error);
+    //                 return;
+    //             }
+    //             resolve(result);
+    //         });
+    //     })
+    // }
 
-    }
-    //tìm theo thương hiệu
-    findProductByBrand(thuonghieu) {
-        return new Promise((resolve, reject) => {
-            con.query(`SELECT * FROM sanpham where idthuonghieu = ${thuonghieu}`, function (error, result, fields) {
-                if (error) {
-                    reject(error);
-                    return;
-                }
-                resolve(result);
-            });
-        })
-    }
-    //tìm theo chất liệu
-    findProductByMaterial(chatlieu) {
-        return new Promise((resolve, reject) => {
-            con.query(`SELECT * FROM sanpham where idchatlieu = ${chatlieu}`, function (error, result, fields) {
-                if (error) {
-                    reject(error);
-                    return;
-                }
-                resolve(result);
-            });
-        })
-    }
-    //tìm theo kiểu mặt đồng hồ
-    findProductByType(kieumat) {
-        return new Promise((resolve, reject) => {
-            con.query(`SELECT * FROM sanpham where idkieumat = ${kieumat}`, function (error, result, fields) {
-                if (error) {
-                    reject(error);
-                    return;
-                }
-                resolve(result);
-            });
-        })
-    }
-    //Tìm theo kích thước
-    findProductBySize(kichthuoc) {
-        return new Promise((resolve, reject) => {
-            con.query(`SELECT * FROM sanpham where idkichthuoc = ${kichthuoc}`, function (error, result, fields) {
-                if (error) {
-                    reject(error);
-                    return;
-                }
-                resolve(result);
-            });
-        })
-    }
-    //Tìm theo loại máy
-    findProductByMachine(loaimay) {
-        return new Promise((resolve, reject) => {
-            con.query(`SELECT * FROM sanpham where idloaimay = ${loaimay}`, function (error, result, fields) {
-                if (error) {
-                    reject(error);
-                    return;
-                }
-                resolve(result);
-            });
-        })
-    }
-
-    create(tenSP, giaBan, moTa, soLuongCon, maLoai, anhdaidien) {
-        return new Promise((resolve, reject) => {
-            con.query(`INSERT INTO sanpham(tenSP, giaBan, moTa, soLuongCon, maLoai, anhdaidien)
-            VALUES ('${tenSP}', '${giaBan}', '${moTa}', ${soLuongCon}, ${maLoai}, '${anhdaidien}');`, function (error, result, fields) {
-                if (error) {
-                    reject(error);
-                    return;
-                }
-                resolve(result);
-            });
-        })
-    }
+    // create(tenSP, giaBan, moTa, soLuongCon, maLoai, anhdaidien) {
+    //     return new Promise((resolve, reject) => {
+    //         con.query(`INSERT INTO sanpham(tenSP, giaBan, moTa, soLuongCon, maLoai, anhdaidien)
+    //         VALUES ('${tenSP}', '${giaBan}', '${moTa}', ${soLuongCon}, ${maLoai}, '${anhdaidien}');`, function (error, result, fields) {
+    //             if (error) {
+    //                 reject(error);
+    //                 return;
+    //             }
+    //             resolve(result);
+    //         });
+    //     })
+    // }
 
     // update() {
     //     return new Promise((resolve, reject) => {
@@ -143,17 +93,6 @@ class productService {
     //     })
     // }
 
-    findOneById(id) {
-        return new Promise((resolve, reject) => {
-            con.query(`SELECT * FROM sanpham where idsanpham = ${id}`, function (error, result, fields) {
-                if (error) {
-                    reject(error);
-                    return;
-                }
-                resolve(result);
-            });
-        })
-    }
 
 
 

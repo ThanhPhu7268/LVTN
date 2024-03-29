@@ -1,63 +1,62 @@
 import React from 'react';
-import { Avatar, Form, Input, Button } from 'antd';
-import { UserOutlined, PhoneOutlined, HomeOutlined, MailOutlined } from '@ant-design/icons';
+import { Card, CardBody, Typography, Avatar } from '@material-tailwind/react';
 
-const PersonalInfo = () => {
-    const onFinish = (values) => {
-        console.log('Form values:', values);
-    };
+const UserProfile = () => {
+    const users = [
+        {
+            id: 1,
+            name: 'John Doe',
+            email: 'john@example.com',
+            avatar: 'https://i.pinimg.com/564x/1d/f1/43/1df143603c7a9f51f3e8348f0ede6277.jpg',
+            about: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed finibus magna id accumsan sodales.',
+            phone: '123-456-7890',
+            address: '123 Main St, Anytown, USA',
+        }
+    ];
+
+    const user = users[0];
 
     return (
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-            <Form
-                name="personalInfoForm"
-                onFinish={onFinish}
-                labelCol={{ span: 6 }}
-                wrapperCol={{ span: 16 }}
-                style={{ width: '500px', padding: '20px', border: '1px solid #d9d9d9', borderRadius: '4px' }}
-            >
-                <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
-                    <Avatar size={120} src="https://i.pinimg.com/564x/c5/04/ce/c504ce97f611b279f88b30858e19dd0a.jpg" />
-                </div>
-                <Form.Item
-                    label="Họ và tên"
-                    name="fullName"
-                    rules={[{ required: true, message: 'Vui lòng nhập họ và tên!' }]}
-                >
-                    <Input prefix={<UserOutlined />} />
-                </Form.Item>
-                <Form.Item
-                    label="Số điện thoại"
-                    name="phoneNumber"
-                    rules={[{ required: true, message: 'Vui lòng nhập số điện thoại!' }]}
-                >
-                    <Input prefix={<PhoneOutlined />} />
-                </Form.Item>
-                <Form.Item
-                    label="Địa chỉ"
-                    name="address"
-                    rules={[{ required: true, message: 'Vui lòng nhập địa chỉ!' }]}
-                >
-                    <Input prefix={<HomeOutlined />} />
-                </Form.Item>
-                <Form.Item
-                    label="Email"
-                    name="email"
-                    rules={[
-                        { required: true, message: 'Vui lòng nhập email!' },
-                        { type: 'email', message: 'Email không hợp lệ!' },
-                    ]}
-                >
-                    <Input prefix={<MailOutlined />} />
-                </Form.Item>
-                <Form.Item wrapperCol={{ offset: 6, span: 16 }}>
-                    <Button type="primary" htmlType="submit">
-                        Lưu
-                    </Button>
-                </Form.Item>
-            </Form>
+        <div className="max-w-md mx-auto mt-10" style={{ boxShadow: '0 3px 10px rgba(0, 0, 0, 0.404)', borderRadius: '20px' }}>
+            <Card>
+                <CardBody>
+                    <div className="text-center" style={{ backgroundColor: 'white' }}>
+                        <Avatar
+                            src={user.avatar}
+                            alt="avatar"
+                            size="xxl"
+                            className="mx-auto mb-4 border-4 border-blue-gray-200 rounded-full" // Thêm lớp CSS để tạo viền xung quanh avatar
+                        />
+                        <Typography variant="h4" color="blue-gray" className="font-semibold mb-2">
+                            {user.name}
+                        </Typography>
+                        <Typography variant="subtitle" color="blue-gray" className="mb-4">
+                            {user.email}
+                        </Typography>
+                    </div>
+                    <div className="border-t border-blue-gray-200 mt-6 pt-4">
+                        <Typography variant="subtitle" color="blue-gray" className="font-semibold mb-2">
+                            About Me
+                        </Typography>
+                        <Typography variant="body" color="blue-gray" className="mb-4">
+                            {user.about}
+                        </Typography>
+                    </div>
+                    <div className="border-t border-blue-gray-200 mt-6 pt-4">
+                        <Typography variant="subtitle" color="blue-gray" className="font-semibold mb-2">
+                            Contact Information
+                        </Typography>
+                        <Typography variant="body" color="blue-gray" className="mb-2">
+                            <span className="font-semibold">Phone:</span> {user.phone}
+                        </Typography>
+                        <Typography variant="body" color="blue-gray" className="mb-2">
+                            <span className="font-semibold">Address:</span> {user.address}
+                        </Typography>
+                    </div>
+                </CardBody>
+            </Card>
         </div>
     );
 };
 
-export default PersonalInfo;
+export default UserProfile;

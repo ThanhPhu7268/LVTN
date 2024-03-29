@@ -123,13 +123,7 @@ const AdminOrder = () => {
     return (
         <Layout style={{ minHeight: '100vh' }}>
             {/* ... */}
-            <AdminSidebar />
             <Layout>
-                <Header style={{ background: '#fff', padding: 0 }}>
-                    <div>
-                        <span>DASHBOARD</span>
-                    </div>
-                </Header>
                 <Content style={{ margin: '16px' }}>
                     {/* Bảng liệt kê đơn hàng */}
                     <Table columns={columns} dataSource={orderList} />

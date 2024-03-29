@@ -1,18 +1,30 @@
-import '../../assets/css/sidebar.css';
-import React from 'react';
-import { Layout, Menu, Button } from 'antd';
+import React from "react";
+import { useNavigate, Link } from "react-router-dom";
+import 'tailwindcss/tailwind.css';
 import {
-    UserOutlined,
-    ShoppingOutlined,
-    AppstoreOutlined,
-    BarChartOutlined,
-    LogoutOutlined,
-} from '@ant-design/icons';
-import { Link, useNavigate } from 'react-router-dom';
+    Card,
+    Typography,
+    List,
+    ListItem,
+    ListItemPrefix,
+    ListItemSuffix,
+    Chip,
+    Accordion,
+    AccordionHeader,
+    AccordionBody,
+} from "@material-tailwind/react";
+import {
+    PresentationChartBarIcon,
+    ShoppingBagIcon,
+    UserCircleIcon,
+    Cog6ToothIcon,
+    InboxIcon,
+    PowerIcon,
+} from "@heroicons/react/24/solid";
+import { ChevronRightIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
 
-const { Sider } = Layout;
-
-const AdminSidebar = () => {
+export function AdminSidebar() {
+    const [open, setOpen] = React.useState(0);
     const navigate = useNavigate();
 
     const handleLogout = () => {
@@ -21,36 +33,129 @@ const AdminSidebar = () => {
         navigate('/login');
     };
 
-    return (
-        <Sider width={200} theme="light" className="admin-sidebar">
-            <div className="admin-sidebar-logo">
-                <img alt="" src="./img/logo/logo.png" />
-            </div>
-            <div>
-                <Menu mode="inline" defaultSelectedKeys={['1']} className="admin-sidebar-menu">
-                    <Menu.Item key="1" icon={<UserOutlined />} className="admin-sidebar-menu-item">
-                        Quản lý Tài khoản
-                    </Menu.Item>
-                    <Menu.Item key="2" icon={<ShoppingOutlined />} className="admin-sidebar-menu-item">
-                        Quản lý đơn hàng
-                    </Menu.Item>
-                    <Menu.Item key="3" icon={<AppstoreOutlined />} className="admin-sidebar-menu-item">
-                        Quản lý sản phẩm
-                    </Menu.Item>
-                    <Menu.Item key="4" icon={<BarChartOutlined />} className="admin-sidebar-menu-item">
-                        Thống kê
-                    </Menu.Item>
-                </Menu>
-            </div>
-            <div>
-                <Menu mode="inline" className="admin-sidebar-menu">
-                    <Menu.Item key="5" icon={<LogoutOutlined />} className="admin-sidebar-menu-item" onClick={handleLogout}>
-                        Đăng xuất
-                    </Menu.Item>
-                </Menu>
-            </div>
-        </Sider>
-    );
-};
+    const handleOpen = (value) => {
+        setOpen(open === value ? 0 : value);
+    };
 
-export default AdminSidebar;
+    return (
+        <Card className="w-full max-w-[20rem] p-4 shadow-xl shadow-blue-gray-500/10 fixed" style={{ height: '94vh', marginLeft: '10px', boxShadow: '0 3px 10px rgba(0, 0, 0, 0.55)' }}>
+            <div className="mb-2 p-4">
+                <Typography variant="h2" color="blue-gray">
+                    Admin
+                </Typography>
+            </div>
+            <List>
+                <Accordion
+                    open={open === 1}
+                    icon={
+                        <ChevronDownIcon
+                            strokeWidth={2.5}
+                            className={`mx-auto h-4 w-4 transition-transform ${open === 1 ? "rotate-180" : ""}`}
+                        />
+                    }
+                >
+                    <ListItem className="p-0" selected={open === 1}>
+                        <AccordionHeader onClick={() => handleOpen(1)} className="border-b-0 p-3">
+                            <ListItemPrefix>
+                                <PresentationChartBarIcon className="h-5 w-5" />
+                            </ListItemPrefix>
+                            <Typography color="blue-gray" className="mr-auto font-normal">
+                                Dashboard
+                            </Typography>
+                        </AccordionHeader>
+                    </ListItem>
+                    <AccordionBody className="py-1">
+                        <List className="p-0">
+                            <ListItem>
+                                <ListItemPrefix>
+                                    <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
+                                </ListItemPrefix>
+                                Analytics
+                            </ListItem>
+                            <ListItem>
+                                <ListItemPrefix>
+                                    <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
+                                </ListItemPrefix>
+                                <Link
+                                    to='/admin/taikhoan'
+                                    style={{ textDecoration: 'none', color: 'black' }}
+                                >
+                                    Account
+                                </Link>
+                            </ListItem>
+                        </List>
+                    </AccordionBody>
+                </Accordion>
+                <Accordion
+                    open={open === 2}
+                    icon={
+                        <ChevronDownIcon
+                            strokeWidth={2.5}
+                            className={`mx-auto h-4 w-4 transition-transform ${open === 2 ? "rotate-180" : ""}`}
+                        />
+                    }
+                >
+                    <ListItem className="p-0" selected={open === 2}>
+                        <AccordionHeader onClick={() => handleOpen(2)} className="border-b-0 p-3">
+                            <ListItemPrefix>
+                                <ShoppingBagIcon className="h-5 w-5" />
+                            </ListItemPrefix>
+                            <Typography color="blue-gray" className="mr-auto font-normal">
+                                E-Commerce
+                            </Typography>
+                        </AccordionHeader>
+                    </ListItem>
+                    <AccordionBody className="py-1">
+                        <List className="p-0">
+                            <ListItem>
+                                <ListItemPrefix>
+                                    <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
+                                </ListItemPrefix>
+                                <Link
+                                    to='/admin/taikhoan'
+                                    style={{ textDecoration: 'none', color: 'black' }}
+                                >
+                                    Orders
+                                </Link>
+                            </ListItem>
+                            <ListItem>
+
+                                <ListItemPrefix>
+                                    <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
+                                </ListItemPrefix>
+                                <Link
+                                    to='/admin/product'
+                                    style={{ textDecoration: 'none', color: 'black' }}
+                                >
+                                    Products
+                                </Link>
+                            </ListItem>
+                        </List>
+                    </AccordionBody>
+                </Accordion>
+                <hr className="my-2 border-blue-gray-50" />
+                <ListItem>
+                    <ListItemPrefix>
+                        <InboxIcon className="h-5 w-5" />
+                    </ListItemPrefix>
+                    Inbox
+                    <ListItemSuffix>
+                        <Chip value="14" size="sm" variant="ghost" color="blue-gray" className="rounded-full" />
+                    </ListItemSuffix>
+                </ListItem>
+                <ListItem>
+                    <ListItemPrefix>
+                        <UserCircleIcon className="h-5 w-5" />
+                    </ListItemPrefix>
+                    Profile
+                </ListItem>
+                <ListItem onClick={handleLogout}>
+                    <ListItemPrefix>
+                        <PowerIcon className="h-5 w-5" />
+                    </ListItemPrefix>
+                    Log Out
+                </ListItem>
+            </List>
+        </Card>
+    );
+}

@@ -37,7 +37,7 @@ const BrandsCarousel = () => {
 
     return (
         <div>
-            <div className='img-brands'>
+            <div className='img-brands' style={{ display: 'flex' }}>
                 <img src='https://cdn.galle.vn/media/amasty/webp/wysiwyg/z3739362259835_a026dde213099895fcc39e723c7a3562_jpg.webp' style={{ width: '50%' }} />
                 <img src='https://cdn.galle.vn/media/amasty/webp/wysiwyg/z3739362264568_cedeb06bdab76eace15149fc6ce95ae3_jpg.webp' style={{ width: '50%' }} />
             </div>

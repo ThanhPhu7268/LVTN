@@ -1,6 +1,6 @@
 .product-page {
     padding: 24px;
-    background-color: #4089f728;
+    background-color: #ffffff93;
 }
 
 .sider-bar {
@@ -13,10 +13,48 @@
     border-radius: 10px;
 }
 
+.price-input {
+    border-radius: 0;
+}
+
+.price-input-wrapper {
+    position: relative;
+    border-radius: 0;
+}
+
+.price-input-wrapper::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 88px;
+    right: -61px;
+    height: 1px;
+    background-color: #b19e9e;
+
+}
+
+.price-input-wrapper::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    transform: translateY(-50%);
+}
+
+.right-line {
+    float: right;
+}
+
+.card--product .ant-card-body {
+    padding: 15px;
+}
+
 .filter-sider {
     background-color: #fff;
     padding: 16px;
-    border-radius: 4px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
     margin-right: 20px;
 }
@@ -41,4 +79,94 @@
 .pagination {
     margin: 30px;
     text-align: center;
+}
+
+.filter-options {
+    margin-bottom: 20px;
+}
+
+.filter-options>div {
+    margin-bottom: 10px;
+}
+
+.filter-options h4 {
+    margin-bottom: 5px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.filter-options .ant-radio-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.filter-options .ant-radio-group .ant-radio-button-wrapper {
+    margin-bottom: 8px;
+    height: 30px;
+    line-height: 28px;
+    padding: 0 15px;
+    font-size: 14px;
+}
+
+.filter-options .ant-radio-group .ant-radio-button-wrapper:first-child {
+    margin-left: 0;
+}
+
+.filter-options .ant-radio-group .ant-radio-button-wrapper:last-child {
+    margin-right: 0;
+}
+
+.filter-options .ant-radio-group .ant-radio-button-wrapper-checked {
+    background-color: #1890ff;
+    color: #fff;
+}
+
+.filter-options .ant-radio-group .ant-radio-button-wrapper-checked:hover {
+    background-color: #1890ff;
+    opacity: 0.8;
+}
+
+:where(.css-dev-only-do-not-override-1k979oh).ant-radio-wrapper .ant-radio-inner {
+    border-radius: 0;
+}
+
+.radio-btn:hover .ant-radio-inner {
+    background-color: #3b3636;
+    border: #fff;
+    box-shadow: none;
+    /* Màu bạn muốn áp dụng khi hover */
+}
+
+.radio-btn:hover .ant-radio-inner::after {
+    background-color: #3f3a3a;
+    /* Màu bạn muốn áp dụng cho dấu check khi hover */
+}
+
+/* Áp dụng kiểu cho trạng thái checked */
+.radio-btn .ant-radio-input:checked+.ant-radio-inner {
+    background-color: #000000;
+    border: #1b1919a2;
+    /* Màu bạn muốn áp dụng khi nút radio được chọn */
+}
+
+.radio-btn .ant-radio-input:checked+.ant-radio-inner::after {
+    background-color: #000000;
+    /* Màu bạn muốn áp dụng cho dấu check khi nút radio được chọn */
+}
+
+.btn-reset {
+    width: 80%;
+    height: 40px;
+    margin: 20px;
+    margin-left: 10%;
+    margin-right: 10%;
+    color: rgb(0, 0, 0);
+    border-radius: 0;
+}
+
+:where(.css-dev-only-do-not-override-1k979oh).ant-pagination .ant-pagination-item-active {
+    font-weight: 600;
+    margin-bottom: 5px;
+    background-color: #eeeeee;
+    border-color: #8f9091;
 }

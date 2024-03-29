@@ -7,38 +7,8 @@ class products {
         res.json(data)
     }
 
-    async findBrand(req, res) {
-        let data = await productService.findBrand()
-        res.json(data)
-    }
-    //tìm theo thương hiệu
     async findProductByBrand(req, res) {
-        let thuonghieu = req.params.thuonghieu
-        let data = await productService.findProductByBrand(thuonghieu)
-        res.json(data)
-    }
-
-    async findProductByMaterial(req, res) {
-        let chatlieu = req.params.chatlieu
-        let data = await productService.findProductByMaterial(chatlieu)
-        res.json(data)
-    }
-
-    async findProductByType(req, res) {
-        let kieumat = req.params.kieumat
-        let data = await productService.findProductByType(kieumat)
-        res.json(data)
-    }
-
-    async findProductBySize(req, res) {
-        let kichthuoc = req.params.kichthuoc
-        let data = await productService.findProductBySize(kichthuoc)
-        res.json(data)
-    }
-
-    async findProductByMachine(req, res) {
-        let loaimay = req.params.loaimay
-        let data = await productService.findProductByMachine(loaimay)
+        let data = await productService.findProductByBrand()
         res.json(data)
     }
 
@@ -53,6 +23,7 @@ class products {
             res.json('Thất bại')
         }
     }
+
     async update(req, res) {
         let data = await productService.update()
         res.json(data)
@@ -72,11 +43,11 @@ class products {
         res.json(data)
     }
 
-    async findOneById(req, res) {
-        let id = req.params.id
-        let data = await productService.findOneById(id)
-        res.json(data)
-    }
+    // async findOneById(req, res) {
+    //     let id = req.params.id
+    //     let data = await productService.findOneById(id)
+    //     res.json(data)
+    // }
 
 
 

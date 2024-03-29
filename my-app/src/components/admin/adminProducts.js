@@ -1,236 +1,230 @@
-import React, { useState, useEffect } from 'react';
-import { Button, Table, Modal, Form, Input, Select, Upload } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
-import AdminSidebar from './adminsidebar';
-import '../../assets/css/sidebar.css';
+import { PencilIcon } from "@heroicons/react/24/solid";
+import {
+    ArrowDownTrayIcon,
+    MagnifyingGlassIcon,
+} from "@heroicons/react/24/outline";
+import {
+    Card,
+    CardHeader,
+    Typography,
+    Button,
+    CardBody,
+    Chip,
+    CardFooter,
+    Avatar,
+    IconButton,
+    Tooltip,
+    Menu,
+    MenuItem,
+    Input,
+} from "@material-tailwind/react";
+import { useState, useEffect } from "react";
 import axios from 'axios';
 
-const { Option } = Select;
+const TABLE_HEAD = ["Name Product", "Amount", "Type", "Status", "Brand", ""];
 
-const AdminProducts = () => {
-    const [isModalVisible, setIsModalVisible] = useState(false);
+export default function AdminProducts() {
     const [products, setProducts] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(0); // Khai báo biến totalPages
 
-    const [form] = Form.useForm();
-
-    const showModal = () => {
-        setIsModalVisible(true);
-    };
-
-    const handleCancel = () => {
-        setIsModalVisible(false);
-    };
-
-    const handleSubmit = (values) => {
-        const newProduct = {
-            id: products.length + 1,
-            ...values,
-        };
-
-        setProducts([...products, newProduct]);
-        form.resetFields();
-        setIsModalVisible(false);
-    };
     useEffect(() => {
-        getProducts()
-    }, []);
+        getProducts();
+    }, [currentPage]);
 
     const getProducts = async () => {
         try {
-            const response = await axios.get(`http://localhost:8080/api/products`);
-            setProducts(response.data);
+            const response = await axios.get('http://localhost:8080/api/products/productbrand');
+            const allProducts = response.data;
+
+            // Tính chỉ số bắt đầu và chỉ số kết thúc của mảng sản phẩm dựa trên trang hiện tại và số lượng sản phẩm trên mỗi trang
+            const startIndex = (currentPage - 1) * 5;
+            const endIndex = startIndex + 5;
+
+            const productsOnCurrentPage = allProducts.slice(startIndex, endIndex);
+            setProducts(productsOnCurrentPage);
+
+            // Tính số trang dựa trên tổng số sản phẩm và số lượng sản phẩm trên mỗi trang
+            const totalProducts = allProducts.length;
+            const totalPages = Math.ceil(totalProducts / 5);
+            setTotalPages(totalPages);
         } catch (error) {
-            console.error('Error fetching data:', error);
+            console.error(error);
         }
-    }
-
-    const columns = [
-        {
-            title: 'Tên sản phẩm',
-            dataIndex: 'name',
-            key: 'name',
-        },
-        {
-            title: 'Giá',
-            dataIndex: 'price',
-            key: 'price',
-        },
-        {
-            title: 'Mô tả',
-            dataIndex: 'description',
-            key: 'description',
-        },
-        {
-            title: 'Giới tính',
-            dataIndex: 'gender',
-            key: 'gender',
-        },
-        {
-            title: 'Chất liệu',
-            dataIndex: 'material',
-            key: 'material',
-        },
-        {
-            title: 'Kiểu mặt',
-            dataIndex: 'faceType',
-            key: 'faceType',
-        },
-        {
-            title: 'Thương hiệu',
-            dataIndex: 'brand',
-            key: 'brand',
-        },
-        {
-            title: 'Kích thước',
-            dataIndex: 'size',
-            key: 'size',
-        },
-        {
-            title: 'Loại máy',
-            dataIndex: 'movement',
-            key: 'movement',
-        }, {
-            title: 'Thao tác',
-            dataIndex: 'actions',
-            key: 'actions',
-            render: (_, record) => (
-                <span>
-                    <Button type="link" onClick={() => handleEdit(record)}>
-                        Sửa
-                    </Button>
-                    <Button type="link" onClick={() => handleDelete(record)}>
-                        Xoá
-                    </Button>
-                </span>
-            ),
-        }
-    ];
-    const uploadButton = (
-        <div>
-            <PlusOutlined />
-            <div style={{ marginTop: 8 }}>Tải lên</div>
-        </div>
-    );
-
-    const handleEdit = (record) => {
-        // Hiển thị modal sửa và điền dữ liệu sản phẩm vào form
-        form.setFieldsValue(record); // Điền dữ liệu sản phẩm vào form
-        setIsModalVisible(true); // Hiển thị modal sửa
     };
 
-    const handleDelete = (record) => {
-        // Hiển thị xác nhận xoá và xử lý xoá sản phẩm sau khi xác nhận
-        Modal.confirm({
-            title: 'Xác nhận xoá',
-            content: 'Bạn có chắc chắn muốn xoá sản phẩm này?',
-            okText: 'Đồng ý',
-            cancelText: 'Hủy',
-            onOk: () => {
-                const updatedProducts = products.filter((item) => item.id !== record.id);
-                setProducts(updatedProducts);
-            },
-        });
+    const handlePageChange = (pageNumber) => {
+        setCurrentPage(pageNumber);
     };
+
+    const handleNextPage = () => {
+        if (currentPage < totalPages) {
+            setCurrentPage(currentPage + 1);
+        }
+    };
+
+    const handlePreviousPage = () => {
+        if (currentPage > 1) {
+            setCurrentPage(currentPage - 1);
+        }
+    };
+
 
     return (
-        <div className="admin-container">
-            <AdminSidebar />
-            <div>
-                <Button type="primary" onClick={showModal} className='admin-btnplus' icon={<PlusOutlined />}>
-                    Thêm sản phẩm
+        <Card className=" w-72" style={{ margin: '20px', width: '72%', marginLeft: 'auto', boxShadow: '0 3px 10px rgba(0, 0, 0, 0.2)' }}>
+            <CardHeader floated={false} shadow={false} className="rounded-none">
+                <div className="mb-4 flex flex-col justify-between gap-8 md:flex-row md:items-center">
+                    <div>
+                        <Typography variant="h5" color="blue-gray">
+                            Products
+                        </Typography>
+                        <Typography color="gray" className="mt-1 font-normal">
+                            These are details about the last transactions
+                        </Typography>
+                    </div>
+                    <div className="flex w-full shrink-0 gap-2 md:w-max">
+                        <div className="w-full md:w-72">
+                            <Input
+                                label="Search"
+                                icon={<MagnifyingGlassIcon className="h-5 w-5" />}
+                            />
+                        </div>
+                        <Button className="flex items-center gap-3" size="sm">
+                            <ArrowDownTrayIcon strokeWidth={2} className="h-4 w-4" /> Download
+                        </Button>
+                    </div>
+                </div>
+            </CardHeader>
+            <CardBody className="overflow-scroll px-0">
+                <table className="w-full min-w-max table-auto text-left">
+                    <thead>
+                        <tr>
+                            {TABLE_HEAD.map((head) => (
+                                <th
+                                    key={head}
+                                    className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4"
+                                >
+                                    <Typography
+                                        variant="small"
+                                        color="blue-gray"
+                                        className="font-normal leading-none opacity-70"
+                                    >
+                                        {head}
+                                    </Typography>
+                                </th>
+                            ))}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {products.map((item, index) => {
+                            const isLast = index === products.length - 1;
+                            const classes = isLast
+                                ? "p-4"
+                                : "p-4 border-b border-blue-gray-50";
+
+                            return (
+                                <tr key={item}>
+                                    <td className={classes}>
+                                        <div className="flex items-center gap-3">
+                                            <Avatar
+                                                src={item.sanphamhinhdaidien}
+                                                alt={item}
+                                                size="lg"
+                                                className="border border-blue-gray-50 bg-blue-gray-50/50 object-contain p-1"
+                                            />
+                                            <Typography
+                                                variant="small"
+                                                color="blue-gray"
+                                                className="font-bold"
+                                            >
+                                                {item.sanphamten}
+                                            </Typography>
+                                        </div>
+                                    </td>
+                                    <td className={classes}>
+                                        <Typography
+                                            variant="small"
+                                            color="blue-gray"
+                                            className="font-normal"
+                                        >
+                                            ${item.sanphamgia}
+                                        </Typography>
+                                    </td>
+                                    <td className={classes}>
+                                        <Typography
+                                            variant="small"
+                                            color="blue-gray"
+                                            className="font-normal"
+                                        >
+                                            {item.sanphamgioitinh}
+                                        </Typography>
+                                    </td>
+                                    <td className={classes}>
+                                        {/* <IconButton variant="text" onClick={handleClick}>
+                                            <Chip
+                                                size="small"
+                                                variant="ghost"
+                                                label={selectedStatus || "--Select status--"}
+                                                color={
+                                                    selectedStatus === "paid"
+                                                        ? "primary"
+                                                        : selectedStatus === "pending"
+                                                            ? "secondary"
+                                                            : "default"
+                                                }
+                                            />
+                                        </IconButton>
+                                        <Menu
+                                            anchorEl={anchorEl}
+                                            open={Boolean(anchorEl)}
+                                            onClose={handleClose}
+                                        >
+                                            <MenuItem onClick={() => handleMenuItemClick('paid')}>Paid</MenuItem>
+                                            <MenuItem onClick={() => handleMenuItemClick('pending')}>Pending</MenuItem>
+                                            <MenuItem onClick={() => handleMenuItemClick('cancelled')}>Cancelled</MenuItem>
+                                        </Menu> */}
+                                    </td>
+                                    <td className={classes}>
+                                        <div className="flex items-center gap-3">
+                                            <div className="h-10 w-14 rounded-md border border-blue-gray-50 p-1">
+                                                <Avatar
+                                                    src={item.thuonghieuhinhanh}
+                                                    size="xxl"
+                                                    alt='{item}'
+                                                    variant="square"
+                                                    className="h-full w-full object-contain p-1"
+                                                />
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td className={classes}>
+                                        <Tooltip content="Edit User">
+                                            <IconButton variant="text">
+                                                <PencilIcon className="h-4 w-4" />
+                                            </IconButton>
+                                        </Tooltip>
+                                    </td>
+                                </tr>
+                            );
+                        })}
+                    </tbody>
+                </table>
+            </CardBody>
+            <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
+                <Button variant="outlined" size="sm" onClick={handlePreviousPage}>
+                    Previous
                 </Button>
-                <Table dataSource={products} columns={columns} />
-
-                <Modal
-                    title="Thêm sản phẩm"
-                    visible={isModalVisible}
-                    onCancel={handleCancel}
-                    footer={null}
-                >
-                    <Form form={form} onFinish={handleSubmit}>
-                        <Form.Item name="name" label="Tên sản phẩm" placeholder="Nhập tên sản phẩm" rules={[{ required: true }]}>
-                            <Input />
-                        </Form.Item>
-                        <Form.Item name="price" label="Giá" placeholder="Thêm giá" rules={[{ required: true }]}>
-                            <Input type="number" />
-                        </Form.Item>
-                        <Form.Item name="description" label="Mô tả" placeholder="Mô tả sản phẩm">
-                            <Input.TextArea />
-                        </Form.Item>
-                        <Form.Item name="gender" label="Sản phẩm giới tính" rules={[{ required: true }]} placeholder="Chọn giới tính">
-                            <Select>
-                                <Option value="1">Nam</Option>
-                                <Option value="2">Nữ</Option>
-                            </Select>
-                        </Form.Item>
-                        <Form.Item name="material" label="Chất liệu" rules={[{ required: true }]}>
-                            <Select>
-                                <Option value="kính sapphire">Kính Sapphire</Option>
-                                <Option value="kính cứng">Kính cứng</Option>
-                                <Option value="kính hardlex">Kính Hardlex</Option>
-                            </Select>
-                        </Form.Item>
-                        <Form.Item name="faceType" label="Kiểu mặt" rules={[{ required: true }]}>
-                            <Select>
-                                <Option value="mặt tròn">Mặt tròn</Option>
-                                <Option value="mặt vuông">Mặt vuông</Option>
-                                <Option value="oval">Oval</Option>
-                                <Option value="chữ nhật">Chữ nhật</Option>
-                            </Select>
-                        </Form.Item>
-                        <Form.Item name="brand" label="Thương hiệu" rules={[{ required: true }]}>
-                            <Select>
-                                <Option value="Casio">Casio</Option>
-                                <Option value="G-Shock">G-Shock</Option>
-                                <Option value="Hublot">Hublot</Option>
-                                <Option value="Seiko">Seiko</Option>
-                                <Option value="Tissot">Tissot</Option>
-                                <Option value="Citizen">Citizen</Option>
-                                <Option value="Certina">Certina</Option>
-                                <Option value="Movado">Movado</Option>
-                                <Option value="Omega">Omega</Option>
-                                <Option value="Orient">Orient</Option>
-                                <Option value="Longines">Longines</Option>
-                                <Option value="Bentley">Bentley</Option>
-                                <Option value="Daniel Klein">Daniel Klein</Option>
-                            </Select>
-                        </Form.Item>
-                        <Form.Item name="size" label="Kích thước" rules={[{ required: true }]}>
-                            <Select>
-                                <Option value="Dưới 25mm">Dưới 25mm</Option>
-                                <Option value="25mm-30mm">25mm-30mm</Option>
-                                <Option value="30mm-35mm">30mm-35mm</Option>
-                                <Option value="35mm-38mm">35mm-38mm</Option>
-                                <Option value="38mm-40mm">38mm-40mm</Option>
-                                <Option value="40mm-43mm">40mm-43mm</Option>
-                            </Select>
-                        </Form.Item>
-                        <Form.Item name="movement" label="Loại máy" rules={[{ required: true }]}>
-                            <Select>
-                                <Option value="đồng hồ điện tử (Quartz)">Đồng hồ điện tử (Quartz)</Option>
-                                <Option value="đồng hồ cơ (Mechanical)">Đồng hồ cơ (Mechanical)</Option>
-                            </Select>
-                        </Form.Item>
-                        <Form.Item name="image" label="Hình ảnh sản phẩm">
-                            <Upload
-                                name="image"
-                                listType="picture-card"
-                                showUploadList={false}
-                                beforeUpload={() => false}
-                            >
-                                {uploadButton}
-                            </Upload>
-                        </Form.Item>
-                        <Form.Item>
-                            <Button type="primary" htmlType="submit">
-                                Thêm
-                            </Button>
-                        </Form.Item>
-                    </Form>
-                </Modal>
-            </div>
-        </div>
+                <div className="flex items-center gap-2">
+                    {Array.from({ length: totalPages }, (_, index) => (
+                        <IconButton key={index} variant={currentPage === index + 1 ? 'outlined' : 'text'} size="sm" onClick={() => handlePageChange(index + 1)}>
+                            {index + 1}
+                        </IconButton>
+                    ))}
+                </div>
+                <Button variant="outlined" size="sm" onClick={handleNextPage}>
+                    Next
+                </Button>
+            </CardFooter>
+        </Card>
     );
-};
-
-export default AdminProducts;
+}

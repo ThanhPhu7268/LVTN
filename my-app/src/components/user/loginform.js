@@ -59,7 +59,7 @@ const LoginForm = () => {
                 onFinish={onFinish}
                 className="login-form"
             >
-                <h2 className="login-title">LOGIN</h2>
+                <h2 className="login-title">Sign In</h2>
                 <Form.Item
                     name="username"
                     rules={[{ required: true, message: 'Please input your username!' }]}
@@ -76,7 +76,7 @@ const LoginForm = () => {
 
                 <Form.Item>
                     <Button type="primary" htmlType="submit" className="login-button">
-                        Log In
+                        Sign In
                     </Button>
                 </Form.Item>
 

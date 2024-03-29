@@ -3,16 +3,13 @@ import '../../assets/css/hearder.css'
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Menu, Dropdown } from "antd";
+import { Avatar } from '@material-tailwind/react';
 import { DownOutlined } from "@ant-design/icons";
 import axios from 'axios';
 
 export default function HeaderHome() {
-    const [selectedItem, setSelectedItem] = useState(null);
     const navigate = useNavigate();
-
-    const handleItemClick = (index) => {
-        setSelectedItem(index);
-    };
+    const [selectedItem, setSelectedItem] = useState(null);
 
     const handleLogout = async () => {
         localStorage.removeItem('user');
@@ -66,7 +63,13 @@ export default function HeaderHome() {
                         <div className="span-id">
                             <Dropdown overlay={menu} trigger={['click']}>
                                 <a className="ant-dropdown-link" onClick={(e) => e.preventDefault()}>
-                                    {user.taikhoanten}<DownOutlined />
+                                    <Avatar
+                                        src="https://i.pinimg.com/564x/1d/f1/43/1df143603c7a9f51f3e8348f0ede6277.jpg"
+                                        alt="avatar"
+                                        size="md"
+                                        style={{ marginTop: '24px' }}
+                                        className="mx-auto mb-4 border-2 border-blue-gray-200 rounded-full" // Thêm lớp CSS để tạo viền xung quanh avatar
+                                    />
                                 </a>
                             </Dropdown>
                         </div>
@@ -88,8 +91,6 @@ export default function HeaderHome() {
                     <li className={selectedItem === 0 ? 'active' : ''}>
                         <Link
                             to='/'
-                            onClick={() => handleItemClick(0)}
-                            style={{ color: selectedItem === 0 ? 'red' : 'black' }}
                         >
                             Home
                         </Link>
@@ -97,37 +98,30 @@ export default function HeaderHome() {
                     <li className={selectedItem === 1 ? 'active' : ''}>
                         <Link
                             to='/product'
-                            onClick={() => handleItemClick(1)}
-                            style={{ color: selectedItem === 1 ? 'red' : 'black' }}
                         >
                             Men
                         </Link>
                     </li>
                     <li className={selectedItem === 2 ? 'active' : ''}>
-                        <a
-                            href="#"
-                            onClick={() => handleItemClick(2)}
-                            style={{ color: selectedItem === 2 ? 'red' : 'black' }}
+                        <Link
+                            to='/productwm'
                         >
                             Women
-                        </a>
+                        </Link>
                     </li>
                     <li className={selectedItem === 3 ? 'active' : ''}>
-                        <a
+                        <Link
                             href="#"
-                            onClick={() => handleItemClick(3)}
-                            style={{ color: selectedItem === 3 ? 'red' : 'black' }}
                         >
                             Kids
-                        </a>
+                        </Link>
                     </li>
                     <li className={selectedItem === 4 ? 'active' : ''}>
-                        <a
+                        <Link
                             href="#"
-                            onClick={() => handleItemClick(4)} style={{ color: selectedItem === 4 ? 'red' : 'black' }}
                         >
                             History
-                        </a>
+                        </Link>
                     </li>
                 </ul>
                 <div className="nav-login-cart">

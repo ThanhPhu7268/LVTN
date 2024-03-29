@@ -17,7 +17,7 @@ const getReviewCount = () => {
     return `(${reviewCount} reviews)`;
 };
 
-const ProductPage = () => {
+const ProductWmPage = () => {
     const [currentPage, setCurrentPage] = useState(1); // Trang hiện tại
     const [priceRange, setPriceRange] = useState([0, 99999]); // Khoảng giá
     const [products, setProducts] = useState([]);
@@ -41,8 +41,17 @@ const ProductPage = () => {
 
     const getProducts = async () => {
         try {
-            const response = await axios.get(`http://localhost:8080/api/filter/gioitinh`);
+            const response = await axios.get(`http://localhost:8080/api/filter/nu`);
             setProducts(response.data);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    }
+
+    const getBrand = async () => {
+        try {
+            const response = await axios.get(`http://localhost:8080/api/filter/thuonghieu`);
+            setBrand(response.data);
         } catch (error) {
             console.error('Error fetching data:', error);
         }
@@ -66,14 +75,6 @@ const ProductPage = () => {
         }
     }
 
-    const getBrand = async () => {
-        try {
-            const response = await axios.get(`http://localhost:8080/api/filter/thuonghieu`);
-            setBrand(response.data);
-        } catch (error) {
-            console.error('Error fetching data:', error);
-        }
-    }
     const findProductByBrand = async (thuonghieu) => {
         try {
             const response = await axios.get(`http://localhost:8080/api/filter/thuonghieu/${thuonghieu}`);
@@ -123,8 +124,10 @@ const ProductPage = () => {
     const currentProducts = products
         .filter((product) => product.sanphamgia >= priceRange[0] && product.sanphamgia <= priceRange[1])
         .slice((currentPage - 1) * pageSize, currentPage * pageSize);
-
+    // Các tùy chọn lọc sản phẩm
+    const watchTypes = ['Mặt tròn', 'Mặt vuông', 'Mặt Oval', 'Mặt chữ nhật'];
     const materials = ['kimloai', 'Material 2', 'Material 3'];
+
     // Handlers cho các tùy chọn lọc sản phẩm
     const handleFilterOption = (option, filterType) => {
         switch (filterType) {
@@ -183,7 +186,7 @@ const ProductPage = () => {
                         <Slider
                             range
                             min={0}
-                            max={99999}
+                            max={300}
                             value={priceRange}
                             onChange={handlePriceRangeChange}
                         />
@@ -323,4 +326,4 @@ const ProductPage = () => {
     );
 };
 
-export default ProductPage;
+export default ProductWmPage;

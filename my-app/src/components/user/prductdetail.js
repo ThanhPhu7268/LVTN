@@ -10,8 +10,8 @@ const ProductDetailPage = () => {
     const { id } = useParams();
     const [data, setData] = useState([])
 
-    const handleAddToCart = () => {
-        console.log('Add to Cart')
+    const getRandomRating = () => {
+        return Math.random() * (5 - 3) + 3; // Generates a random number between 3 and 5
     };
     useEffect(() => {
         getProduct(id)
@@ -120,7 +120,10 @@ const ProductDetailPage = () => {
                                 <h2 className="product-name">{data[0].sanphamten}</h2>
                                 <p className="product-price">${data[0].sanphamgia}</p>
                                 <div className="product-rating">
-                                    <Rate allowHalf defaultValue={4.5} />
+                                    <Rate style={{ color: '#000', fontSize: 24 }}
+                                        character={<span className="custom-rate-icon">&#9733;</span>}
+                                        allowHalf
+                                        defaultValue={getRandomRating()} />
                                     <span className="rating-count">(18 reviews)</span>
                                 </div>
                                 <Button type="primary" size="large" className="buy-now-button" onClick={handleBuyNow}>
