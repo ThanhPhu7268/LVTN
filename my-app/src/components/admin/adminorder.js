@@ -10,7 +10,7 @@ const AdminOrder = () => {
         {
             id: 1,
             orderName: 'Đơn hàng 1',
-            products: ['Sản phẩm A', 'Sản phẩm B'],
+            products: ['Đồng Hồ Nam ', 'Đồng Hồ Nữ Casio'],
             totalAmount: 470,
             paymentStatus: 'Ship COD',
             orderStatus: 'Đang xử lý',
@@ -18,43 +18,19 @@ const AdminOrder = () => {
         {
             id: 2,
             orderName: 'Đơn hàng 2',
-            products: ['Sản phẩm C', 'Sản phẩm D'],
+            products: ['Đồng Hồ Nam ', 'Đồng Hồ Nữ Casio'],
             totalAmount: 240,
             paymentStatus: 'Ship COD',
             orderStatus: 'Đang giao',
         },
         {
             id: 3,
-            orderName: 'Đơn hàng 2',
-            products: ['Sản phẩm C', 'Sản phẩm D'],
+            orderName: 'Đơn hàng 3',
+            products: ['Đồng Hồ Nam ', 'Đồng Hồ Nữ Casio'],
             totalAmount: 240,
             paymentStatus: 'Đã thanh toán online',
             orderStatus: 'Đang giao',
-        },
-        {
-            id: 4,
-            orderName: 'Đơn hàng 3',
-            products: ['Sản phẩm C', 'Sản phẩm D'],
-            totalAmount: 240,
-            paymentStatus: 'Đã thanh toán online',
-            orderStatus: 'Đã giao',
-        },
-        {
-            id: 5,
-            orderName: 'Đơn hàng 2',
-            products: ['Sản phẩm C', 'Sản phẩm D'],
-            totalAmount: 240,
-            paymentStatus: 'Đã thanh toán online',
-            orderStatus: 'Đang xử lí',
-        },
-        {
-            id: 6,
-            orderName: 'Đơn hàng 2',
-            products: ['Sản phẩm C', 'Sản phẩm D'],
-            totalAmount: 240,
-            paymentStatus: 'Đã thanh toán online',
-            orderStatus: 'Đã giao',
-        },
+        }
         // ...Thêm đơn hàng khác vào danh sách
     ]);
 
@@ -78,16 +54,37 @@ const AdminOrder = () => {
         { title: 'Sản phẩm', dataIndex: 'products', key: 'products', render: renderProducts },
         { title: 'Tổng giá tiền', dataIndex: 'totalAmount', key: 'totalAmount' },
         { title: 'Trạng thái thanh toán', dataIndex: 'paymentStatus', key: 'paymentStatus' },
-        { title: 'Trạng thái đơn hàng', dataIndex: 'orderStatus', key: 'orderStatus' },
+        {
+            title: 'Trạng thái đơn hàng',
+            dataIndex: 'orderStatus',
+            key: 'orderStatus',
+            render: (text) => {
+                let color = '';
+                switch (text) {
+                    case 'Đang xử lý':
+                        color = 'red';
+                        break;
+                    case 'Đang giao':
+                        color = '#fb8618';
+                        break;
+                    case 'Đã giao':
+                        color = '#15f424';
+                        break;
+                    default:
+                        color = 'black';
+                }
+                return <span style={{ color, fontWeight: 'bold' }}>{text}</span>;
+            }
+        },
         {
             title: 'Hành động',
             key: 'action',
             render: (text, record) => (
                 <Space>
-                    <Button type="primary" onClick={() => handleChangeOrderStatus(record)}>
+                    <Button type="primary" style={{ background: 'black' }} onClick={() => handleChangeOrderStatus(record)}>
                         Thay đổi trạng thái
                     </Button>
-                    <Button type="danger" onClick={() => handleDeleteOrder(record)}>
+                    <Button type="danger" style={{ background: 'beige' }} onClick={() => handleDeleteOrder(record)}>
                         Xoá đơn hàng
                     </Button>
                 </Space>
@@ -121,7 +118,7 @@ const AdminOrder = () => {
     };
 
     return (
-        <Layout style={{ minHeight: '100vh' }}>
+        <Layout className=" w-72" style={{ margin: '20px', width: '72%', marginLeft: 'auto', boxShadow: '0 3px 10px rgba(0, 0, 0, 0.2)' }}>
             {/* ... */}
             <Layout>
                 <Content style={{ margin: '16px' }}>

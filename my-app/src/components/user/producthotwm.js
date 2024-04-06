@@ -9,7 +9,7 @@ import {
     Button,
 } from "@material-tailwind/react";
 
-export default function NewProduct() {
+export default function NewProductWm() {
     const [products, setProducts] = useState([]);
 
     useEffect(() => {
@@ -18,7 +18,7 @@ export default function NewProduct() {
 
     const getProducts = async () => {
         try {
-            const response = await axios.get(`http://localhost:8080/api/products/Menhome`);
+            const response = await axios.get(`http://localhost:8080/api/products/WMenhome`);
             setProducts(response.data);
         } catch (error) {
             console.error('Error fetching data:', error);

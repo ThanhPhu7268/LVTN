@@ -8,20 +8,15 @@ class filterType {
     }
 
     async findOneById(req, res) {
-        let id = req.params.id
-        let data = await filterService.findOneById(id)
+        let name = req.params.name
+        let data = await filterService.findOneById(name)
         res.json(data)
     }
+
     //tìm theo thương hiệu
     async findProductByBrand(req, res) {
         let thuonghieu = req.params.thuonghieu
         let data = await filterService.findProductByBrand(thuonghieu)
-        res.json(data)
-    }
-
-    async findProductByMaterial(req, res) {
-        let chatlieu = req.params.chatlieu
-        let data = await filterService.findProductByMaterial(chatlieu)
         res.json(data)
     }
 
@@ -54,6 +49,16 @@ class filterType {
 
     async findMachine(req, res) {
         let data = await filterService.findMachine()
+        res.json(data)
+    }
+
+    async findMaterial(req, res) {
+        let data = await filterService.findMaterial()
+        res.json(data)
+    }
+    async findProductByMaterial(req, res) {
+        let chatlieu = req.params.chatlieu
+        let data = await filterService.findProductByMaterial(chatlieu)
         res.json(data)
     }
 

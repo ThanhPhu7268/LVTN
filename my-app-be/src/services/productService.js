@@ -27,17 +27,48 @@ class productService {
             });
         })
     }
-    // findOneById(product) {
-    //     return new Promise((resolve, reject) => {
-    //         con.query(`SELECT * FROM sanpham where sanpham.idsanpham = ${product}`, function (error, result, fields) {
-    //             if (error) {
-    //                 reject(error);
-    //                 return;
-    //             }
-    //             resolve(result);
-    //         });
-    //     })
-    // }
+
+    findProductHome() {
+        return new Promise((resolve, reject) => {
+            con.query(`select * from sanpham where sanphamgioitinh = 'Nam'
+            and idthuonghieu = 3
+            limit 8;  
+            `, function (error, result, fields) {
+                if (error) {
+                    reject(error);
+                    return;
+                }
+                resolve(result);
+            });
+        })
+    }
+
+    findProductHomeWm() {
+        return new Promise((resolve, reject) => {
+            con.query(`select * from sanpham where sanphamgioitinh = 'Nữ'
+            and idthuonghieu = 2
+            limit 8;  
+            `, function (error, result, fields) {
+                if (error) {
+                    reject(error);
+                    return;
+                }
+                resolve(result);
+            });
+        })
+    }
+
+    findOneById(sanpham) {
+        return new Promise((resolve, reject) => {
+            con.query(`SELECT * FROM sanpham where sanpham.idsanpham = ${sanpham}`, function (error, result, fields) {
+                if (error) {
+                    reject(error);
+                    return;
+                }
+                resolve(result);
+            });
+        })
+    }
 
     // create(tenSP, giaBan, moTa, soLuongCon, maLoai, anhdaidien) {
     //     return new Promise((resolve, reject) => {

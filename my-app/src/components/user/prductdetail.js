@@ -20,7 +20,7 @@ const ProductDetailPage = () => {
 
     const getProduct = async (id) => {
         try {
-            const response = await axios.get(`http://localhost:8080/api/products/${id}`);
+            const response = await axios.get(`http://localhost:8080/api/filter/${id}`);
             setData(response.data);
         } catch (error) {
             console.error('Error fetching data:', error);

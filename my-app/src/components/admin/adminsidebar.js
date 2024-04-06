@@ -70,7 +70,12 @@ export function AdminSidebar() {
                                 <ListItemPrefix>
                                     <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
                                 </ListItemPrefix>
-                                Analytics
+                                <Link
+                                    to='/admin/dashboard'
+                                    style={{ textDecoration: 'none', color: 'black' }}
+                                >
+                                    Analytics
+                                </Link>
                             </ListItem>
                             <ListItem>
                                 <ListItemPrefix>
@@ -112,7 +117,7 @@ export function AdminSidebar() {
                                     <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
                                 </ListItemPrefix>
                                 <Link
-                                    to='/admin/taikhoan'
+                                    to='/admin/order'
                                     style={{ textDecoration: 'none', color: 'black' }}
                                 >
                                     Orders

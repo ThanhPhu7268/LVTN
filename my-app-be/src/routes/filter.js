@@ -3,9 +3,11 @@ var router = express.Router()
 
 const filter = require("../controller/filterController")
 
+router.get('/:id', filter.findOneById)
 router.get('/size', filter.findSize)
 router.get('/machine', filter.findMachine)
 router.get('/type', filter.findType)
+router.get('/material', filter.findMaterial)
 router.get('/thuonghieu', filter.findBrand)
 router.get('/nu', filter.findProductByWoman)
 router.get('/gioitinh', filter.findProductBySex)

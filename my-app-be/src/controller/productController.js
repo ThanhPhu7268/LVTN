@@ -7,11 +7,26 @@ class products {
         res.json(data)
     }
 
+    async findOneById(req, res) {
+        let name = req.params.name
+        let data = await productService.findOneById(name)
+        res.json(data)
+    }
+
     async findProductByBrand(req, res) {
         let data = await productService.findProductByBrand()
         res.json(data)
     }
 
+    async findProductHome(req, res) {
+        let data = await productService.findProductHome()
+        res.json(data)
+    }
+
+    async findProductHomeWm(req, res) {
+        let data = await productService.findProductHomeWm()
+        res.json(data)
+    }
     async create(req, res) {
         let product = req.body
         let avatar = req.file.filename
@@ -37,17 +52,7 @@ class products {
             res.json("Xóa thất bại")
         }
     }
-    async findAllByCategoryId(req, res) {
-        let categoryId = req.params.id
-        let data = await productService.findAllByCategoryId(categoryId)
-        res.json(data)
-    }
 
-    // async findOneById(req, res) {
-    //     let id = req.params.id
-    //     let data = await productService.findOneById(id)
-    //     res.json(data)
-    // }
 
 
 

@@ -1,6 +1,6 @@
 const con = require('../config/connectDB')
 
-class filterService {
+class filterwmService {
     //tìm theo thương hiệu
     findBrand() {
         return new Promise((resolve, reject) => {
@@ -15,9 +15,10 @@ class filterService {
         })
     }
 
-    findOneById(name) {
+    findProductByBrand(thuonghieu) {
         return new Promise((resolve, reject) => {
-            con.query(`SELECT * FROM sanpham where idsanpham = ${name}`, function (error, result, fields) {
+            con.query(`SELECT * FROM sanpham where sanphamgioitinh = 'Nữ'
+            and idthuonghieu = ${thuonghieu}`, function (error, result, fields) {
                 if (error) {
                     reject(error);
                     return;
@@ -26,11 +27,11 @@ class filterService {
             });
         })
     }
-
-    findProductByBrand(thuonghieu) {
+    //tìm theo chất liệu
+    findProductByMaterial(chatlieu) {
         return new Promise((resolve, reject) => {
-            con.query(`SELECT * FROM sanpham where sanphamgioitinh = 'Nam'
-            and idthuonghieu = ${thuonghieu}`, function (error, result, fields) {
+            con.query(`SELECT * FROM sanpham where sanphamgioitinh = 'Nữ'
+            and idchatlieu = ${chatlieu}`, function (error, result, fields) {
                 if (error) {
                     reject(error);
                     return;
@@ -53,7 +54,7 @@ class filterService {
     }
     findProductByType(kieumat) {
         return new Promise((resolve, reject) => {
-            con.query(`SELECT * FROM sanpham where sanphamgioitinh = 'Nam'
+            con.query(`SELECT * FROM sanpham where sanphamgioitinh = 'Nữ'
             and idkieumat = ${kieumat}`, function (error, result, fields) {
                 if (error) {
                     reject(error);
@@ -77,7 +78,7 @@ class filterService {
     }
     findProductBySize(kichthuoc) {
         return new Promise((resolve, reject) => {
-            con.query(`SELECT * FROM sanpham where sanphamgioitinh = 'Nam'
+            con.query(`SELECT * FROM sanpham where sanphamgioitinh = 'Nữ'
             and idkichthuoc = ${kichthuoc}`, function (error, result, fields) {
                 if (error) {
                     reject(error);
@@ -102,7 +103,7 @@ class filterService {
 
     findProductByMachine(loaimay) {
         return new Promise((resolve, reject) => {
-            con.query(`SELECT * FROM sanpham where sanphamgioitinh = 'Nam'
+            con.query(`SELECT * FROM sanpham where sanphamgioitinh = 'Nữ'
             and idloaimay = ${loaimay}`, function (error, result, fields) {
                 if (error) {
                     reject(error);
@@ -128,7 +129,7 @@ class filterService {
 
     findProductByMaterial(chatlieu) {
         return new Promise((resolve, reject) => {
-            con.query(`SELECT * FROM sanpham where sanphamgioitinh = 'Nam'
+            con.query(`SELECT * FROM sanpham where sanphamgioitinh = 'Nữ'
             and idchatlieu = ${chatlieu}`, function (error, result, fields) {
                 if (error) {
                     reject(error);
@@ -139,18 +140,6 @@ class filterService {
         })
     }
     //Tìm theo giới tính
-    findProductBySex(gioitinh) {
-        return new Promise((resolve, reject) => {
-            con.query(`SELECT * FROM sanpham where sanphamgioitinh = 'Nam'`, function (error, result, fields) {
-                if (error) {
-                    reject(error);
-                    return;
-                }
-                resolve(result);
-            });
-        })
-    }
-
     findProductByWoman() {
         return new Promise((resolve, reject) => {
             con.query(`SELECT * FROM sanpham where sanphamgioitinh = 'Nữ'`, function (error, result, fields) {
@@ -164,4 +153,4 @@ class filterService {
     }
 }
 
-module.exports = new filterService()
+module.exports = new filterwmService()

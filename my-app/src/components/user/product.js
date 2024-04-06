@@ -31,12 +31,15 @@ const ProductPage = () => {
     const [size, setSize] = useState([]);
     const [brand, setBrand] = useState([]);
     const [type, setType] = useState([]);
+    const [material, setMaterial] = useState([]);
+
     useEffect(() => {
         getProducts()
         getMachine()
         getSize()
         getBrand()
         getType()
+        getMaterial()
     }, []);
 
     const getProducts = async () => {
@@ -60,6 +63,24 @@ const ProductPage = () => {
     const findProductByType = async (types) => {
         try {
             const response = await axios.get(`http://localhost:8080/api/filter/kieumat/${types}`);
+            setProducts(response.data);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    }
+
+    const getMaterial = async () => {
+        try {
+            const response = await axios.get(`http://localhost:8080/api/filter/material`);
+            setMaterial(response.data);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    }
+
+    const findProductByMaterial = async (types) => {
+        try {
+            const response = await axios.get(`http://localhost:8080/api/filter/chatlieu/${types}`);
             setProducts(response.data);
         } catch (error) {
             console.error('Error fetching data:', error);
@@ -124,7 +145,6 @@ const ProductPage = () => {
         .filter((product) => product.sanphamgia >= priceRange[0] && product.sanphamgia <= priceRange[1])
         .slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
-    const materials = ['kimloai', 'Material 2', 'Material 3'];
     // Handlers cho các tùy chọn lọc sản phẩm
     const handleFilterOption = (option, filterType) => {
         switch (filterType) {
@@ -253,13 +273,14 @@ const ProductPage = () => {
                         </Panel>
                         <Panel header="Chất liệu" key="4">
                             <Radio.Group value={selectedMaterial} onChange={(e) => handleFilterOption(e.target.value, 'material')}>
-                                {materials.map((material) => (
-                                    <div key={material}>
+                                {material.map((item) => (
+                                    <div key={item}>
                                         <Radio
                                             className='radio-btn'
-                                            value={material}
+                                            value={item}
+                                            onClick={() => findProductByMaterial(item.idchatlieu)}
                                         >
-                                            {material}
+                                            {item.loaichatlieu}
                                         </Radio>
                                     </div>
                                 ))}
@@ -285,13 +306,13 @@ const ProductPage = () => {
                 <Content>
                     <Row gutter={[16, 16]}>
                         {/* Hiển thị sản phẩm */}
-                        {currentProducts.map((product) => (
-                            <Col key={product.idsanpham} xs={24} sm={12} md={8} lg={6}>
-                                <Link to={`/product/${product.idsanpham}`} style={{ textDecoration: 'none' }}>
-                                    <Card className="card--product" hoverable cover={<img alt={product.sanphamten} src={product.sanphamhinhdaidien} className="img-conten" />}>
+                        {currentProducts.map((products) => (
+                            <Col key={products.idsanpham} xs={24} sm={12} md={8} lg={6}>
+                                <Link to={`/product/${products.idsanpham}`} style={{ textDecoration: 'none' }}>
+                                    <Card className="card--product" hoverable cover={<img alt={products.sanphamten} src={products.sanphamhinhdaidien} className="img-conten" />}>
                                         <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '100%' }}>
                                             <div>
-                                                <h3 style={{ fontSize: '13px', fontWeight: 'bold' }}>{product.sanphamten}</h3>
+                                                <h3 style={{ fontSize: '13px', fontWeight: 'bold' }}>{products.sanphamten}</h3>
                                                 <Rate style={{ color: '#000', fontSize: 20 }}
                                                     character={<span className="custom-rate-icon">&#9733;</span>}
                                                     allowHalf
@@ -299,7 +320,7 @@ const ProductPage = () => {
                                                 <span className="rating-count" style={{ fontSize: '11px' }}>
                                                     {getReviewCount()}
                                                 </span>
-                                                <p style={{ fontSize: '22px', fontWeight: 'bold', textAlign: 'center' }} >${product.sanphamgia} <ShoppingCartOutlined /></p>
+                                                <p style={{ fontSize: '22px', fontWeight: 'bold', textAlign: 'center' }} >${products.sanphamgia} <ShoppingCartOutlined /></p>
                                             </div>
                                         </div>
                                     </Card>

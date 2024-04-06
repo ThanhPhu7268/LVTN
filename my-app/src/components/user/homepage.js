@@ -1,10 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PanelHome from './panelhome';
 import '../../assets/css/home.css';
 import BrandsCarousel from './brands';
 import NewProduct from './producthot';
+import { ButtonGroup, Button } from "@material-tailwind/react";
+import NewProductWm from './producthotwm';
 
 export default function HomePage() {
+    const [selectedCategory, setSelectedCategory] = useState('Men');
+
+    const handleCategoryClick = (category) => {
+        setSelectedCategory(category);
+    };
     return (
         <div>
             <div className="body-container" >
@@ -41,13 +48,37 @@ export default function HomePage() {
                         </div>
                     </div>
                 </div>
-                <div class="section-title text--center" style={{ padding: '50px' }}>
+                <div class="section-title text--center" style={{ padding: '50px', textAlign: 'center' }}>
                     <h2>FAMOUS BRANDS</h2>
                 </div>
                 <BrandsCarousel />
-                <div class="section-title text--center" style={{ padding: '50px', marginTop: '0px' }}>
+                <div class="section-title text--center" style={{ padding: '50px', marginTop: '0px', textAlign: 'center' }}>
                     <h2 style={{ marginBottom: '50px' }}>OUTSTANDING PRODUCT</h2>
-                    <NewProduct />
+                    <ButtonGroup className="flex" style={{
+                        width: '10%', flexWrap: 'nowrap',
+                        justifyContent: 'center', margin: 'auto', marginBottom: '30px'
+                    }}>
+                        <Button
+                            onClick={() => handleCategoryClick('Men')}
+                            active={selectedCategory === 'Men'}
+                        >
+                            Men
+                        </Button>
+                        <Button
+                            onClick={() => handleCategoryClick('Women')}
+                            active={selectedCategory === 'Women'}
+                        >
+                            Women
+                        </Button>
+                        <Button
+                            onClick={() => handleCategoryClick('Couple')}
+                            active={selectedCategory === 'Couple'}
+                        >
+                            Couple
+                        </Button>
+                    </ButtonGroup>
+                    {selectedCategory === 'Men' && <NewProduct />}
+                    {selectedCategory === 'Women' && <NewProductWm />}
                 </div>
 
             </div>
