@@ -6,7 +6,9 @@ import AdminAccount from "./adminaccount";
 import AdminOrder from "./adminorder";
 import AccountManagementPage from "./adminAccountPage";
 import Revenue from "./adminDashboar";
-
+import AdminBrands from "./adminBrand";
+import AdminWareHouse from "./adminWareHouse";
+import OrderDetailPage from "./orderDetailPage";
 import '../../assets/css/admin.css';
 export default function Home() {
     return (
@@ -16,7 +18,10 @@ export default function Home() {
                 <Route path='/account' element={<AdminAccount />} />
                 <Route path='/taikhoan' element={<AccountManagementPage />} />
                 <Route path='/order' element={<AdminOrder />} />
-                <Route path='/dashboard' element={<Revenue />} />
+                <Route path='/warehouse' element={<AdminWareHouse />} />
+                <Route path='/' element={<Revenue />} />
+                <Route path='/orderdetail/:id' element={<OrderDetailPage />} />
+                <Route path='/brand' element={<AdminBrands />} />
                 <Route path='/product' element={<AdminProducts />} />
             </Routes>
         </>

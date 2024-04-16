@@ -199,7 +199,7 @@ const ProductPage = () => {
                     {/* Hiển thị các tùy chọn lọc sản phẩm */}
                     {/* Thanh kéo thả để chọn khoảng giá */}
                     <div className="price-slider">
-                        Lọc Theo Khoảng Giá
+                        Filter
                         <Slider
                             range
                             min={0}
@@ -226,7 +226,7 @@ const ProductPage = () => {
                     </div>
                     <Button onClick={resetFilters} className='btn-reset'>Reset</Button>
                     <Collapse defaultActiveKey={['1', '2', '3', '4', '5']} accordion style={{ borderRadius: '0', backgroundColor: 'white' }}>
-                        <Panel header="Thương hiệu" key="1">
+                        <Panel header="Brands" key="1">
                             <Radio.Group value={selectedBrand} onChange={(e) => handleFilterOption(e.target.value, 'brand')}>
                                 {brand.map((item) => (
                                     <div key={item}>
@@ -241,7 +241,7 @@ const ProductPage = () => {
                                 ))}
                             </Radio.Group>
                         </Panel>
-                        <Panel header="Kiểu mặt" key="2">
+                        <Panel header="Types" key="2">
                             <Radio.Group value={selectedWatchType} onChange={(e) => handleFilterOption(e.target.value, 'watchType')}>
                                 {type.map((item) => (
                                     <div key={item}>
@@ -256,7 +256,7 @@ const ProductPage = () => {
                                 ))}
                             </Radio.Group>
                         </Panel>
-                        <Panel header="Kích cỡ" key="3">
+                        <Panel header="Sizes" key="3">
                             <Radio.Group value={selectedSize} onChange={(e) => handleFilterOption(e.target.value, 'size')}>
                                 {size.map((item) => (
                                     <div key={item}>
@@ -271,7 +271,7 @@ const ProductPage = () => {
                                 ))}
                             </Radio.Group>
                         </Panel>
-                        <Panel header="Chất liệu" key="4">
+                        <Panel header="Materials" key="4">
                             <Radio.Group value={selectedMaterial} onChange={(e) => handleFilterOption(e.target.value, 'material')}>
                                 {material.map((item) => (
                                     <div key={item}>
@@ -286,7 +286,7 @@ const ProductPage = () => {
                                 ))}
                             </Radio.Group>
                         </Panel>
-                        <Panel header="Loại đồng hồ" key="5">
+                        <Panel header="Machine" key="5">
                             <Radio.Group value={selectedDialStyle} onChange={(e) => handleFilterOption(e.target.value, 'dialStyle')}>
                                 {machine.map((item) => (
                                     <div key={item}>

@@ -51,7 +51,7 @@ class filterwmType {
         res.json(data)
     }
     async findProductByMaterial(req, res) {
-        let chatlieu = req.params.kieumat
+        let chatlieu = req.params.chatlieu
         let data = await filterwmService.findProductByMaterial(chatlieu)
         res.json(data)
     }

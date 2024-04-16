@@ -17,7 +17,7 @@ const getReviewCount = () => {
     return `(${reviewCount} reviews)`;
 };
 
-const ProductWmPage = () => {
+const ProductCouplePage = () => {
     const [currentPage, setCurrentPage] = useState(1); // Trang hiện tại
     const [priceRange, setPriceRange] = useState([0, 99999]); // Khoảng giá
     const [products, setProducts] = useState([]);
@@ -44,7 +44,7 @@ const ProductWmPage = () => {
 
     const getProducts = async () => {
         try {
-            const response = await axios.get(`http://localhost:8080/api/filterwm/nu`);
+            const response = await axios.get(`http://localhost:8080/api/filtercp/gioitinh`);
             setProducts(response.data);
         } catch (error) {
             console.error('Error fetching data:', error);
@@ -53,7 +53,7 @@ const ProductWmPage = () => {
 
     const getType = async () => {
         try {
-            const response = await axios.get(`http://localhost:8080/api/filterwm/type`);
+            const response = await axios.get(`http://localhost:8080/api/filtercp/type`);
             setType(response.data);
         } catch (error) {
             console.error('Error fetching data:', error);
@@ -62,7 +62,7 @@ const ProductWmPage = () => {
 
     const findProductByType = async (types) => {
         try {
-            const response = await axios.get(`http://localhost:8080/api/filterwm/kieumat/${types}`);
+            const response = await axios.get(`http://localhost:8080/api/filtercp/kieumat/${types}`);
             setProducts(response.data);
         } catch (error) {
             console.error('Error fetching data:', error);
@@ -71,7 +71,7 @@ const ProductWmPage = () => {
 
     const getMaterial = async () => {
         try {
-            const response = await axios.get(`http://localhost:8080/api/filterwm/material`);
+            const response = await axios.get(`http://localhost:8080/api/filtercp/material`);
             setMaterial(response.data);
         } catch (error) {
             console.error('Error fetching data:', error);
@@ -80,7 +80,7 @@ const ProductWmPage = () => {
 
     const findProductByMaterial = async (types) => {
         try {
-            const response = await axios.get(`http://localhost:8080/api/filterwm/chatlieu/${types}`);
+            const response = await axios.get(`http://localhost:8080/api/filtercp/chatlieu/${types}`);
             setProducts(response.data);
         } catch (error) {
             console.error('Error fetching data:', error);
@@ -89,7 +89,7 @@ const ProductWmPage = () => {
 
     const getBrand = async () => {
         try {
-            const response = await axios.get(`http://localhost:8080/api/filterwm/thuonghieu`);
+            const response = await axios.get(`http://localhost:8080/api/filtercp/thuonghieu`);
             setBrand(response.data);
         } catch (error) {
             console.error('Error fetching data:', error);
@@ -97,7 +97,7 @@ const ProductWmPage = () => {
     }
     const findProductByBrand = async (thuonghieu) => {
         try {
-            const response = await axios.get(`http://localhost:8080/api/filterwm/thuonghieu/${thuonghieu}`);
+            const response = await axios.get(`http://localhost:8080/api/filtercp/thuonghieu/${thuonghieu}`);
             setProducts(response.data);
         } catch (error) {
             console.error('Error fetching data:', error);
@@ -106,7 +106,7 @@ const ProductWmPage = () => {
 
     const getMachine = async () => {
         try {
-            const response = await axios.get(`http://localhost:8080/api/filterwm/machine`);
+            const response = await axios.get(`http://localhost:8080/api/filtercp/machine`);
             setMachine(response.data);
         } catch (error) {
             console.error('Error fetching data:', error);
@@ -115,7 +115,7 @@ const ProductWmPage = () => {
 
     const getSize = async () => {
         try {
-            const response = await axios.get(`http://localhost:8080/api/filterwm/size`);
+            const response = await axios.get(`http://localhost:8080/api/filtercp/size`);
             setSize(response.data);
         } catch (error) {
             console.error('Error fetching data:', error);
@@ -123,7 +123,7 @@ const ProductWmPage = () => {
     }
     const findProductBySize = async (idsize) => {
         try {
-            const response = await axios.get(`http://localhost:8080/api/filterwm/kichthuoc/${idsize}`);
+            const response = await axios.get(`http://localhost:8080/api/filtercp/kichthuoc/${idsize}`);
             setProducts(response.data);
         } catch (error) {
             console.error('Error fetching data:', error);
@@ -132,7 +132,7 @@ const ProductWmPage = () => {
 
     const findProductByMachine = async (id) => {
         try {
-            const response = await axios.get(`http://localhost:8080/api/filterwm/loaimay/${id}`);
+            const response = await axios.get(`http://localhost:8080/api/filtercp/loaimay/${id}`);
             setProducts(response.data);
         } catch (error) {
             console.error('Error fetching data:', error);
@@ -211,7 +211,7 @@ const ProductWmPage = () => {
                             <InputNumber
                                 className="price-input-wrapper"
                                 min={0}
-                                max={100}
+                                max={10000}
                                 value={priceRange[0]}
                                 onChange={(value) => handlePriceRangeChange([value, priceRange[1]])}
                             />
@@ -344,4 +344,4 @@ const ProductWmPage = () => {
     );
 };
 
-export default ProductWmPage;
+export default ProductCouplePage;

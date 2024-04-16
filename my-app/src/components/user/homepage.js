@@ -5,6 +5,8 @@ import BrandsCarousel from './brands';
 import NewProduct from './producthot';
 import { ButtonGroup, Button } from "@material-tailwind/react";
 import NewProductWm from './producthotwm';
+import NewProductCp from './producthotcp';
+import { useEffect } from 'react';
 
 export default function HomePage() {
     const [selectedCategory, setSelectedCategory] = useState('Men');
@@ -12,6 +14,21 @@ export default function HomePage() {
     const handleCategoryClick = (category) => {
         setSelectedCategory(category);
     };
+
+    useEffect(() => {
+        const script = document.createElement('script');
+        script.type = 'text/javascript';
+        script.async = true;
+        script.src = 'https://embed.tawk.to/66154688a0c6737bd129f4f8/1hr1hn2bd';
+        script.charset = 'UTF-8';
+        script.setAttribute('crossorigin', '*');
+        document.body.appendChild(script);
+
+        return () => {
+            document.body.removeChild(script);
+        };
+    }, []);
+
     return (
         <div>
             <div className="body-container" >
@@ -79,6 +96,7 @@ export default function HomePage() {
                     </ButtonGroup>
                     {selectedCategory === 'Men' && <NewProduct />}
                     {selectedCategory === 'Women' && <NewProductWm />}
+                    {selectedCategory === 'Couple' && <NewProductCp />}
                 </div>
 
             </div>

@@ -9,9 +9,9 @@ import Alert from '@mui/material/Alert';
 import { useState, useEffect } from "react";
 import axios from 'axios';
 
-const TABLE_HEAD = ["Name Product", "Amount", "Type", "Status", "Brand", ""];
+const TABLE_HEAD = ["Name Product", "Amount", "Type", "Quantity Remaining", "Brand", ""];
 
-export default function AdminProducts() {
+export default function AdminWareHouse() {
     const [products, setProducts] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0); // Khai báo biến totalPages
@@ -370,7 +370,7 @@ export default function AdminProducts() {
                                                 variant="small"
                                                 color="blue-gray"
                                                 className="font-bold"
-                                                style={{ width: '280px' }}
+                                                style={{ width: '280px', marginBottom: '0' }}
                                             >
                                                 {item.sanphamten}
                                             </Typography>
@@ -381,6 +381,7 @@ export default function AdminProducts() {
                                             variant="small"
                                             color="blue-gray"
                                             className="font-normal"
+                                            style={{ marginBottom: '0', fontWeight: 'bold' }}
                                         >
                                             ${item.sanphamgia}
                                         </Typography>
@@ -390,16 +391,13 @@ export default function AdminProducts() {
                                             variant="small"
                                             color="blue-gray"
                                             className="font-normal"
+                                            style={{ marginBottom: '0' }}
                                         >
                                             {item.sanphamgioitinh}
                                         </Typography>
                                     </td>
-                                    <td className={classes}>
-                                        {item.isInStock ? (
-                                            <Typography variant="body2" style={{ color: 'green' }}>In Stock</Typography>
-                                        ) : (
-                                            <Typography variant="body2" style={{ color: 'red' }}>Out of Stock</Typography>
-                                        )}
+                                    <td className={classes} style={{ textAlign: 'center' }}>
+                                        {item.soluongcon}
                                     </td>
                                     <td className={classes}>
                                         <div className="flex items-center gap-3">

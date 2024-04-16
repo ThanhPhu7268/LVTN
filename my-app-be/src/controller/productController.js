@@ -27,12 +27,18 @@ class products {
         let data = await productService.findProductHomeWm()
         res.json(data)
     }
+
+    async findProductHomeCp(req, res) {
+        let data = await productService.findProductHomeCp()
+        res.json(data)
+    }
+
     async create(req, res) {
         let product = req.body
-        let avatar = req.file.filename
+        // let avatar = req.file.filename
         if (product) {
-            let data = await productService.create(product.name, product.price, product.description,
-                product.quantity, product.category, avatar)
+            let data = await productService.create(product.tenSP, product.gia, product.moTa, product.gioiTinh, product.idchatlieu,
+                product.idkieumat, product.idthuonghieu, product.idkichthuoc, product.idloaimay, product.anhDaiDien)
             res.json(data)
         } else {
             res.json('Thất bại')
@@ -52,10 +58,6 @@ class products {
             res.json("Xóa thất bại")
         }
     }
-
-
-
-
 }
 
 module.exports = new products()

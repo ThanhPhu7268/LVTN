@@ -17,7 +17,7 @@ class productService {
 
     findProductByBrand() {
         return new Promise((resolve, reject) => {
-            con.query(`select * from sanpham s, thuonghieu t where s.idthuonghieu = t.idthuonghieu;  
+            con.query(`select * from sanpham s, thuonghieu t where s.idthuonghieu = t.idthuonghieu order by idsanpham DESC;  
             `, function (error, result, fields) {
                 if (error) {
                     reject(error);
@@ -30,9 +30,7 @@ class productService {
 
     findProductHome() {
         return new Promise((resolve, reject) => {
-            con.query(`select * from sanpham where sanphamgioitinh = 'Nam'
-            and idthuonghieu = 3
-            limit 8;  
+            con.query(`SELECT * FROM sanpham WHERE sanphamgioitinh = 'Nam' ORDER BY RAND() LIMIT 8;
             `, function (error, result, fields) {
                 if (error) {
                     reject(error);
@@ -45,9 +43,21 @@ class productService {
 
     findProductHomeWm() {
         return new Promise((resolve, reject) => {
-            con.query(`select * from sanpham where sanphamgioitinh = 'Nữ'
-            and idthuonghieu = 2
-            limit 8;  
+            con.query(`SELECT * FROM sanpham WHERE sanphamgioitinh = 'Nữ' ORDER BY RAND() LIMIT 8;`,
+                function (error, result, fields) {
+                    if (error) {
+                        reject(error);
+                        return;
+                    }
+                    resolve(result);
+                });
+        })
+    }
+
+
+    findProductHomeCp() {
+        return new Promise((resolve, reject) => {
+            con.query(`SELECT * FROM sanpham WHERE sanphamgioitinh = 'Cặp Đôi' ORDER BY RAND() LIMIT 8;  
             `, function (error, result, fields) {
                 if (error) {
                     reject(error);
@@ -70,32 +80,18 @@ class productService {
         })
     }
 
-    // create(tenSP, giaBan, moTa, soLuongCon, maLoai, anhdaidien) {
-    //     return new Promise((resolve, reject) => {
-    //         con.query(`INSERT INTO sanpham(tenSP, giaBan, moTa, soLuongCon, maLoai, anhdaidien)
-    //         VALUES ('${tenSP}', '${giaBan}', '${moTa}', ${soLuongCon}, ${maLoai}, '${anhdaidien}');`, function (error, result, fields) {
-    //             if (error) {
-    //                 reject(error);
-    //                 return;
-    //             }
-    //             resolve(result);
-    //         });
-    //     })
-    // }
-
-    // update() {
-    //     return new Promise((resolve, reject) => {
-    //         con.query(`UPDATE table_name
-    //         SET column1 = value1, column2 = value2, ...
-    //         WHERE condition;`, function (error, result, fields) {
-    //             if (error) {
-    //                 reject(error);
-    //                 return;
-    //             }
-    //             resolve(result);
-    //         });
-    //     })
-    // }
+    create(tenSP, gia, moTa, gioiTinh, idChatLieu, idKieuMat, idThuongHieu, idKichThuoc, idLoaiMay, anhDaiDien) {
+        return new Promise((resolve, reject) => {
+            con.query(`INSERT INTO sanpham(sanphamten, sanphamgia, sanphammota, sanphamgioitinh, idchatlieu, idkieumat, idthuonghieu, idkichthuoc, idloaimay, sanphamhinhdaidien)
+            VALUES ('${tenSP}', '${gia}', '${moTa}', '${gioiTinh}', ${idChatLieu}, ${idKieuMat}, ${idThuongHieu}, ${idKichThuoc}, ${idLoaiMay}, '${anhDaiDien}');`, function (error, result, fields) {
+                if (error) {
+                    reject(error);
+                    return;
+                }
+                resolve(result);
+            });
+        })
+    }
 
     delete(id) {
         return new Promise((resolve, reject) => {

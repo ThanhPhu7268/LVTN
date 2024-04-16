@@ -36,6 +36,11 @@ header {
     gap: 3px;
 }
 
+.hv-mid a:hover {
+    transition: color 0.3s ease-in-out;
+    color: red;
+}
+
 .nav-menu li.active a:hover {
     transition: color 0.3s ease-in-out;
     color: red;
@@ -43,7 +48,7 @@ header {
 
 .nav-menu a {
     text-decoration: none;
-    color: #626262;
+    color: #555555;
 }
 
 .nav-login-cart {
@@ -76,11 +81,11 @@ header {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: -35px;
-    margin-left: -55px;
+    margin-top: -32px;
+    margin-left: -59px;
     border-radius: 11px;
     font-size: 14px;
-    background: red;
+    background: rgb(56, 55, 55);
     color: white;
 }
 
@@ -90,9 +95,7 @@ header {
     align-items: center;
     color: white;
     justify-content: flex-end;
-    height: 50px;
-    border-bottom: 1px solid #bebaba;
-    background-color: #000000;
+    height: 60px;
 }
 
 .search-bar {
@@ -125,11 +128,11 @@ header {
 .span-id {
     display: flex;
     justify-content: space-around;
-    margin-right: 5px;
+    margin-right: 15px;
+    margin-left: 15px;
     font-size: 18px;
     font-weight: 500;
-    padding: 0px 19px;
-    color: #ffffff;
+    color: #747474;
     transition: 0.3 s;
 }
 
