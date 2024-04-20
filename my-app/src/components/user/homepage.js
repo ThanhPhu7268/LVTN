@@ -6,6 +6,7 @@ import NewProduct from './producthot';
 import { ButtonGroup, Button } from "@material-tailwind/react";
 import NewProductWm from './producthotwm';
 import NewProductCp from './producthotcp';
+import Gallery from './gallery';
 import { useEffect } from 'react';
 
 export default function HomePage() {
@@ -65,29 +66,36 @@ export default function HomePage() {
                         </div>
                     </div>
                 </div>
-                <div class="section-title text--center" style={{ padding: '50px', textAlign: 'center' }}>
+                <Gallery />
+                <div class="section-title text--center" style={{ padding: '50px', marginTop: '100px', textAlign: 'center', color: 'black', background: 'white', borderTop: '1px solid #afadad' }}>
                     <h2>FAMOUS BRANDS</h2>
                 </div>
                 <BrandsCarousel />
-                <div class="section-title text--center" style={{ padding: '50px', marginTop: '0px', textAlign: 'center' }}>
-                    <h2 style={{ marginBottom: '50px' }}>OUTSTANDING PRODUCT</h2>
+                <div class="section-title text--center" style={{ padding: '50px', marginTop: '40px', textAlign: 'center' }}>
+                    <h2 style={{ marginBottom: '30px', fontWeight: 'bold' }}>OUTSTANDING PRODUCT</h2>
                     <ButtonGroup className="flex" style={{
                         width: '10%', flexWrap: 'nowrap',
                         justifyContent: 'center', margin: 'auto', marginBottom: '30px'
                     }}>
                         <Button
+                            className='text-black'
+                            style={{ borderRadius: '0', marginRight: '5px', background: 'white', border: '1px solid black', color: 'black !important' }}
                             onClick={() => handleCategoryClick('Men')}
                             active={selectedCategory === 'Men'}
                         >
                             Men
                         </Button>
                         <Button
+                            className='text-black'
+                            style={{ borderRadius: '0', marginRight: '5px', background: 'white', border: '1px solid black', color: 'black !important' }}
                             onClick={() => handleCategoryClick('Women')}
                             active={selectedCategory === 'Women'}
                         >
                             Women
                         </Button>
                         <Button
+                            className='text-black'
+                            style={{ borderRadius: '0', marginRight: '5px', background: 'white', border: '1px solid black', color: 'black !important' }}
                             onClick={() => handleCategoryClick('Couple')}
                             active={selectedCategory === 'Couple'}
                         >

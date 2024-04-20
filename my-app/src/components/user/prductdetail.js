@@ -60,6 +60,14 @@ const ProductDetailPage = () => {
 
     const addCartDetail = async () => {
         const user = JSON.parse(window.localStorage.getItem('user'));
+        if (!user) {
+            message.warning('Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng!');
+            return;
+        }
+        if (data[0].soluongcon === 0) {
+            message.warning('Sản phẩm đã hết hàng. Không thể thêm vào giỏ hàng!');
+            return;
+        }
         const response = await axios.get(`http://localhost:8080/api/cart/${user.idkhachhang}`);
         let product = {
             quantity: 1,
@@ -102,7 +110,7 @@ const ProductDetailPage = () => {
                             <div className="main-image-container">
                                 <img
                                     alt="Main Product"
-                                    src={selectedImage || data[0].sanphamhinhdaidien}
+                                    src={`http://localhost:8080/upload/${data[0].sanphamhinhdaidien}`}
                                     className="main-image"
                                 />
                             </div>
@@ -146,7 +154,7 @@ const ProductDetailPage = () => {
                                             onClick={addCartDetail}
                                             icon={<ShoppingCartOutlined />}
                                         >
-                                            <i className="fa-solid fa-cart-shopping"></i> Add to Cart
+                                            <i className="fa-solid fa-cart-shopping"></i> Add to Cart ({data[0].soluongcon})
                                         </Button>
                                         <Button
                                             type="primary"

@@ -6,8 +6,7 @@ import HeaderHome from "./header";
 import FooterHome from "./footer";
 import Cart from "./category";
 import UserProfile from "./profile"
-import PurchaseHistory from "./history";
-
+import OrderPage from "./orderDetail";
 export default function Home() {
     return (
         <>
@@ -15,7 +14,7 @@ export default function Home() {
             <Routes>
                 <Route path='/' element={<HomePage />} />
                 <Route path='/user' element={<UserProfile />} />
-                <Route path='/history' element={<PurchaseHistory />} />
+                <Route path='/history' element={<OrderPage />} />
             </Routes>
             <FooterHome />
         </>

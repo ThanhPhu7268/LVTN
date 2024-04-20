@@ -7,6 +7,7 @@ import { Modal, TextField, Select, MenuItem, InputLabel } from "@mui/material";
 import { Upload } from "antd";
 import Alert from '@mui/material/Alert';
 import { useState, useEffect } from "react";
+import '../../assets/css/admin.css'
 import axios from 'axios';
 
 const TABLE_HEAD = ["Name Product", "Amount", "Type", "Status", "Brand", ""];
@@ -15,6 +16,18 @@ export default function AdminProducts() {
     const [products, setProducts] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0); // Khai báo biến totalPages
+    const [formData, setFormData] = useState({
+        tenSP: '',
+        gia: '',
+        moTa: '',
+        gioiTinh: '',
+        idchatlieu: '',
+        idkieumat: '',
+        idkichthuoc: '',
+        idthuonghieu: '',
+        idloaimay: '',
+        idSP: ''
+    });
 
     useEffect(() => {
         getProducts();
@@ -24,12 +37,10 @@ export default function AdminProducts() {
         try {
             const response = await axios.get('http://localhost:8080/api/products/productbrand');
             const allProducts = response.data;
-            // Tính chỉ số bắt đầu và chỉ số kết thúc của mảng sản phẩm dựa trên trang hiện tại và số lượng sản phẩm trên mỗi trang
             const startIndex = (currentPage - 1) * 15;
             const endIndex = startIndex + 15;
             const productsOnCurrentPage = allProducts.slice(startIndex, endIndex);
             setProducts(productsOnCurrentPage);
-            // Tính số trang dựa trên tổng số sản phẩm và số lượng sản phẩm trên mỗi trang
             const totalProducts = allProducts.length;
             const totalPages = Math.ceil(totalProducts / 15);
             setTotalPages(totalPages);
@@ -37,11 +48,9 @@ export default function AdminProducts() {
             console.error(error);
         }
     };
-
     const handlePageChange = (pageNumber) => {
         setCurrentPage(pageNumber);
     };
-
     const handleNextPage = () => {
         if (currentPage < totalPages) {
             setCurrentPage(currentPage + 1);
@@ -53,8 +62,36 @@ export default function AdminProducts() {
             setCurrentPage(currentPage - 1);
         }
     };
-
+    const getProductById = async (id) => {
+        try {
+            const response = await axios.get(`http://localhost:8080/api/products/${id}`);
+            formData(response.data);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    };
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [selectedProduct, setSelectedProduct] = useState(null);
+    // Hàm mở modal chỉnh sửa và điền dữ liệu của sản phẩm được chọn vào đó
+    const openEditModal = (product) => {
+        console.log(product);
+        setSelectedProduct(product);
+        setIsEditModalOpen(true);
+        setFormData({
+            tenSP: product.sanphamten,
+            gia: product.sanphamgia,
+            moTa: product.sanphammota,
+            gioiTinh: product.sanphamgioitinh,
+            idchatlieu: product.idchatlieu,
+            idkieumat: product.idkieumat,
+            idkichthuoc: product.idkichthuoc,
+            idthuonghieu: product.idthuonghieu,
+            idloaimay: product.idloaimay,
+            idSP: product.idsanpham
+        })
+    };
+
     const [newProduct, setNewProduct] = useState({
         tenSP: '',
         gia: '',
@@ -65,19 +102,28 @@ export default function AdminProducts() {
         idthuonghieu: '',
         idkichthuoc: '',
         idloaimay: '',
-        anhDaiDien: ''
+        anhDaiDien: '',
+        idSP: ''
     });
+
+    const handleEditChange = (e) => {
+        const { name, value } = e.target;
+        let newValue = value;
+        if (name === "gia" && parseFloat(value) <= 0) {
+            newValue = "1";
+        }
+        setFormData(prevState => ({
+            ...prevState,
+            [name]: newValue
+        }));
+    };
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         let newValue = value;
-
-        // Kiểm tra nếu tên trường là "gia" và giá trị nhập vào nhỏ hơn hoặc bằng 0
         if (name === "gia" && parseFloat(value) <= 0) {
-            // Đặt giá trị của ô nhập thành giá trị mặc định (ở đây là "1")
             newValue = "1";
         }
-        // Cập nhật state với giá trị mới
         setNewProduct(prevState => ({
             ...prevState,
             [name]: newValue
@@ -88,15 +134,15 @@ export default function AdminProducts() {
         event.preventDefault();
         console.log(newProduct);
         axios.post('http://localhost:8080/api/products/', newProduct, {
-            // headers: {
-            //     'Content-Type': 'multipart/form-data'
-            // }
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
         })
             .then(response => {
                 // Xử lý kết quả từ server
                 console.log(response.data);
                 setIsModalOpen(false);
-                // getApiData()
+                // formDataData()
                 setShowSuccessAlert(true);
                 setNewProduct({
                     tenSP: '',
@@ -108,7 +154,7 @@ export default function AdminProducts() {
                     idthuonghieu: '',
                     idkichthuoc: '',
                     idloaimay: '',
-                    anhDaiDien: ''
+                    anhDaiDien: null
                 })
                 setTimeout(() => {
                     setShowSuccessAlert(false);
@@ -119,6 +165,14 @@ export default function AdminProducts() {
                 console.error(error);
             });
     };
+
+    const handleChangeImage = (event) => {
+        const file = event.target.files[0];
+        setNewProduct((prev) => ({
+            ...prev,
+            anhDaiDien: file
+        }))
+    }
 
     const deleteProduct = (id, productName) => {
         const isConfirmed = window.confirm(`Bạn có chắc muốn xóa sản phẩm "${productName}" không?`);
@@ -136,7 +190,17 @@ export default function AdminProducts() {
         }
     };
 
-
+    const handleEditProduct = async () => {
+        try {
+            await axios.put(`http://localhost:8080/api/products/update`, formData);
+            console.log('Update order status successfully');
+            alert('cập nhật thành công');
+            setIsEditModalOpen(false);
+            // Cập nhật lại trạng thái đơn hàng trong state hoặc tải lại trang để cập nhật dữ liệu mới
+        } catch (error) {
+            console.error('Error updating order status:', error);
+        }
+    };
 
     return (
         <Card className=" w-72" style={{ margin: '20px', width: '72%', marginLeft: 'auto', boxShadow: '0 3px 10px rgba(0, 0, 0, 0.2)' }}>
@@ -276,6 +340,7 @@ export default function AdminProducts() {
                             <Select
                                 fullWidth
                                 name="idthuonghieu"
+                                defaultValue={newProduct.idthuonghieu}
                                 value={newProduct.idthuonghieu}
                                 style={{ marginBottom: '10px' }}
                                 onChange={handleInputChange}
@@ -308,14 +373,16 @@ export default function AdminProducts() {
                             </Select>
                         </div>
                     </div>
-                    <TextField
-                        label="Image"
-                        fullWidth
-                        name="anhDaiDien"
-                        value={newProduct.anhDaiDien}
-                        style={{ marginBottom: '10px' }}
-                        onChange={handleInputChange}
-                    />
+                    <label for="anhDaiDien" class="custom-file-upload">
+                        <span>Choose picture</span>
+                        <input
+                            id="anhDaiDien"
+                            type="file"
+                            name="anhDaiDien"
+                            style={{ marginBottom: '10px' }}
+                            onChange={handleChangeImage}
+                        />
+                    </label>
                     {/* Add more fields as needed */}
                     <Button variant="contained" color="primary"
                         style={{ marginLeft: '30%' }}
@@ -361,7 +428,7 @@ export default function AdminProducts() {
                                     <td className={classes}>
                                         <div className="flex items-center gap-3">
                                             <Avatar
-                                                src={item.sanphamhinhdaidien}
+                                                src={`http://localhost:8080/upload/${item.sanphamhinhdaidien}`}
                                                 alt={item}
                                                 size="lg"
                                                 className="border border-blue-gray-50 bg-blue-gray-50/50 object-contain p-1"
@@ -416,7 +483,10 @@ export default function AdminProducts() {
                                     </td>
                                     <td className={classes}>
                                         <Tooltip content="Edit Product">
-                                            <IconButton variant="text">
+                                            <IconButton variant="text" onClick={() => {
+                                                getProductById(item.idsanpham)
+                                                openEditModal(item)
+                                            }}>
                                                 <PencilIcon className="h-4 w-4" />
                                             </IconButton>
                                         </Tooltip>
@@ -432,6 +502,163 @@ export default function AdminProducts() {
                     </tbody>
                 </table>
             </CardBody>
+            <Modal Modal open={isEditModalOpen} onClose={() => setIsEditModalOpen(false)}>
+                <div style={{ backgroundColor: "white", padding: "20px", maxWidth: "400px", margin: "auto" }}>
+                    <Typography variant="h6" gutterBottom>
+                        Chỉnh sửa sản phẩm
+                    </Typography>
+                    {formData && (
+                        <>
+                            {/* Hiển thị các trường nhập với dữ liệu của sản phẩm được chọn điền sẵn */}
+                            <TextField
+                                label="Tên sản phẩm"
+                                fullWidth
+                                name="tenSP"
+                                value={formData.tenSP}
+                                style={{ marginBottom: '10px' }}
+                                onChange={handleEditChange}
+                            />
+                            <TextField
+                                label="Price"
+                                fullWidth
+                                name="gia"
+                                type="number"
+                                value={formData.gia}
+                                style={{ marginBottom: '10px' }}
+                                onChange={handleEditChange}
+                            />
+                            <TextField
+                                label="Description"
+                                fullWidth
+                                name="moTa"
+                                value={formData.moTa}
+                                style={{ marginBottom: '5px' }}
+                                onChange={handleEditChange}
+                            />
+                            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                <div style={{ flex: '1', marginRight: '5px' }}>
+                                    <InputLabel htmlFor="gioiTinh">Sex</InputLabel>
+                                    <Select
+                                        fullWidth
+                                        name="gioiTinh"
+                                        value={formData.gioiTinh}
+                                        onChange={handleEditChange}
+                                        InputLabelProps={{ shrink: true }}
+                                    >
+                                        <MenuItem value="Nam">Men</MenuItem>
+                                        <MenuItem value="Nữ">Women</MenuItem>
+                                        <MenuItem value="Trẻ Em">Kid</MenuItem>
+                                        <MenuItem value="Cặp Đôi">Couple</MenuItem>
+                                    </Select>
+                                </div>
+                                <div style={{ flex: '1', marginLeft: '5px' }}>
+                                    <InputLabel htmlFor="chatLieu">Material</InputLabel>
+                                    <Select
+                                        fullWidth
+                                        name="idchatlieu"
+                                        value={formData.idchatlieu}
+                                        onChange={handleEditChange}
+                                        InputLabelProps={{ shrink: true }}
+                                    >
+                                        <MenuItem value="1">Kính Sapphire</MenuItem>
+                                        <MenuItem value="2">Kính Khoáng</MenuItem>
+                                        <MenuItem value="3">Kính Hardlex</MenuItem>
+                                        <MenuItem value="4">Kính Nhựa</MenuItem>
+                                    </Select>
+                                </div>
+                            </div>
+
+                            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px' }}>
+                                <div style={{ flex: '1', marginRight: '5px' }}>
+                                    <InputLabel htmlFor="kieuMat">Type</InputLabel>
+                                    <Select
+                                        fullWidth
+                                        name="idkieumat"
+                                        value={formData.idkieumat}
+                                        onChange={handleEditChange}
+                                        InputLabelProps={{ shrink: true }}
+                                    >
+                                        <MenuItem value="1">Mặt tròn</MenuItem>
+                                        <MenuItem value="2">Mặt vuông</MenuItem>
+                                        <MenuItem value="3">Mặt oval</MenuItem>
+                                        <MenuItem value="4">Mặt chữ nhật</MenuItem>
+                                    </Select>
+                                </div>
+                                <div style={{ flex: '1', marginLeft: '5px' }}>
+                                    <InputLabel htmlFor="kichThuoc">Size</InputLabel>
+                                    <Select
+                                        fullWidth
+                                        name="idkichthuoc"
+                                        value={formData.idkichthuoc}
+                                        onChange={handleEditChange}
+                                        InputLabelProps={{ shrink: true }}
+                                    >
+                                        <MenuItem value="1">Dưới 25mm</MenuItem>
+                                        <MenuItem value="2">25mm đến 30mm</MenuItem>
+                                        <MenuItem value="3">30mm đến 35mm</MenuItem>
+                                        <MenuItem value="4">35mm đến 38mm</MenuItem>
+                                        <MenuItem value="5">38mm đến 40mm</MenuItem>
+                                        <MenuItem value="6">40mm đến 43mm</MenuItem>
+                                        <MenuItem value="7">Trên 43mm</MenuItem>
+                                    </Select>
+                                </div>
+                            </div>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px' }}>
+                                <div style={{ flex: '1', marginRight: '5px' }}>
+                                    <InputLabel htmlFor="thuongHieu">Brand</InputLabel>
+                                    <Select
+                                        fullWidth
+                                        name="idthuonghieu"
+                                        value={formData.idthuonghieu}
+                                        style={{ marginBottom: '10px' }}
+                                        onChange={handleEditChange}
+                                    >
+                                        <MenuItem value="1">Casio</MenuItem>
+                                        <MenuItem value="2">G-Shock</MenuItem>
+                                        <MenuItem value="3">Hublot</MenuItem>
+                                        <MenuItem value="4">Seiko</MenuItem>
+                                        <MenuItem value="5">Tissot</MenuItem>
+                                        <MenuItem value="6">Citizen</MenuItem>
+                                        <MenuItem value="7">Certina</MenuItem>
+                                        <MenuItem value="8">Daniel Klein</MenuItem>
+                                        <MenuItem value="9">Omega</MenuItem>
+                                        <MenuItem value="10">Orient</MenuItem>
+                                        <MenuItem value="11">Longines</MenuItem>
+                                        <MenuItem value="12">Bentley</MenuItem>
+                                    </Select>
+                                </div>
+                                <div style={{ flex: '1', marginLeft: '5px' }}>
+                                    <InputLabel htmlFor="loaiMay">Machine</InputLabel>
+                                    <Select
+                                        fullWidth
+                                        name="idloaimay"
+                                        value={formData.idloaimay}
+                                        onChange={handleEditChange}
+                                        InputLabelProps={{ shrink: true }}
+                                    >
+                                        <MenuItem value="1">Đồng Hồ Điện Tử (Quartz)</MenuItem>
+                                        <MenuItem value="2">Đồng Hồ Cơ (Mechanical)</MenuItem>
+                                    </Select>
+                                </div>
+                            </div>
+                            <input
+                                type="file"
+                                name="anhDaiDien"
+                                style={{ marginBottom: '10px' }}
+                                onChange={handleChangeImage}
+                            />
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                style={{ marginLeft: '30%' }}
+                                onClick={handleEditProduct}
+                            >
+                                Lưu thay đổi
+                            </Button>
+                        </>
+                    )}
+                </div>
+            </Modal>
             <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
                 <Button variant="outlined" size="sm" onClick={handlePreviousPage}>
                     Previous

@@ -157,22 +157,22 @@ p {
 
 /* phần title */
 .text--center {
-    background-color: #000;
+    background-color: #ffffff;
 }
 
 .section-title .h2,
 .section-title h2 {
     display: inline-block;
-    font-size: 30px;
+    font-size: 40px;
     font-weight: 700;
     margin: 0;
-    color: #ffffff;
+    color: #000000;
     position: relative;
 }
 
 .section-title .h2:before,
 .section-title h2:before {
-    background-color: #ffffff;
+    background-color: #000000;
     content: "";
     height: 2px;
     left: -100px;
@@ -183,7 +183,7 @@ p {
 
 .section-title .h2:after,
 .section-title h2:after {
-    background-color: #ffffff;
+    background-color: #000000;
     content: "";
     height: 2px;
     position: absolute;
@@ -197,9 +197,11 @@ p {
     /* Tùy chỉnh kích thước và định vị của carousel */
     width: 100%;
     margin: 0 auto;
-    background-color: #000;
+    background-color: #ffffff;
     /* Thêm border cho carousel */
-    padding: 10px;
+    padding-bottom: 50px;
+    padding-top: 50px;
+    border-bottom: 1px solid #afadad;
 }
 
 .brand-item {
@@ -208,8 +210,12 @@ p {
     justify-content: center;
     text-align: center;
     margin-right: 10px;
+    margin-bottom: 30px;
     margin: 0 10px;
+    border: #000000 solid 1px;
+    background: white;
     transition: transform 0.3s;
+    width: 250px;
 }
 
 .brand-item:hover {
@@ -220,8 +226,7 @@ p {
     /* Tùy chỉnh kích thước và định dạng hình ảnh */
     width: 80%;
     height: auto;
-    border: 1px solid #ddd;
-    border-radius: 4px;
+    border-radius: 8px;
     padding: 0px;
 }
 

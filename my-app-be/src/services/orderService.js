@@ -135,23 +135,23 @@ class orderService {
     //     })
     // }
 
-    // findAllByCustomerId(maKH) {
-    //     return new Promise((resolve, reject) => {
-    //         con.query(`select a.maDH, a.ngayDat, a.tongTien, a.maKH, a.tinhtrangthanhtoan, b.phuongthuc, c.tinhtrang, c.id as idTT
-    //         from donhang a 
-    //         inner join phuongthucthanhtoan b
-    //         on a.phuongthucthanhtoan = b.id
-    //         inner join tinhtrangdonhang c
-    //         on a.tinhtrangdonhang = c.id
-    //         and a.maKH = ${maKH} ORDER BY maDH DESC;`, function (error, result, fields) {
-    //             if (error) {
-    //                 reject(error);
-    //                 return;
-    //             }
-    //             resolve(result);
-    //         });
-    //     })
-    // }
+    findAllByCustomerId(maKH) {
+        return new Promise((resolve, reject) => {
+            con.query(`select a.*, b.phuongthucthanhtoanten, c.*
+            from donhang a, phuongthucthanhtoan b, trangthai c, khachhang d
+            where a.idkhachhang = d.idkhachhang
+            and a.idphuongthucthanhtoan = b.idphuongthucthanhtoan
+            and a.donhangtrangthai = c.idtrangthai
+            and d.idkhachhang = ${maKH}
+            ORDER BY iddonhang DESC;`, function (error, result, fields) {
+                if (error) {
+                    reject(error);
+                    return;
+                }
+                resolve(result);
+            });
+        })
+    }
 
     // findAllByTinhTrangId(id) {
     //     return new Promise((resolve, reject) => {

@@ -9,8 +9,9 @@ import ProductDetailPage from './components/user/prductdetail';
 import Protectedadmin from './components/user/useAuth';
 import ProductWmPage from './components/user/productwm';
 import ProductCouplePage from './components/user/productcp';
-import Invoice from './components/user/invoice';
-
+import OrderPage from './components/user/orderDetail';
+import MyOrder from './components/user/myorder';
+import Gallery from './components/user/gallery';
 function App() {
 
     return (
@@ -27,7 +28,9 @@ function App() {
                 <Route path='/productcp' element={<ProductCouplePage />} />
                 <Route path='/product/:id' element={<ProductDetailPage />} />
                 <Route path='/register' element={<RegistrationForm />} />
-                <Route path='/bill' element={<Invoice />} />
+                <Route path='/orderpage' element={<OrderPage />} />
+                <Route path='/myorder/:id' element={<MyOrder />} />
+                <Route path='/gallery' element={<Gallery />} />
             </Routes>
         </Router>);
 }

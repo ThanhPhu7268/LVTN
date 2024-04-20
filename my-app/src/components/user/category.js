@@ -182,12 +182,7 @@ const Cart = () => {
       setIsPayPalVisible(false);
     }
   };
-  // const onFinish = (values) => {
-  //   console.log(values);
-  //   message.success('Đặt hàng thành công!');
-  //   setCartItems([]);
-  //   window.localStorage.removeItem('cart');
-  // };
+
   const onFinish = (event) => {
     event.preventDefault();
     const nguoiDat = form.getFieldValue('fullName');
@@ -266,7 +261,7 @@ const Cart = () => {
                 title="Item"
                 dataIndex="productImg"
                 key="image"
-                render={(productImg) => <Image src={productImg} width={100} />}
+                render={(productImg) => <Image src={`http://localhost:8080/upload/${productImg}`} width={100} />}
               />
               <Column title="Product Name" dataIndex="productName" key="name" />
               <Column
@@ -360,7 +355,7 @@ const Cart = () => {
                   </>
                 )}
                 <div style={{ textAlign: 'right', fontSize: '15px', fontWeight: 'bold' }}>
-                  Tổng tiền tạm tính: <strong style={{ color: 'red' }}>{totalPrice.toLocaleString()} USD</strong>
+                  Tổng tiền tạm tính: <strong style={{ color: 'red' }}>{totalPrice.toLocaleString()}.00 USD</strong>
                 </div>
                 <Form.Item
                   label="Phương thức thanh toán"

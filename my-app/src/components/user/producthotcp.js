@@ -28,10 +28,10 @@ export default function NewProductCp() {
     return (
         <div className="grid grid-cols-4 gap-4">
             {products.map((product, index) => (
-                <Card key={index} className="w-full">
+                <Card key={index} className="w-full" style={{ border: '1px solid #d5d5d5' }}>
                     <CardHeader shadow={false} floated={false} className="h-56">
                         <img
-                            src={product.sanphamhinhdaidien}
+                            src={`http://localhost:8080/upload/${product.sanphamhinhdaidien}`}
                             alt={product.sanphamten}
                             className="h-full object-cover"
                             style={{ width: 'auto', margin: 'auto' }}

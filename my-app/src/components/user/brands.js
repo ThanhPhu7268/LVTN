@@ -38,8 +38,11 @@ const BrandsCarousel = () => {
     return (
         <div>
             <div className='img-brands' style={{ display: 'flex' }}>
-                <img src='https://cdn.galle.vn/media/amasty/webp/wysiwyg/z3739362259835_a026dde213099895fcc39e723c7a3562_jpg.webp' style={{ width: '50%' }} />
-                <img src='https://cdn.galle.vn/media/amasty/webp/wysiwyg/z3739362264568_cedeb06bdab76eace15149fc6ce95ae3_jpg.webp' style={{ width: '50%' }} />
+                <img src='https://www.omegawatches.com/media/wysiwyg/paris2024-chronoscope-stainless_steel-desktop-kv-4.jpg' style={{ width: '60%' }} />
+                <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-around' }}>
+                    <img src='https://www.omegawatches.com/media/wysiwyg/paris2024-chronoscope-stainless_steel-desktop-kv_back.png' />
+                    <img src='https://www.omegawatches.com/media/wysiwyg/watch-31030425004001-closeup-back.png' style={{}} />
+                </div>
             </div>
 
             <Carousel responsive={responsive} className="brands-carousel">

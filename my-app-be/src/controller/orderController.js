@@ -31,16 +31,16 @@ class orderController {
         }
     }
 
-    // async findAllByCustomerId(req, res) {
-    //     try {
-    //         const maKH = req.query.id
-    //         let orders = await orderService.findAllByCustomerId(maKH)
-    //         res.status(200).json(orders);
-    //     } catch (error) {
-    //         console.error('Đã xảy ra lỗi:', error);
-    //         res.status(500).json({ message: 'Đã xảy ra lỗi khi tạo đơn hàng.' });
-    //     }
-    // }
+    async findAllByCustomerId(req, res) {
+        try {
+            const maKH = req.params.id
+            let orders = await orderService.findAllByCustomerId(maKH)
+            res.status(200).json(orders);
+        } catch (error) {
+            console.error('Đã xảy ra lỗi:', error);
+            res.status(500).json({ message: 'Đã xảy ra lỗi khi tạo đơn hàng.' });
+        }
+    }
 
     // async findAllByTinhTrangId(req, res) {
     //     try {
@@ -85,20 +85,6 @@ class orderController {
             res.status(500).json({ message: 'Đã xảy ra lỗi khi cập nhật đơn hàng' });
         }
     }
-
-    async updateTTTT(req, res) {
-        const thanhToan = req.body.thanhToan;
-        const maDH = req.params.id
-        try {
-            await orderService.updateTT(thanhToan, maDH)
-            res.status(200).json({ message: 'Đã cập nhật đơn hàng thành công' });
-        } catch (error) {
-            console.error('Đã xảy ra lỗi:', error);
-            res.status(500).json({ message: 'Đã xảy ra lỗi khi cập nhật đơn hàng' });
-        }
-    }
-
-
 
     // async delete(req, res) {
     //     let id = req.params.id

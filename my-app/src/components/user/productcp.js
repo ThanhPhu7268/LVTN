@@ -309,7 +309,7 @@ const ProductCouplePage = () => {
                         {currentProducts.map((products) => (
                             <Col key={products.idsanpham} xs={24} sm={12} md={8} lg={6}>
                                 <Link to={`/product/${products.idsanpham}`} style={{ textDecoration: 'none' }}>
-                                    <Card className="card--product" hoverable cover={<img alt={products.sanphamten} src={products.sanphamhinhdaidien} className="img-conten" />}>
+                                    <Card className="card--product" hoverable cover={<img alt={products.sanphamten} src={`http://localhost:8080/upload/${products.sanphamhinhdaidien}`} className="img-conten" />}>
                                         <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '100%' }}>
                                             <div>
                                                 <h3 style={{ fontSize: '13px', fontWeight: 'bold' }}>{products.sanphamten}</h3>

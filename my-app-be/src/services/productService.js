@@ -105,6 +105,29 @@ class productService {
         })
     }
 
+    update(ten, gia, moTa, gioiTinh, chatLieu, kieuMat, thuongHieu, kichThuoc, loaiMay, idSP) {
+        return new Promise((resolve, reject) => {
+            con.query(`UPDATE sanpham
+            SET 
+                sanphamten = '${ten}',
+                sanphamgia = ${gia},
+                sanphammota = '${moTa}',
+                sanphamgioitinh = '${gioiTinh}',
+                idchatlieu = ${chatLieu},
+                idkieumat = ${kieuMat},
+                idthuonghieu = ${thuongHieu},
+                idkichthuoc = ${kichThuoc},
+                idloaimay = ${loaiMay}
+            WHERE idsanpham = ${idSP};`, function (error, result, fields) {
+                if (error) {
+                    reject(error);
+                    return;
+                }
+                resolve(result);
+            });
+        })
+    }
+
     // findAllByCategoryId(id) {
     //     return new Promise((resolve, reject) => {
     //         con.query(`SELECT * 

@@ -9,7 +9,7 @@ import Alert from '@mui/material/Alert';
 import { useState, useEffect } from "react";
 import axios from 'axios';
 
-const TABLE_HEAD = ["Name Product", "Amount", "Type", "Quantity Remaining", "Brand", ""];
+const TABLE_HEAD = ["Name Product", "SalePrice", "Type", "Quantity Remaining", "Brand", ""];
 
 export default function AdminWareHouse() {
     const [products, setProducts] = useState([]);
@@ -361,7 +361,7 @@ export default function AdminWareHouse() {
                                     <td className={classes}>
                                         <div className="flex items-center gap-3">
                                             <Avatar
-                                                src={item.sanphamhinhdaidien}
+                                                src={`http://localhost:8080/upload/${item.sanphamhinhdaidien}`}
                                                 alt={item}
                                                 size="lg"
                                                 className="border border-blue-gray-50 bg-blue-gray-50/50 object-contain p-1"

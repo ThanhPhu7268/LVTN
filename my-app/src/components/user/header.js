@@ -3,8 +3,15 @@ import '../../assets/css/hearder.css'
 import { useState } from "react";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { Link, useNavigate } from "react-router-dom";
-import { Menu, Dropdown } from "antd";
-import { Avatar, Input, Tooltip } from '@material-tailwind/react';
+// import { Menu, Dropdown } from "antd";
+import { Input, Tooltip } from '@material-tailwind/react';
+import Avatar from '@mui/material/Avatar';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import IconButton from '@mui/material/IconButton';
+import Divider from '@mui/material/Divider';
+// import Tooltip from '@mui/material/Tooltip';
+
 import axios from 'axios';
 
 export default function HeaderHome() {
@@ -53,19 +60,14 @@ export default function HeaderHome() {
     const userJSON = localStorage.getItem('user');
     const user = JSON.parse(userJSON);
 
-    const menu = (
-        <Menu>
-            <Menu.Item key="1">
-                <Link to="/user">Thông tin cá nhân</Link>
-            </Menu.Item>
-            <Menu.Item key="2">
-                <Link to="/history">Lịch sử mua hàng</Link>
-            </Menu.Item>
-            <Menu.Item key="3">
-                <button onClick={handleLogout}>Đăng xuất</button>
-            </Menu.Item>
-        </Menu>
-    );
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const open = Boolean(anchorEl);
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
 
     return (
         <header>
@@ -82,21 +84,54 @@ export default function HeaderHome() {
                     </span>
                 </Tooltip>
                 {user ? (
-                    <div className="dropdown">
-                        <div className="span-id">
-                            <Dropdown overlay={menu} trigger={['click']}>
-                                <a className="ant-dropdown-link" onClick={(e) => e.preventDefault()}>
-                                    <Avatar
-                                        src="https://i.pinimg.com/564x/1d/f1/43/1df143603c7a9f51f3e8348f0ede6277.jpg"
-                                        alt="avatar"
-                                        size="md"
-                                        style={{ marginTop: '24px' }}
-                                        className="mx-auto mb-4 border-2 border-blue-gray-200 rounded-full" // Thêm lớp CSS để tạo viền xung quanh avatar
-                                    />
-                                </a>
-                            </Dropdown>
-                        </div>
-                    </div>
+                    <React.Fragment>
+                        <Tooltip content={user.taikhoanten}>
+                            <IconButton
+                                onClick={handleClick}
+                                width="32"
+                                height="32"
+                                aria-controls={open ? 'account-menu' : undefined}
+                                aria-haspopup="true"
+                            >
+                                <Avatar />
+                            </IconButton>
+                        </Tooltip>
+                        <Menu
+                            style={{ width: '240px' }}
+                            anchorEl={anchorEl}
+                            id="account-menu"
+                            open={open}
+                            onClose={handleClose}
+                            PaperProps={{
+                                elevation: 0,
+                                sx: {
+                                    overflow: 'visible',
+                                    filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+                                    '& .MuiAvatar-root': {
+                                        width: 42,
+                                        height: 42,
+                                        ml: -0.5,
+                                        mr: 1,
+                                    },
+                                },
+                            }}
+                            transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+                            anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+                        >
+                            <MenuItem onClick={handleClose}>
+                                Profile
+                            </MenuItem>
+                            <Link style={{ textDecoration: 'none', color: 'rgba(0, 0, 0, 0.8)' }} to='/history'>
+                                <MenuItem onClick={handleClose}>
+                                    My order
+                                </MenuItem>
+                            </Link>
+                            <MenuItem style={{ borderTop: '1px solid rgb(207 207 207)' }} onClick={handleLogout}>
+                                <svg style={{ color: 'rgba(0, 0, 0, 0.54)' }} xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13.496 21H6.5c-1.105 0-2-1.151-2-2.571V5.57c0-1.419.895-2.57 2-2.57h7M16 15.5l3.5-3.5L16 8.5m-6.5 3.496h10" /></svg>
+                                Logout
+                            </MenuItem>
+                        </Menu>
+                    </React.Fragment>
                 ) : (
                     <Tooltip content="Login">
                         <Link to="/login" style={{ textDecoration: 'none' }}>
@@ -146,11 +181,12 @@ export default function HeaderHome() {
                         </Link>
                     </li>
                 </ul>
-                <div className="nav-login-cart">
-                    {/* <button>Login</button> */}
-                    <Link to="/Cart"><svg style={{ width: '45px', height: '45px', color: '#747474' }} xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M2.237 2.288a.75.75 0 1 0-.474 1.424l.265.088c.676.225 1.124.376 1.453.529c.312.145.447.262.533.382c.087.12.155.284.194.626c.041.361.042.833.042 1.546v2.672c0 1.367 0 2.47.117 3.337c.12.9.38 1.658.982 2.26c.601.602 1.36.86 2.26.982c.866.116 1.969.116 3.336.116H19a.75.75 0 0 0 0-1.5h-8c-1.435 0-2.436-.002-3.192-.103c-.733-.099-1.122-.28-1.399-.556a1.496 1.496 0 0 1-.255-.341h9.905c.448 0 .842 0 1.17-.035c.354-.039.698-.124 1.02-.337c.324-.213.537-.495.712-.806c.161-.286.317-.649.493-1.061l.467-1.09c.385-.896.706-1.647.867-2.257c.168-.637.212-1.302-.184-1.903c-.396-.6-1.025-.822-1.676-.919c-.625-.092-1.441-.092-2.417-.092H5.707a5.204 5.204 0 0 0-.009-.083c-.055-.485-.176-.93-.467-1.333c-.291-.404-.675-.66-1.117-.865c-.417-.194-.946-.37-1.572-.58zM5.75 6.75V9.5c0 1.172.001 2.054.057 2.75h10.215c.496 0 .809-.001 1.046-.027c.219-.023.303-.062.356-.097c.053-.035.122-.097.23-.289c.117-.208.24-.495.436-.95l.429-1c.414-.968.69-1.616.819-2.106c.126-.476.062-.62.014-.694c-.049-.073-.157-.189-.644-.26c-.501-.075-1.205-.077-2.257-.077zm-.5 12.75a2.25 2.25 0 1 0 4.5 0a2.25 2.25 0 0 0-4.5 0m2.25.75a.75.75 0 1 1 0-1.5a.75.75 0 0 1 0 1.5m9 1.5a2.25 2.25 0 1 1 0-4.5a2.25 2.25 0 0 1 0 4.5m-.75-2.25a.75.75 0 1 0 1.5 0a.75.75 0 0 0-1.5 0" clip-rule="evenodd" /></svg></Link>
-                    <div className="cart-count">{quantity}</div>
-                </div>
+                <Tooltip content="my cart">
+                    <div className="nav-login-cart">
+                        <Link to="/Cart"><svg style={{ width: '45px', height: '45px', color: '#747474' }} xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M2.237 2.288a.75.75 0 1 0-.474 1.424l.265.088c.676.225 1.124.376 1.453.529c.312.145.447.262.533.382c.087.12.155.284.194.626c.041.361.042.833.042 1.546v2.672c0 1.367 0 2.47.117 3.337c.12.9.38 1.658.982 2.26c.601.602 1.36.86 2.26.982c.866.116 1.969.116 3.336.116H19a.75.75 0 0 0 0-1.5h-8c-1.435 0-2.436-.002-3.192-.103c-.733-.099-1.122-.28-1.399-.556a1.496 1.496 0 0 1-.255-.341h9.905c.448 0 .842 0 1.17-.035c.354-.039.698-.124 1.02-.337c.324-.213.537-.495.712-.806c.161-.286.317-.649.493-1.061l.467-1.09c.385-.896.706-1.647.867-2.257c.168-.637.212-1.302-.184-1.903c-.396-.6-1.025-.822-1.676-.919c-.625-.092-1.441-.092-2.417-.092H5.707a5.204 5.204 0 0 0-.009-.083c-.055-.485-.176-.93-.467-1.333c-.291-.404-.675-.66-1.117-.865c-.417-.194-.946-.37-1.572-.58zM5.75 6.75V9.5c0 1.172.001 2.054.057 2.75h10.215c.496 0 .809-.001 1.046-.027c.219-.023.303-.062.356-.097c.053-.035.122-.097.23-.289c.117-.208.24-.495.436-.95l.429-1c.414-.968.69-1.616.819-2.106c.126-.476.062-.62.014-.694c-.049-.073-.157-.189-.644-.26c-.501-.075-1.205-.077-2.257-.077zm-.5 12.75a2.25 2.25 0 1 0 4.5 0a2.25 2.25 0 0 0-4.5 0m2.25.75a.75.75 0 1 1 0-1.5a.75.75 0 0 1 0 1.5m9 1.5a2.25 2.25 0 1 1 0-4.5a2.25 2.25 0 0 1 0 4.5m-.75-2.25a.75.75 0 1 0 1.5 0a.75.75 0 0 0-1.5 0" clip-rule="evenodd" /></svg></Link>
+                        <div className="cart-count">{quantity}</div>
+                    </div>
+                </Tooltip>
             </div>
         </header >
     )

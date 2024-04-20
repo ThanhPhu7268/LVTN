@@ -12,6 +12,8 @@ app.use(express.json())
 //public 
 app.use(express.static(path.join(__dirname, '/public')))
 
+app.use(express.static(path.join(__dirname, '/src/public/upload')))
+
 const route = require('./routes/route')
 route(app)
 
