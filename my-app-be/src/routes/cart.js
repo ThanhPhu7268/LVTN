@@ -10,10 +10,4 @@ router.post('/', cartController.createCartDetail)
 router.delete('/:id', cartController.delete)
 
 
-// router.put('/:id', cartController.update)
-
-
-
-
-
 module.exports = router 

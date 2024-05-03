@@ -9,12 +9,24 @@ import Alert from '@mui/material/Alert';
 import { useState, useEffect } from "react";
 import axios from 'axios';
 
-const TABLE_HEAD = ["Name Product", "SalePrice", "Type", "Quantity Remaining", "Brand", ""];
+const TABLE_HEAD = ["Name Product", "SalePrice", "Type", "Qty Remaining", "Brand", ""];
 
 export default function AdminWareHouse() {
     const [products, setProducts] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0); // Khai báo biến totalPages
+    const [formData, setFormData] = useState({
+        tenSP: '',
+        gia: '',
+        moTa: '',
+        gioiTinh: '',
+        idchatlieu: '',
+        idkieumat: '',
+        idkichthuoc: '',
+        idthuonghieu: '',
+        idloaimay: '',
+        idSP: ''
+    });
 
     useEffect(() => {
         getProducts();
@@ -24,12 +36,10 @@ export default function AdminWareHouse() {
         try {
             const response = await axios.get('http://localhost:8080/api/products/productbrand');
             const allProducts = response.data;
-            // Tính chỉ số bắt đầu và chỉ số kết thúc của mảng sản phẩm dựa trên trang hiện tại và số lượng sản phẩm trên mỗi trang
             const startIndex = (currentPage - 1) * 15;
             const endIndex = startIndex + 15;
             const productsOnCurrentPage = allProducts.slice(startIndex, endIndex);
             setProducts(productsOnCurrentPage);
-            // Tính số trang dựa trên tổng số sản phẩm và số lượng sản phẩm trên mỗi trang
             const totalProducts = allProducts.length;
             const totalPages = Math.ceil(totalProducts / 15);
             setTotalPages(totalPages);
@@ -37,11 +47,9 @@ export default function AdminWareHouse() {
             console.error(error);
         }
     };
-
     const handlePageChange = (pageNumber) => {
         setCurrentPage(pageNumber);
     };
-
     const handleNextPage = () => {
         if (currentPage < totalPages) {
             setCurrentPage(currentPage + 1);
@@ -53,8 +61,36 @@ export default function AdminWareHouse() {
             setCurrentPage(currentPage - 1);
         }
     };
-
+    const getProductById = async (id) => {
+        try {
+            const response = await axios.get(`http://localhost:8080/api/products/${id}`);
+            formData(response.data);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    };
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [selectedProduct, setSelectedProduct] = useState(null);
+    // Hàm mở modal chỉnh sửa và điền dữ liệu của sản phẩm được chọn vào đó
+    const openEditModal = (product) => {
+        console.log(product);
+        setSelectedProduct(product);
+        setIsEditModalOpen(true);
+        setFormData({
+            tenSP: product.sanphamten,
+            gia: product.sanphamgia,
+            moTa: product.sanphammota,
+            gioiTinh: product.sanphamgioitinh,
+            idchatlieu: product.idchatlieu,
+            idkieumat: product.idkieumat,
+            idkichthuoc: product.idkichthuoc,
+            idthuonghieu: product.idthuonghieu,
+            idloaimay: product.idloaimay,
+            idSP: product.idsanpham
+        })
+    };
+
     const [newProduct, setNewProduct] = useState({
         tenSP: '',
         gia: '',
@@ -65,19 +101,28 @@ export default function AdminWareHouse() {
         idthuonghieu: '',
         idkichthuoc: '',
         idloaimay: '',
-        anhDaiDien: ''
+        anhDaiDien: '',
+        idSP: ''
     });
+
+    const handleEditChange = (e) => {
+        const { name, value } = e.target;
+        let newValue = value;
+        if (name === "gia" && parseFloat(value) <= 0) {
+            newValue = "1";
+        }
+        setFormData(prevState => ({
+            ...prevState,
+            [name]: newValue
+        }));
+    };
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         let newValue = value;
-
-        // Kiểm tra nếu tên trường là "gia" và giá trị nhập vào nhỏ hơn hoặc bằng 0
         if (name === "gia" && parseFloat(value) <= 0) {
-            // Đặt giá trị của ô nhập thành giá trị mặc định (ở đây là "1")
             newValue = "1";
         }
-        // Cập nhật state với giá trị mới
         setNewProduct(prevState => ({
             ...prevState,
             [name]: newValue
@@ -87,16 +132,20 @@ export default function AdminWareHouse() {
     const handleAddProduct = (event) => {
         event.preventDefault();
         console.log(newProduct);
+        if (parseFloat(newProduct.gia) <= parseFloat(newProduct.giaNhap)) {
+            alert('Giá bán phải lớn hơn giá nhập.');
+            return;
+        }
         axios.post('http://localhost:8080/api/products/', newProduct, {
-            // headers: {
-            //     'Content-Type': 'multipart/form-data'
-            // }
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
         })
             .then(response => {
                 // Xử lý kết quả từ server
                 console.log(response.data);
                 setIsModalOpen(false);
-                // getApiData()
+                // formDataData()
                 setShowSuccessAlert(true);
                 setNewProduct({
                     tenSP: '',
@@ -108,7 +157,9 @@ export default function AdminWareHouse() {
                     idthuonghieu: '',
                     idkichthuoc: '',
                     idloaimay: '',
-                    anhDaiDien: ''
+                    anhDaiDien: null,
+                    soLuongCon: '',
+                    giaNhap: ''
                 })
                 setTimeout(() => {
                     setShowSuccessAlert(false);
@@ -119,6 +170,14 @@ export default function AdminWareHouse() {
                 console.error(error);
             });
     };
+
+    const handleChangeImage = (event) => {
+        const file = event.target.files[0];
+        setNewProduct((prev) => ({
+            ...prev,
+            anhDaiDien: file
+        }))
+    }
 
     const deleteProduct = (id, productName) => {
         const isConfirmed = window.confirm(`Bạn có chắc muốn xóa sản phẩm "${productName}" không?`);
@@ -136,30 +195,39 @@ export default function AdminWareHouse() {
         }
     };
 
-
+    const handleEditProduct = async () => {
+        try {
+            await axios.put(`http://localhost:8080/api/products/update`, formData);
+            console.log('Update order status successfully');
+            alert('cập nhật thành công');
+            setIsEditModalOpen(false);
+            // Cập nhật lại trạng thái đơn hàng trong state hoặc tải lại trang để cập nhật dữ liệu mới
+        } catch (error) {
+            console.error('Error updating order status:', error);
+        }
+    };
 
     return (
         <Card className=" w-72" style={{ margin: '20px', width: '72%', marginLeft: 'auto', boxShadow: '0 3px 10px rgba(0, 0, 0, 0.2)' }}>
             <CardHeader floated={false} shadow={false} className="rounded-none">
-                <div className="mb-4 flex flex-col justify-between gap-8 md:flex-row md:items-center">
+                <div className="mb-4 flex flex-col justify-between gap-8 md:flex-row md:items-center p-4 bg-gainsboro"
+                    style={{ background: 'gainsboro', borderRadius: '10px' }}
+                >
                     <div>
                         <Typography variant="h5" color="blue-gray">
-                            Products
+                            WareHouse Products
                         </Typography>
                         <Typography color="gray" className="mt-1 font-normal">
                             Otis watch products
                         </Typography>
                     </div>
-                    <div className="flex w-full shrink-0 gap-2 md:w-max">
+                    <div className="flex w-full shrink-0 gap-2 md:w-max" style={{ background: 'white', borderRadius: '10px' }}>
                         <div className="w-full md:w-72">
                             <Input
                                 label="Search"
                                 icon={<MagnifyingGlassIcon className="h-5 w-5" />}
                             />
                         </div>
-                        <Button className="flex items-center gap-3" size="sm">
-                            <ArrowDownTrayIcon strokeWidth={2} className="h-4 w-4" /> Download
-                        </Button>
                     </div>
                     <div>
                         <Button
@@ -173,7 +241,7 @@ export default function AdminWareHouse() {
                 </div>
             </CardHeader>
             <Modal open={isModalOpen} onClose={() => setIsModalOpen(false)}>
-                <div style={{ backgroundColor: "white", padding: "20px", maxWidth: "400px", margin: "auto" }}>
+                <div style={{ backgroundColor: "white", padding: "20px", maxWidth: "400px", margin: "auto", marginTop: '10px', maxHeight: "90vh", overflowY: "auto" }}>
                     <Typography variant="h6" gutterBottom>
                         Add Product
                     </Typography>
@@ -185,12 +253,34 @@ export default function AdminWareHouse() {
                         style={{ marginBottom: '10px' }}
                         onChange={handleInputChange}
                     />
+                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <div style={{ flex: '1', marginRight: '5px' }}>
+                            <TextField
+                                label="Warehouse Price"
+                                name="giaNhap"
+                                type="number"
+                                value={newProduct.giaNhap}
+                                style={{ marginBottom: '10px' }}
+                                onChange={handleInputChange}
+                            />
+                        </div>
+                        <div style={{ flex: '1', marginLeft: '5px' }}>
+                            <TextField
+                                label="Price"
+                                name="gia"
+                                type="number"
+                                value={newProduct.gia}
+                                style={{ marginBottom: '10px' }}
+                                onChange={handleInputChange}
+                            />
+                        </div>
+                    </div>
                     <TextField
-                        label="Price"
+                        label="Qty Remaining"
                         fullWidth
-                        name="gia"
+                        name="soLuongCon"
                         type="number"
-                        value={newProduct.gia}
+                        value={newProduct.soLuongCon}
                         style={{ marginBottom: '10px' }}
                         onChange={handleInputChange}
                     />
@@ -234,7 +324,6 @@ export default function AdminWareHouse() {
                             </Select>
                         </div>
                     </div>
-
                     <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px' }}>
                         <div style={{ flex: '1', marginRight: '5px' }}>
                             <InputLabel htmlFor="kieuMat">Type</InputLabel>
@@ -276,6 +365,7 @@ export default function AdminWareHouse() {
                             <Select
                                 fullWidth
                                 name="idthuonghieu"
+                                defaultValue={newProduct.idthuonghieu}
                                 value={newProduct.idthuonghieu}
                                 style={{ marginBottom: '10px' }}
                                 onChange={handleInputChange}
@@ -308,14 +398,16 @@ export default function AdminWareHouse() {
                             </Select>
                         </div>
                     </div>
-                    <TextField
-                        label="Image"
-                        fullWidth
-                        name="anhDaiDien"
-                        value={newProduct.anhDaiDien}
-                        style={{ marginBottom: '10px' }}
-                        onChange={handleInputChange}
-                    />
+                    <label for="anhDaiDien" class="custom-file-upload">
+                        <span>Choose picture</span>
+                        <input
+                            id="anhDaiDien"
+                            type="file"
+                            name="anhDaiDien"
+                            style={{ marginBottom: '10px' }}
+                            onChange={handleChangeImage}
+                        />
+                    </label>
                     {/* Add more fields as needed */}
                     <Button variant="contained" color="primary"
                         style={{ marginLeft: '30%' }}
@@ -370,7 +462,7 @@ export default function AdminWareHouse() {
                                                 variant="small"
                                                 color="blue-gray"
                                                 className="font-bold"
-                                                style={{ width: '280px', marginBottom: '0' }}
+                                                style={{ width: '280px' }}
                                             >
                                                 {item.sanphamten}
                                             </Typography>
@@ -381,7 +473,6 @@ export default function AdminWareHouse() {
                                             variant="small"
                                             color="blue-gray"
                                             className="font-normal"
-                                            style={{ marginBottom: '0', fontWeight: 'bold' }}
                                         >
                                             ${item.sanphamgia}
                                         </Typography>
@@ -391,13 +482,19 @@ export default function AdminWareHouse() {
                                             variant="small"
                                             color="blue-gray"
                                             className="font-normal"
-                                            style={{ marginBottom: '0' }}
                                         >
                                             {item.sanphamgioitinh}
                                         </Typography>
                                     </td>
-                                    <td className={classes} style={{ textAlign: 'center' }}>
-                                        {item.soluongcon}
+                                    <td className={classes}>
+                                        <Typography
+                                            style={{ textAlign: 'center' }}
+                                            variant="small"
+                                            color="blue-gray"
+                                            className="font-normal"
+                                        >
+                                            {item.soluongcon}
+                                        </Typography>
                                     </td>
                                     <td className={classes}>
                                         <div className="flex items-center gap-3">
@@ -414,7 +511,10 @@ export default function AdminWareHouse() {
                                     </td>
                                     <td className={classes}>
                                         <Tooltip content="Edit Product">
-                                            <IconButton variant="text">
+                                            <IconButton variant="text" onClick={() => {
+                                                getProductById(item.idsanpham)
+                                                openEditModal(item)
+                                            }}>
                                                 <PencilIcon className="h-4 w-4" />
                                             </IconButton>
                                         </Tooltip>
@@ -430,9 +530,166 @@ export default function AdminWareHouse() {
                     </tbody>
                 </table>
             </CardBody>
+            <Modal Modal open={isEditModalOpen} onClose={() => setIsEditModalOpen(false)}>
+                <div style={{ backgroundColor: "white", padding: "20px", maxWidth: "400px", margin: "auto" }}>
+                    <Typography variant="h6" gutterBottom>
+                        Chỉnh sửa sản phẩm
+                    </Typography>
+                    {formData && (
+                        <>
+                            {/* Hiển thị các trường nhập với dữ liệu của sản phẩm được chọn điền sẵn */}
+                            <TextField
+                                label="Tên sản phẩm"
+                                fullWidth
+                                name="tenSP"
+                                value={formData.tenSP}
+                                style={{ marginBottom: '10px' }}
+                                onChange={handleEditChange}
+                            />
+                            <TextField
+                                label="Price"
+                                fullWidth
+                                name="gia"
+                                type="number"
+                                value={formData.gia}
+                                style={{ marginBottom: '10px' }}
+                                onChange={handleEditChange}
+                            />
+                            <TextField
+                                label="Description"
+                                fullWidth
+                                name="moTa"
+                                value={formData.moTa}
+                                style={{ marginBottom: '5px' }}
+                                onChange={handleEditChange}
+                            />
+                            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                <div style={{ flex: '1', marginRight: '5px' }}>
+                                    <InputLabel htmlFor="gioiTinh">Sex</InputLabel>
+                                    <Select
+                                        fullWidth
+                                        name="gioiTinh"
+                                        value={formData.gioiTinh}
+                                        onChange={handleEditChange}
+                                        InputLabelProps={{ shrink: true }}
+                                    >
+                                        <MenuItem value="Nam">Men</MenuItem>
+                                        <MenuItem value="Nữ">Women</MenuItem>
+                                        <MenuItem value="Trẻ Em">Kid</MenuItem>
+                                        <MenuItem value="Cặp Đôi">Couple</MenuItem>
+                                    </Select>
+                                </div>
+                                <div style={{ flex: '1', marginLeft: '5px' }}>
+                                    <InputLabel htmlFor="chatLieu">Material</InputLabel>
+                                    <Select
+                                        fullWidth
+                                        name="idchatlieu"
+                                        value={formData.idchatlieu}
+                                        onChange={handleEditChange}
+                                        InputLabelProps={{ shrink: true }}
+                                    >
+                                        <MenuItem value="1">Kính Sapphire</MenuItem>
+                                        <MenuItem value="2">Kính Khoáng</MenuItem>
+                                        <MenuItem value="3">Kính Hardlex</MenuItem>
+                                        <MenuItem value="4">Kính Nhựa</MenuItem>
+                                    </Select>
+                                </div>
+                            </div>
+
+                            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px' }}>
+                                <div style={{ flex: '1', marginRight: '5px' }}>
+                                    <InputLabel htmlFor="kieuMat">Type</InputLabel>
+                                    <Select
+                                        fullWidth
+                                        name="idkieumat"
+                                        value={formData.idkieumat}
+                                        onChange={handleEditChange}
+                                        InputLabelProps={{ shrink: true }}
+                                    >
+                                        <MenuItem value="1">Mặt tròn</MenuItem>
+                                        <MenuItem value="2">Mặt vuông</MenuItem>
+                                        <MenuItem value="3">Mặt oval</MenuItem>
+                                        <MenuItem value="4">Mặt chữ nhật</MenuItem>
+                                    </Select>
+                                </div>
+                                <div style={{ flex: '1', marginLeft: '5px' }}>
+                                    <InputLabel htmlFor="kichThuoc">Size</InputLabel>
+                                    <Select
+                                        fullWidth
+                                        name="idkichthuoc"
+                                        value={formData.idkichthuoc}
+                                        onChange={handleEditChange}
+                                        InputLabelProps={{ shrink: true }}
+                                    >
+                                        <MenuItem value="1">Dưới 25mm</MenuItem>
+                                        <MenuItem value="2">25mm đến 30mm</MenuItem>
+                                        <MenuItem value="3">30mm đến 35mm</MenuItem>
+                                        <MenuItem value="4">35mm đến 38mm</MenuItem>
+                                        <MenuItem value="5">38mm đến 40mm</MenuItem>
+                                        <MenuItem value="6">40mm đến 43mm</MenuItem>
+                                        <MenuItem value="7">Trên 43mm</MenuItem>
+                                    </Select>
+                                </div>
+                            </div>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px' }}>
+                                <div style={{ flex: '1', marginRight: '5px' }}>
+                                    <InputLabel htmlFor="thuongHieu">Brand</InputLabel>
+                                    <Select
+                                        fullWidth
+                                        name="idthuonghieu"
+                                        value={formData.idthuonghieu}
+                                        style={{ marginBottom: '10px' }}
+                                        onChange={handleEditChange}
+                                    >
+                                        <MenuItem value="1">Casio</MenuItem>
+                                        <MenuItem value="2">G-Shock</MenuItem>
+                                        <MenuItem value="3">Hublot</MenuItem>
+                                        <MenuItem value="4">Seiko</MenuItem>
+                                        <MenuItem value="5">Tissot</MenuItem>
+                                        <MenuItem value="6">Citizen</MenuItem>
+                                        <MenuItem value="7">Certina</MenuItem>
+                                        <MenuItem value="8">Daniel Klein</MenuItem>
+                                        <MenuItem value="9">Omega</MenuItem>
+                                        <MenuItem value="10">Orient</MenuItem>
+                                        <MenuItem value="11">Longines</MenuItem>
+                                        <MenuItem value="12">Bentley</MenuItem>
+                                    </Select>
+                                </div>
+                                <div style={{ flex: '1', marginLeft: '5px' }}>
+                                    <InputLabel htmlFor="loaiMay">Machine</InputLabel>
+                                    <Select
+                                        fullWidth
+                                        name="idloaimay"
+                                        value={formData.idloaimay}
+                                        onChange={handleEditChange}
+                                        InputLabelProps={{ shrink: true }}
+                                    >
+                                        <MenuItem value="1">Đồng Hồ Điện Tử (Quartz)</MenuItem>
+                                        <MenuItem value="2">Đồng Hồ Cơ (Mechanical)</MenuItem>
+                                    </Select>
+                                </div>
+                            </div>
+                            <input
+                                type="file"
+                                name="anhDaiDien"
+                                style={{ marginBottom: '10px' }}
+                                onChange={handleChangeImage}
+                            />
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                style={{ marginLeft: '30%' }}
+                                onClick={handleEditProduct}
+                            >
+                                Lưu thay đổi
+                            </Button>
+                        </>
+                    )}
+                </div>
+            </Modal>
             <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
-                <Button variant="outlined" size="sm" onClick={handlePreviousPage}>
-                    Previous
+                <Button variant="outlined" size="sm" style={{ padding: '3px' }} onClick={handlePreviousPage}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="m7.825 13l4.9 4.9q.3.3.288.7t-.313.7q-.3.275-.7.288t-.7-.288l-6.6-6.6q-.15-.15-.213-.325T4.426 12t.063-.375t.212-.325l6.6-6.6q.275-.275.688-.275t.712.275q.3.3.3.713t-.3.712L7.825 11H19q.425 0 .713.288T20 12t-.288.713T19 13z" /></svg>
                 </Button>
                 <div className="flex items-center gap-2">
                     {Array.from({ length: totalPages }, (_, index) => (
@@ -441,8 +698,8 @@ export default function AdminWareHouse() {
                         </IconButton>
                     ))}
                 </div>
-                <Button variant="outlined" size="sm" onClick={handleNextPage}>
-                    Next
+                <Button variant="outlined" size="sm" style={{ padding: '3px' }} onClick={handleNextPage}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M16.175 13H5q-.425 0-.712-.288T4 12t.288-.712T5 11h11.175l-4.9-4.9q-.3-.3-.288-.7t.313-.7q.3-.275.7-.288t.7.288l6.6 6.6q.15.15.213.325t.062.375t-.062.375t-.213.325l-6.6 6.6q-.275.275-.687.275T11.3 19.3q-.3-.3-.3-.712t.3-.713z" /></svg>
                 </Button>
             </CardFooter>
         </Card>

@@ -38,7 +38,7 @@ export function AdminSidebar() {
     };
 
     return (
-        <Card className="w-full max-w-[20rem] p-4 shadow-xl shadow-blue-gray-500/10 fixed" style={{ height: '94vh', marginLeft: '10px', boxShadow: '0 3px 10px rgba(0, 0, 0, 0.55)' }}>
+        <Card className="w-full max-w-[20rem] p-4  fixed" style={{ height: '94vh', marginLeft: '10px', border: '1px solid rgb(203 202 202)' }}>
             <div className="mb-2 p-4">
                 <Typography variant="h2" color="blue-gray">
                     Admin

@@ -80,10 +80,10 @@ class productService {
         })
     }
 
-    create(tenSP, gia, moTa, gioiTinh, idChatLieu, idKieuMat, idThuongHieu, idKichThuoc, idLoaiMay, anhDaiDien) {
+    create(tenSP, gia, giaNhap, moTa, gioiTinh, idChatLieu, idKieuMat, idThuongHieu, idKichThuoc, idLoaiMay, anhDaiDien, soLuongCon) {
         return new Promise((resolve, reject) => {
-            con.query(`INSERT INTO sanpham(sanphamten, sanphamgia, sanphammota, sanphamgioitinh, idchatlieu, idkieumat, idthuonghieu, idkichthuoc, idloaimay, sanphamhinhdaidien)
-            VALUES ('${tenSP}', '${gia}', '${moTa}', '${gioiTinh}', ${idChatLieu}, ${idKieuMat}, ${idThuongHieu}, ${idKichThuoc}, ${idLoaiMay}, '${anhDaiDien}');`, function (error, result, fields) {
+            con.query(`INSERT INTO sanpham(sanphamten, sanphamgia, gianhap, sanphammota, sanphamgioitinh, idchatlieu, idkieumat, idthuonghieu, idkichthuoc, idloaimay, sanphamhinhdaidien, soluongcon)
+            VALUES ('${tenSP}', '${gia}', '${giaNhap}','${moTa}', '${gioiTinh}', ${idChatLieu}, ${idKieuMat}, ${idThuongHieu}, ${idKichThuoc}, ${idLoaiMay}, '${anhDaiDien}', ${soLuongCon});`, function (error, result, fields) {
                 if (error) {
                     reject(error);
                     return;

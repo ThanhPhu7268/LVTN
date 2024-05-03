@@ -4,7 +4,6 @@ import {
     Card, CardHeader, Typography, Button, CardBody, CardFooter, Avatar, IconButton, Tooltip, Input
 } from "@material-tailwind/react";
 import { Modal, TextField, Select, MenuItem, InputLabel } from "@mui/material";
-import { Upload } from "antd";
 import Alert from '@mui/material/Alert';
 import { useState, useEffect } from "react";
 import '../../assets/css/admin.css'
@@ -221,9 +220,6 @@ export default function AdminProducts() {
                                 icon={<MagnifyingGlassIcon className="h-5 w-5" />}
                             />
                         </div>
-                        <Button className="flex items-center gap-3" size="sm">
-                            <ArrowDownTrayIcon strokeWidth={2} className="h-4 w-4" /> Download
-                        </Button>
                     </div>
                     <div>
                         <Button
@@ -461,11 +457,11 @@ export default function AdminProducts() {
                                             {item.sanphamgioitinh}
                                         </Typography>
                                     </td>
-                                    <td className={classes}>
-                                        {item.isInStock ? (
-                                            <Typography variant="body2" style={{ color: 'green' }}>In Stock</Typography>
+                                    <td className={classes} style={{ textAlign: "center" }}>
+                                        {item.soluongcon > 0 ? (
+                                            <Typography variant="body2" style={{ color: '#16f316', fontWeight: '700', textAlign: 'center', background: '#beffc9', borderRadius: '8px' }}>In Stock</Typography>
                                         ) : (
-                                            <Typography variant="body2" style={{ color: 'red' }}>Out of Stock</Typography>
+                                            <Typography variant="body2" style={{ color: 'red', fontWeight: '700', fontSize: '15px', textAlign: 'center', background: 'rgb(255 190 190)', borderRadius: '8px', paddingLeft: '2px', paddingRight: '2px' }}>Out of Stock</Typography>
                                         )}
                                     </td>
                                     <td className={classes}>
@@ -660,8 +656,8 @@ export default function AdminProducts() {
                 </div>
             </Modal>
             <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
-                <Button variant="outlined" size="sm" onClick={handlePreviousPage}>
-                    Previous
+                <Button variant="outlined" size="sm" style={{ padding: '3px' }} onClick={handlePreviousPage}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="m7.825 13l4.9 4.9q.3.3.288.7t-.313.7q-.3.275-.7.288t-.7-.288l-6.6-6.6q-.15-.15-.213-.325T4.426 12t.063-.375t.212-.325l6.6-6.6q.275-.275.688-.275t.712.275q.3.3.3.713t-.3.712L7.825 11H19q.425 0 .713.288T20 12t-.288.713T19 13z" /></svg>
                 </Button>
                 <div className="flex items-center gap-2">
                     {Array.from({ length: totalPages }, (_, index) => (
@@ -670,8 +666,8 @@ export default function AdminProducts() {
                         </IconButton>
                     ))}
                 </div>
-                <Button variant="outlined" size="sm" onClick={handleNextPage}>
-                    Next
+                <Button variant="outlined" size="sm" style={{ padding: '3px' }} onClick={handleNextPage}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M16.175 13H5q-.425 0-.712-.288T4 12t.288-.712T5 11h11.175l-4.9-4.9q-.3-.3-.288-.7t.313-.7q.3-.275.7-.288t.7.288l6.6 6.6q.15.15.213.325t.062.375t-.062.375t-.213.325l-6.6 6.6q-.275.275-.687.275T11.3 19.3q-.3-.3-.3-.712t.3-.713z" /></svg>
                 </Button>
             </CardFooter>
         </Card>

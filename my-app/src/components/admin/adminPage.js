@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import AdminProducts from "./adminProducts";
 import AdminAccount from "./adminaccount";
 import AdminOrder from "./adminorder";
-import AccountManagementPage from "./adminAccountPage";
+// import AccountManagementPage from "./adminAccountPage";
 import Revenue from "./adminDashboar";
 import AdminBrands from "./adminBrand";
 import AdminWareHouse from "./adminWareHouse";
@@ -15,8 +15,8 @@ export default function Home() {
         <>
             <AdminSidebar />
             <Routes>
-                <Route path='/account' element={<AdminAccount />} />
-                <Route path='/taikhoan' element={<AccountManagementPage />} />
+                <Route path='/taikhoan' element={<AdminAccount />} />
+                {/* <Route path='/account' element={<AccountManagementPage />} /> */}
                 <Route path='/order' element={<AdminOrder />} />
                 <Route path='/warehouse' element={<AdminWareHouse />} />
                 <Route path='/' element={<Revenue />} />

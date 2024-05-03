@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Input, Table, Image, InputNumber, Radio, Row, Col, message, Popconfirm } from 'antd';
+import { Form, Input, Table, Image, Radio, Row, Col, message } from 'antd';
 import { Card, Button, } from '@material-tailwind/react';
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import '../../assets/css/cartform.css';
 import HeaderHome from './header';
+import axios from 'axios';
 
 const { Column } = Table;
 
@@ -13,11 +14,29 @@ const Cart = () => {
   const [cartItems, setCartItems] = useState([]);
   const [paymentMethod, setPaymentMethod] = useState('COD');
   const [isPayPalVisible, setIsPayPalVisible] = useState(false);
+  const [customer, setCustomer] = useState([])
 
   useEffect(() => {
+    getCustomer();
     const cart = JSON.parse(window.localStorage.getItem('cart'));
     setCartItems(cart || []);
   }, []);
+
+  const getCustomer = async () => {
+    try {
+      const user = await JSON.parse(window.localStorage.getItem('user'));
+      const idkhachhang = await user.idkhachhang;
+      const response = await axios.get(`http://localhost:8080/api/account/customer/${idkhachhang}`);
+      console.log(response.data)
+      setCustomer(response.data);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
+
+  console.log(customer)
+
 
   const handleDeleteItem = (productId) => {
     const updatedItems = cartItems.filter(item => item.idproduct !== productId);
@@ -55,6 +74,12 @@ const Cart = () => {
 
     const updatedCartItems = cartItemsFromLocalStorage.map(item => {
       if (item.idproduct === record.idproduct) {
+        // Lấy số lượng còn trong kho từ thuộc tính remain của sản phẩm
+        const remainingStock = item.remain;
+        if (quantity > remainingStock) {
+          message.warning('Số lượng sản phẩm trong giỏ hàng vượt quá số lượng còn trong kho.');
+          return item; // Không thay đổi số lượng nếu vượt quá số lượng còn trong kho
+        }
         return { ...item, quantity };
       }
       return item;
@@ -81,7 +106,6 @@ const Cart = () => {
       totalUSD += priceUSD * item.quantity;
     });
     setTotalPrice(totalUSD);
-
     // Lưu tổng tiền vào localStorage
     window.localStorage.setItem('totalPrice', totalUSD);
   };
@@ -138,6 +162,12 @@ const Cart = () => {
             console.log(result);
             setCartItems([]);
             window.localStorage.removeItem('cart');
+
+            // Tính lại totalPrice dựa trên giá trị mới của giỏ hàng
+            setTotalPrice(0);
+
+            // Cập nhật lại state và lưu vào localStorage
+            window.localStorage.setItem('totalPrice', 0);
             // Hiển thị thông báo cho người dùng
             message.success('Đặt hàng thành công!');
           })
@@ -194,6 +224,12 @@ const Cart = () => {
     const totalPrice = JSON.parse(window.localStorage.getItem('totalPrice'));
     const user = JSON.parse(localStorage.getItem('user'));
     const idkhachhang = user.idkhachhang;
+
+    if (!nguoiDat || !sodienthoai || !diachi) {
+      message.error('Vui lòng điền đầy đủ thông tin trước khi đặt hàng.');
+      return; // Ngăn người dùng tiếp tục
+    }
+
     if (cartItems) {
       const isConfirmed = window.confirm('Vui lòng kiểm tra kỹ giỏ hàng trước khi nhấn "OK" ?');
       if (isConfirmed) {
@@ -222,6 +258,11 @@ const Cart = () => {
             console.log(result);
             setCartItems([]);
             window.localStorage.removeItem('cart');
+            // Tính lại totalPrice dựa trên giá trị mới của giỏ hàng
+            setTotalPrice(0);
+
+            // Cập nhật lại state và lưu vào localStorage
+            window.localStorage.setItem('totalPrice', 0);
             // Hiển thị thông báo cho người dùng
             message.success('Đặt hàng thành công!');
           })
@@ -239,7 +280,6 @@ const Cart = () => {
     } else {
       alert('Giỏ hàng rỗng!!')
     }
-
   };
 
   const isPaymentDetailsFilled = () => {
@@ -316,19 +356,22 @@ const Cart = () => {
         </Col>
         <Col span={7}>
           <Card style={{ padding: '20px', border: '1px solid rgb(215 208 208)', borderRadius: '0' }}>
-            <Form form={form} layout="vertical">
+            <Form
+              form={form}
+              layout="vertical"
+              initialValues={{ fullName: customer[0]?.khachhangten }}
+            >
               <div style={{ marginTop: '20px' }}>
-
                 {paymentMethod === 'COD' && (
                   <>
                     <Row gutter={16}>
                       <Col span={12}>
-                        <Form.Item label="Họ và tên" name="fullName" rules={[{ required: true, message: 'Vui lòng nhập họ và tên' }]}>
+                        <Form.Item label="Name" name="fullName" rules={[{ required: true, message: 'Vui lòng nhập họ và tên' }]}>
                           <Input style={{ borderRadius: '0' }} placeholder="Nhập họ và tên" />
                         </Form.Item>
                       </Col>
                       <Col span={12}>
-                        <Form.Item label="Số điện thoại" name="phoneNumber" rules={[{ required: true, message: 'Vui lòng nhập số điện thoại' }]}>
+                        <Form.Item label="Phone" name="phoneNumber" rules={[{ required: true, message: 'Vui lòng nhập số điện thoại' }]}>
                           <Input style={{ borderRadius: '0' }} placeholder="Nhập số điện thoại" />
                         </Form.Item>
                       </Col>
@@ -337,7 +380,7 @@ const Cart = () => {
                     <Row gutter={16}>
                       <Col span={14}>
                         <Form.Item
-                          label="Địa chỉ nhận hàng"
+                          label="Address"
                           name="address"
                           rules={[{ required: true, message: 'Vui lòng nhập địa chỉ nhận hàng' }]}
                         >
@@ -346,7 +389,7 @@ const Cart = () => {
                       </Col>
                       <Col span={10}>
                         <Form.Item
-                          label="Ghi chú"
+                          label="Note"
                           name="note">
                           <Input.TextArea style={{ borderRadius: '0' }} placeholder="Nhập ghi chú thêm (Nếu có)" />
                         </Form.Item>
@@ -355,16 +398,16 @@ const Cart = () => {
                   </>
                 )}
                 <div style={{ textAlign: 'right', fontSize: '15px', fontWeight: 'bold' }}>
-                  Tổng tiền tạm tính: <strong style={{ color: 'red' }}>{totalPrice.toLocaleString()}.00 USD</strong>
+                  Total: <strong style={{ color: 'red' }}>{totalPrice.toLocaleString()}.00 USD</strong>
                 </div>
                 <Form.Item
-                  label="Phương thức thanh toán"
+                  label="Payment Method"
                   name="paymentMethod"
                   rules={[{ required: true, message: 'Vui lòng chọn phương thức thanh toán' }]}
                 >
                   <Radio.Group value={paymentMethod} onChange={handlePaymentMethodChange}>
-                    <Radio value="COD">Thanh toán khi nhận hàng (COD)</Radio>
-                    <Radio value="PayPal">Thanh toán bằng PayPal</Radio>
+                    <Radio value="COD">Payment on delivery (COD)</Radio>
+                    <Radio value="PayPal">Payment with PayPal</Radio>
                   </Radio.Group>
                 </Form.Item>
 
@@ -385,7 +428,7 @@ const Cart = () => {
                   <Form.Item>
                     <Button type="primary" onClick={onFinish} htmlType="submit"
                       style={{ padding: '10px 30px 10px 30px', borderRadius: '0', width: '172px', margin: 'auto' }}>
-                      Đặt hàng
+                      Order
                     </Button>
                   </Form.Item>
                 </div>
@@ -394,6 +437,7 @@ const Cart = () => {
           </Card>
         </Col>
       </Row>
+
     </div>
   );
 };

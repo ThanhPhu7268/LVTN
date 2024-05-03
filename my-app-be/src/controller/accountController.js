@@ -26,6 +26,11 @@ class accountController {
         res.json(data)
     }
 
+    async findOneCustomer(req, res) {
+        let idkhachhang = req.params.idkhachhang
+        let data = await accountService.findOneCustommer(idkhachhang)
+        res.json(data)
+    }
     // async update(req, res) {
     //     let id = req.params.id
     //     let newCategoryName = req.body.newCategoryName

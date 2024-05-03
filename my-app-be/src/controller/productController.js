@@ -37,8 +37,8 @@ class products {
         let product = req.body
         let avatar = req.file.filename
         if (product) {
-            let data = await productService.create(product.tenSP, product.gia, product.moTa, product.gioiTinh, product.idchatlieu,
-                product.idkieumat, product.idthuonghieu, product.idkichthuoc, product.idloaimay, avatar)
+            let data = await productService.create(product.tenSP, product.gia, product.giaNhap, product.moTa, product.gioiTinh, product.idchatlieu,
+                product.idkieumat, product.idthuonghieu, product.idkichthuoc, product.idloaimay, avatar, product.soLuongCon)
             res.json(data)
         } else {
             res.json('Thất bại')

@@ -1,10 +1,10 @@
 import React, { useRef } from 'react';
 import { jsPDF } from 'jspdf';
 import html2canvas from 'html2canvas';
+import QRCode from "react-qr-code";
 
 const InvoiceOrder = ({ orderItem, dataItem }) => {
     const componentRef = useRef(null);
-
     const downloadInvoice = () => {
         // Tạo một instance mới của jsPDF với kích thước là A5
         const pdf = new jsPDF({
@@ -67,10 +67,23 @@ const InvoiceOrder = ({ orderItem, dataItem }) => {
                         }
                     </tbody>
                 </table>
-                <p style={{ marginTop: '20px', textAlign: 'end', fontFamily: 'monospace', fontSize: '20px' }}>Total: ${orderItem.donhangtonggia}.00</p>
-                <p style={{ marginBottom: '0', fontSize: '20px', color: 'black', fontFamily: 'fantasy' }}>Payment Method</p>
-                <p>Orderer: {orderItem.tennguoidat}<br />{orderItem.phuongthucthanhtoanten}</p>
-                <p style={{ textAlign: 'center', fontFamily: 'fantasy', fontSize: '20px' }}>Thank you for purchase!</p>
+                <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+                    <div>
+                        <p style={{ marginTop: '20px', marginBottom: '0', fontSize: '20px', color: 'black', fontFamily: 'fantasy' }}>Payment Method</p>
+                        <p>Orderer: {orderItem.tennguoidat}<br />{orderItem.phuongthucthanhtoanten}</p>
+                    </div>
+                    <p style={{ marginTop: '20px', textAlign: 'end', fontFamily: 'monospace', fontSize: '20px' }}>Total: ${orderItem.donhangtonggia}.00</p>
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: "auto", margin: "0 auto", width: "100%" }}>
+                    <QRCode
+                        size={256}
+                        style={{ height: "auto", width: "150px" }}
+                        value={orderItem.maDH}
+                        viewBox={`0 0 256 256`}
+                    />
+                    <p style={{ marginTop: '6px', fontSize: '16px', fontWeight: 'bold', fontFamily: 'monospace' }}>Otis is happy to serve you !!!</p>
+                </div>
+                <p style={{ marginTop: '99px', textAlign: 'center', fontFamily: 'fantasy', fontSize: '20px' }}>Thank you for purchase!</p>
                 <div style={{ width: '100%', height: '10px', background: 'black' }}></div>
             </div>
         </div >

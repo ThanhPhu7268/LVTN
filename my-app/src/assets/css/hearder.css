@@ -28,28 +28,31 @@ header {
     font-weight: 500;
 }
 
-.nav-menu li {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 3px;
-}
-
-.hv-mid a:hover {
-    transition: color 0.3s ease-in-out;
-    color: red;
-}
-
-.nav-menu li.active a:hover {
-    transition: color 0.3s ease-in-out;
-    color: red;
-}
-
-.nav-menu a {
+.nav-menu li a {
+    position: relative;
     text-decoration: none;
-    color: #555555;
+    color: black;
+    transition: color 0.3s ease;
+    /* Hiệu ứng chuyển đổi màu khi hover */
 }
+
+.nav-menu li a::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    /* Căn giữa theo chiều ngang */
+    transform: translateX(-50%);
+    bottom: -2px;
+    background-color: black;
+    height: 2px;
+    width: 0;
+    transition: width 0.3s ease;
+}
+
+.nav-menu li a:hover::after {
+    width: 120%;
+}
+
 
 .nav-login-cart {
     display: flex;

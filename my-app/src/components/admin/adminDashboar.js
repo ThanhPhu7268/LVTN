@@ -8,6 +8,7 @@ import {
 } from "@material-tailwind/react";
 import Chart from "react-apexcharts";
 import { BanknotesIcon, ChartBarIcon, CreditCardIcon } from "@heroicons/react/24/outline";
+import { colors } from "@mui/material";
 
 const lineChartConfig = {
     type: "line",
@@ -19,6 +20,7 @@ const lineChartConfig = {
         },
     ],
     options: {
+        colors: ['black']
         // Configuration options for the Line Chart
         // ...
     },
@@ -34,15 +36,33 @@ const barChartConfig = {
         },
     ],
     options: {
-        // Configuration options for the Bar Chart
-        // ...
+        colors: ['pink']
+    },
+};
+
+const columnChartConfig = {
+    type: "bar",
+    height: 240,
+    series: [
+        {
+            name: "Sales",
+            data: [50, 40, 300, 320, 500, 350, 200, 230, 500],
+        },
+        {
+            name: "Expense",
+            data: [30, 20, 100, 150, 200, 180, 90, 120, 250],
+        },
+    ],
+    options: {
+        // Configuration options for the Column Chart
+        colors: ['#3bff34', '#F44336']
     },
 };
 
 export default function Revenue() {
     return (
-        <div>
-            <Breadcrumbs className=" w-72 flex" style={{ margin: '20px', width: '72%', marginLeft: '355px', background: 'white', color: 'black' }}>
+        <div className=" w-72" style={{ margin: '20px', width: '72%', marginLeft: 'auto', boxShadow: '0 3px 10px rgba(0, 0, 0, 0.2)' }}>
+            <Breadcrumbs className=" w-72 flex" style={{ margin: '20px', background: 'white', color: 'black' }}>
                 <a href="#" className="opacity-60">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -59,9 +79,9 @@ export default function Revenue() {
                 </a >
                 <a style={{ color: 'black' }} href="#">Analytics</a>
             </Breadcrumbs>
-            <div className=" w-72 flex" style={{ margin: '20px', width: '72%', marginLeft: 'auto', boxShadow: '0 3px 10px rgba(0, 0, 0, 0.2)' }}>
+            <div className=" w-72 flex" style={{ margin: '20px', width: '100%', marginLeft: 'auto' }}>
                 {/* Today's Revenue */}
-                <Card style={{ margin: 'auto' }}>
+                <Card style={{ margin: 'auto', borderRadius: '0', border: '1px solid #333', height: '127px' }}>
                     <CardHeader
                         floated={false}
                         shadow={false}
@@ -88,9 +108,35 @@ export default function Revenue() {
 
                     </CardBody>
                 </Card>
+                <Card style={{ margin: 'auto', borderRadius: '0', border: '1px solid #333', height: '127px' }}>
+                    <CardHeader
+                        floated={false}
+                        shadow={false}
+                        color="transparent"
+                        className="flex flex-col gap-4 rounded-none md:flex-row md:items-center"
+                    >
+                        <div className="w-max rounded-lg bg-gray-900 p-3 text-white">
+                            <BanknotesIcon className="h-6 w-6" />
+                        </div>
+                        <div style={{ textAlign: 'right' }}>
+                            <Typography
+                                variant="small"
+                                color="gray"
+                                className="max-w-sm font-normal"
+                            >
+                                Total Order
+                            </Typography>
+                            <Typography variant="h3" color="blue-gray">
+                                $203
+                            </Typography>
+                        </div>
+                    </CardHeader>
+                    <CardBody className="px-2 pb-0">
 
+                    </CardBody>
+                </Card>
                 {/* Sold Products */}
-                <Card style={{ margin: 'auto' }}>
+                <Card style={{ margin: 'auto', borderRadius: '0', border: '1px solid #333', height: '127px' }}>
                     <CardHeader
                         floated={false}
                         shadow={false}
@@ -119,7 +165,7 @@ export default function Revenue() {
                 </Card>
 
                 {/* Total Revenue */}
-                <Card style={{ margin: ' 12px auto 12px auto' }}>
+                <Card style={{ margin: 'auto', borderRadius: '0', border: '1px solid #333', height: '127px' }}>
                     <CardHeader
                         floated={false}
                         shadow={false}
@@ -148,8 +194,8 @@ export default function Revenue() {
                     </CardBody>
                 </Card>
             </div>
-            <div className=" w-72 flex" style={{ margin: '20px', width: '72%', marginLeft: 'auto', boxShadow: '0 3px 10px rgba(0, 0, 0, 0.2)' }}>
-                <Card style={{ marginRight: '10px', width: '47%', margin: 'auto' }}>
+            <div className=" w-72 flex" style={{ margin: '20px', width: '100%', marginLeft: 'auto' }}>
+                <Card style={{ marginRight: '10px', width: '47%', margin: 'auto', border: '1px solid rgb(217 209 209)', borderRadius: '0' }}>
                     <CardHeader
                         floated={false}
                         shadow={false}
@@ -175,7 +221,7 @@ export default function Revenue() {
                     </CardBody>
                 </Card>
 
-                <Card style={{ width: '47%', margin: 'auto' }}>
+                <Card style={{ width: '47%', margin: 'auto', border: '1px solid rgb(217 209 209)', borderRadius: '0' }}>
                     <CardHeader
                         floated={false}
                         shadow={false}
@@ -198,6 +244,32 @@ export default function Revenue() {
                     </CardHeader>
                     <CardBody className="px-2 pb-0">
                         <Chart {...barChartConfig} />
+                    </CardBody>
+                </Card>
+            </div>
+            <div style={{ margin: '20px', width: '100%', marginLeft: 'auto', boxShadow: '0 3px 10px rgba(0, 0, 0, 0.2)' }}>
+                <Card style={{ width: '100%', margin: 'auto' }}>
+                    <CardHeader
+                        floated={false}
+                        shadow={false}
+                        color="transparent"
+                        className="flex flex-col gap-4 rounded-none md:flex-row md:items-center"
+                    >
+                        <div>
+                            <Typography variant="h6" color="blue-gray">
+                                Sales vs Expense
+                            </Typography>
+                            <Typography
+                                variant="small"
+                                color="gray"
+                                className="max-w-sm font-normal"
+                            >
+                                Sales and Expense comparison
+                            </Typography>
+                        </div>
+                    </CardHeader>
+                    <CardBody className="px-2 pb-0">
+                        <Chart {...columnChartConfig} />
                     </CardBody>
                 </Card>
             </div>

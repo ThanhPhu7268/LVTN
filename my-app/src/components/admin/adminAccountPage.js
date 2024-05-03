@@ -22,7 +22,7 @@ export default function AccountManagementPage() {
 
     return (
         <Card className=" w-72" style={{ margin: '20px', width: '72%', marginLeft: 'auto', boxShadow: '0 3px 10px rgba(0, 0, 0, 0.2)' }}>
-            <table className="w-full min-w-max table-auto text-left">
+            <table className="min-w-max table-auto text-left">
                 <thead>
                     <tr>
                         {TABLE_HEAD.map((head) => (

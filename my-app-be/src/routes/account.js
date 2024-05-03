@@ -6,6 +6,7 @@ const accountController = require("../controller/accountController")
 router.get('/:username', accountController.findOneByUsername)
 router.get('/', accountController.findAll)
 router.post('/', accountController.create)
+router.get('/customer/:idkhachhang', accountController.findOneCustomer)
 // router.put('/:id', accountController.update)
 // router.delete('/:id', accountController.delete)
 

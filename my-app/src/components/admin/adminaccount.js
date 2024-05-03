@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Layout, Table, Button, Modal, Form, Input, Space } from 'antd';
+import { Layout, Table, Modal, Form, Input, Space } from 'antd';
+import { Button } from "@material-tailwind/react"
 import { PlusOutlined } from '@ant-design/icons';
 import AdminSidebar from './adminsidebar';
 
@@ -32,12 +33,12 @@ const AdminAccount = () => {
 
     const columns = [
         { title: 'ID', dataIndex: 'idtaikhoan', key: 'id' },
-        { title: 'Họ và tên', dataIndex: 'khachhangten', key: 'khachhangten' },
-        { title: 'SĐT', dataIndex: 'khachhangsdt', key: 'khachhangsdt' },
+        { title: 'Name', dataIndex: 'khachhangten', key: 'khachhangten' },
+        { title: 'Phone', dataIndex: 'khachhangsdt', key: 'khachhangsdt' },
         { title: 'Email', dataIndex: 'khachhangemail', key: 'khachhangemail' },
-        { title: 'Tài khoản', dataIndex: 'taikhoanten', key: 'taikhoanten' },
-        { title: 'Mật khẩu', dataIndex: 'matkhau', key: 'matkhau' },
-        { title: 'Ngày tạo', dataIndex: 'khachhangngaytao ', key: 'khachhangngaytao' },
+        { title: 'Account', dataIndex: 'taikhoanten', key: 'taikhoanten' },
+        // { title: 'Mật khẩu', dataIndex: 'matkhau', key: 'matkhau' },
+        // { title: 'Ngày tạo', dataIndex: 'khachhangngaytao ', key: 'khachhangngaytao' },
         // {
         //     title: 'Hành động',
         //     key: 'action',
@@ -100,7 +101,7 @@ const AdminAccount = () => {
     };
 
     return (
-        <Layout style={{ minHeight: '100vh' }}>
+        <Layout className=" w-72" style={{ margin: '20px', width: '72%', marginLeft: 'auto', boxShadow: '0 3px 10px rgba(0, 0, 0, 0.2)' }}>
             {/* ... */}
             {/* Nút thêm mới tài khoản */}
             <Button type="primary" onClick={handleAddAccount} icon={<PlusOutlined />} style={{ width: '20%', margin: '30px' }}>

@@ -39,6 +39,7 @@ class accountService {
             });
         })
     }
+
     findOneByPhone(sdt) {
         return new Promise((resolve, reject) => {
             con.query(`SELECT * FROM khachhang where khachhangsdt = '${sdt}'`, function (error, result, fields) {
@@ -63,7 +64,17 @@ class accountService {
         })
     }
 
-
+    findOneCustommer(idkhachhang) {
+        return new Promise((resolve, reject) => {
+            con.query(`SELECT * FROM khachhang where idkhachhang = ${idkhachhang};`, function (error, result, fields) {
+                if (error) {
+                    reject(error);
+                    return;
+                }
+                resolve(result);
+            });
+        })
+    }
 
     // update(newCategoryName, id) {
     //     return new Promise((resolve, reject) => {

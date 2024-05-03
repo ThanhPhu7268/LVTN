@@ -1,5 +1,6 @@
 import React from 'react';
-import { Form, Input, Button, Empty, message } from 'antd';
+import { Form, Input, message } from 'antd';
+import { Button } from '@material-tailwind/react'
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
@@ -53,37 +54,42 @@ const LoginForm = () => {
 
     return (
         <div className="login-container">
-            <Form
-                name="login-form"
-                initialValues={{ remember: true }}
-                onFinish={onFinish}
-                className="login-form"
-            >
-                <h2 className="login-title">Sign In</h2>
-                <Form.Item
-                    name="username"
-                    rules={[{ required: true, message: 'Please input your username!' }]}
+            <div style={{ display: 'flex', borderRadius: '10px' }}>
+                <Form
+                    name="login-form"
+                    initialValues={{ remember: true }}
+                    onFinish={onFinish}
+                    className="login-form"
                 >
-                    <Input className="login-input" placeholder="Username" />
-                </Form.Item>
+                    <h2 className="login-title">Sign In</h2>
+                    <Form.Item
+                        name="username"
+                        rules={[{ required: true, message: 'Please input your username!' }]}
+                    >
+                        <Input className="login-input" placeholder="Username" />
+                    </Form.Item>
 
-                <Form.Item
-                    name="password"
-                    rules={[{ required: true, message: 'Please input your password!' }]}
-                >
-                    <Input.Password className="login-input" placeholder="Password" />
-                </Form.Item>
+                    <Form.Item
+                        name="password"
+                        rules={[{ required: true, message: 'Please input your password!' }]}
+                    >
+                        <Input.Password className="login-input" placeholder="Password" />
+                    </Form.Item>
 
-                <Form.Item>
-                    <Button type="primary" htmlType="submit" className="login-button">
-                        Sign In
-                    </Button>
-                </Form.Item>
+                    <Form.Item>
+                        <Button type="primary" htmlType="submit" className="login-button">
+                            Sign In
+                        </Button>
+                    </Form.Item>
 
-                <div className="login-footer">
-                    Don't have an account? <Link to="/register"> Sign up</Link>
-                </div>
-            </Form>
+                    <div className="login-footer">
+                        Don't have an account? <Link to="/register"> Sign up</Link>
+                    </div>
+                </Form>
+                <img
+                    style={{ height: '90vh', width: 'auto', borderTopRightRadius: '15px', borderBottomRightRadius: '15px', boxShadow: '0 3px 10px rgba(0, 0, 0, 0.459)' }}
+                    src='https://www.omegawatches.com/media/wysiwyg/PP_SE_Diver300m_Paris2024_tetiere_gauche.jpg' />
+            </div>
         </div>
     );
 };

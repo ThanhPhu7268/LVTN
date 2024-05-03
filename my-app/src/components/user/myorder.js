@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Row, Col, Select, Steps, Modal } from 'antd';
+import { Card, Rate, Row, Col, Select, Steps, Modal } from 'antd';
 import { Button } from '@material-tailwind/react';
 import axios from 'axios';
 import { Link, useParams } from 'react-router-dom';
@@ -15,9 +15,31 @@ const MyOrder = () => {
     const [newStatus, setNewStatus] = useState({
         tinhTrang: ''
     });
-
+    const [comment, setComment] = useState("");
+    const [rating, setRating] = useState(0);
+    const [productId, setProductId] = useState();
+    const [showCommentModal, setShowCommentModal] = useState(false);
     const [showInvoiceModal, setShowInvoiceModal] = useState(false);
-
+    const toggleCommentModal = (id) => {
+        setShowCommentModal(!showCommentModal);
+        setProductId(id)
+    };
+    const submitComment = async (id) => {
+        // Gửi đánh giá lên server
+        try {
+            const user = JSON.parse(window.localStorage.getItem('user'));
+            const response = await axios.post('http://localhost:8080/api/comment', {
+                idsanpham: id,
+                sao: rating,
+                noidung: comment,
+                idtaikhoan: user.idtaikhoan // Thay orderId bằng id của đơn hàng
+            });
+            console.log('Comment submitted successfully:', response.data);
+            toggleCommentModal();
+        } catch (error) {
+            console.error("Error submitting comment:", error);
+        }
+    };
     useEffect(() => {
         getOrderDetails(id);
         getProductOrder(id);
@@ -125,7 +147,7 @@ const MyOrder = () => {
                         </div>
                         <Row gutter={[16, 16]} style={{ borderTop: '1px solid rgb(205 213 229)', borderBottom: '1px solid rgb(205 213 229)' }}>
                             {data.map(product => (
-                                <Col key={product.id} span={24}>
+                                <Col key={product.idsanpham} span={24}>
                                     <Card style={{ borderRadius: '0', border: 'none' }}>
                                         <div className='flex'>
                                             <img src={`http://localhost:8080/upload/${product.sanphamhinhdaidien}`} alt={product.sanphamten} style={{ width: '15%', height: 'auto', marginRight: '15px', padding: '10px', border: '1px solid rgb(205 213 229)', borderRadius: '10px' }} />
@@ -134,14 +156,51 @@ const MyOrder = () => {
                                                 description={`Price: $${product.sanphamgia}.00  Qty:${product.chitietdonhangsoluong}`}
                                             />
                                         </div>
+                                        {orderItem.donhangtrangthai === 4 ?
+                                            <Button
+                                                className='border-black'
+                                                style={{ borderRadius: '0', height: '40px', marginTop: '2%', }}
+                                                variant="outlined"
+                                                onClick={() => toggleCommentModal(product.idsanpham)}>Write a Comment</Button> : null
+                                        }
+                                        <Modal
+                                            visible={showCommentModal}
+                                            onCancel={toggleCommentModal}
+                                            footer={[
+                                                <Button key="cancel" onClick={toggleCommentModal}>
+                                                    Cancel
+                                                </Button>,
+                                                <Button key="submit" type="primary" onClick={() => submitComment(productId)}>
+                                                    Submit {productId}
+                                                </Button>,
+                                            ]}
+                                        >
+                                            <div>
+                                                <h2>Write a Comment</h2>
+                                                {/* Input field for comment */}
+                                                <textarea
+                                                    rows={4}
+                                                    cols={50}
+                                                    value={comment}
+                                                    onChange={(e) => setComment(e.target.value)}
+                                                    placeholder="Write your comment here..."
+                                                />
+                                                {/* Rating component */}
+                                                <Rate
+                                                    allowHalf
+                                                    value={rating}
+                                                    onChange={(value) => setRating(value)}
+                                                />
+                                            </div>
+                                        </Modal>
                                     </Card>
                                 </Col>
                             ))}
                         </Row>
-                        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                            <Card style={{ marginTop: '10px', width: '40%' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-around', flexDirection: 'row' }}>
+                            <Card style={{ marginTop: '10px', width: '60%', border: '1px solid #c5c5c5' }}>
                                 <div>
-                                    <p style={{ fontSize: '16px', fontWeight: 'bold' }}>Total Summary</p>
+                                    <p style={{ fontSize: '16px', fontWeight: 'bold', borderBottom: '1px solid #c5c5c5' }}>Total Summary</p>
                                     <p style={{ color: '#7D879C' }}>Subtotal: <span style={{ color: 'black', fontWeight: 'bold', marginLeft: '10px' }}>${orderItem.donhangtonggia}.00</span></p>
                                     <p>Shipping fee: <span style={{ color: 'black', fontWeight: 'bold', marginLeft: '10px' }}>0</span></p>
                                     <p>Discount(%):  <span style={{ color: 'black', fontWeight: 'bold', marginLeft: '10px' }}>0</span></p>
@@ -149,9 +208,12 @@ const MyOrder = () => {
                                     <p>Payment Method: <span style={{ color: 'black', fontWeight: 'bold', marginLeft: '10px' }}>{orderItem.phuongthucthanhtoanten}</span></p>
                                 </div>
                             </Card>
-                            <Button style={{ borderRadius: '0', height: '48px', marginTop: '14%' }} type="primary" onClick={() => handleUpdateOrderStatus(id)}>Update Status</Button>
+                            <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-around' }}>
+                                {orderItem.donhangtrangthai === 1 || orderItem.donhangtrangthai === 2 ?
+                                    <Button style={{ borderRadius: '0', height: '48px', marginTop: '14%', }} >Cancel Order</Button> : null
+                                }
+                            </div>
                         </div>
-                        {/* Add more buttons or functionality as needed */}
                     </Card>
                 ))
                 }
