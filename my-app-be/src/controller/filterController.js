@@ -71,6 +71,12 @@ class filterType {
         let data = await filterService.findProductByWoman()
         res.json(data)
     }
+
+    async findProductByName(req, res) {
+        let ten = req.params.ten
+        let data = await filterService.findProductByName(ten)
+        res.json(data)
+    }
 }
 
 module.exports = new filterType()

@@ -7,6 +7,8 @@ import FooterHome from "./footer";
 import Cart from "./category";
 import UserProfile from "./profile"
 import OrderPage from "./orderDetail";
+import Blog from "./blog";
+import BlogDetail from "./blogdetail";
 export default function Home() {
     return (
         <>
@@ -15,6 +17,8 @@ export default function Home() {
                 <Route path='/' element={<HomePage />} />
                 <Route path='/user' element={<UserProfile />} />
                 <Route path='/history' element={<OrderPage />} />
+                <Route path='/blog' element={<Blog />} />
+                <Route path='/blog/:id' element={<BlogDetail />} />
             </Routes>
             <FooterHome />
         </>

@@ -56,6 +56,47 @@ class analystController {
         }
     }
 
+    async findTotalOrder(req, res) {
+        try {
+            let total = await analystService.findTotalOrder()
+            res.status(200).json(total);
+        } catch (error) {
+            console.error('Đã xảy ra lỗi:', error);
+            res.status(500).json({ message: 'không lấy thành công' });
+        }
+    }
+
+    async findTotalOrderSale(req, res) {
+        try {
+            let totalSale = await analystService.findTotalOrderSale()
+            res.status(200).json(totalSale);
+        } catch (error) {
+            console.error('Đã xảy ra lỗi:', error);
+            res.status(500).json({ message: 'không lấy thành công' });
+        }
+    }
+
+    async findAllRevenue(req, res) {
+        try {
+            let allrevenue = await analystService.findAllRevenue()
+            res.status(200).json(allrevenue);
+        } catch (error) {
+            console.error('Đã xảy ra lỗi:', error);
+            res.status(500).json({ message: 'lấy không thành công' });
+        }
+    }
+
+    async findRevenueMonth(req, res) {
+        try {
+            let revenue = await analystService.findRevenueMonth()
+            res.status(200).json(revenue);
+        } catch (error) {
+            console.error('Đã xảy ra lỗi:', error);
+            res.status(500).json({ message: 'lấy không thành công' });
+        }
+    }
+
+    //chuasudung
     async countOrdersIn7Days(req, res) {
         try {
             let orders = await analystService.countOrdersIn7Days()

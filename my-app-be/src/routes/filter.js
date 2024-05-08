@@ -17,6 +17,9 @@ router.get('/thuonghieu', filter.findBrand)
 router.get('/nu', filter.findProductByWoman)
 router.get('/gioitinh', filter.findProductBySex)
 router.get('/:id', filter.findOneById)
+router.get('/timtheoten/:ten', filter.findProductByName)
+
+
 
 
 

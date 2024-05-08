@@ -110,7 +110,19 @@ const ProductDetailPage = () => {
 
     const [rated, setRated] = React.useState(4);
 
+    const totalReviews = rate.length; // Số lượng đánh giá
+    let totalStars = 0; // Tổng số sao
+    rate.forEach(item => {
+        totalStars += item.sao; // Tính tổng số sao
+    });
 
+    const handleformatDate = (dateString) => {
+        const orderDate = new Date(dateString);
+        const options = { day: 'numeric', month: 'short', year: 'numeric' };
+        return orderDate.toLocaleDateString('en-GB', options);
+    };
+
+    const averageRating = totalStars / totalReviews;
 
     return (
         <div>
@@ -207,9 +219,9 @@ const ProductDetailPage = () => {
                                                 style={{ color: '#000', fontSize: 24, paddingTop: '3px' }}
                                                 character={<span className="custom-rate-icon">&#9733;</span>}
                                                 allowHalf
-                                                defaultValue={5}
+                                                value={averageRating}
                                             />
-                                            <span className="rating-count">(18 reviews)</span>
+                                            <span className="rating-count">({totalReviews} reviews)</span>
                                         </div>
                                     </div>
                                     <p style={{ width: '90%', paddingTop: '10px', borderTop: '1px solid rgb(199 188 188)', textAlign: 'justify' }}>{data[0].sanphammota}</p>
@@ -253,39 +265,42 @@ const ProductDetailPage = () => {
                 </Modal>
             </Card>
 
-            <div style={{ padding: '40px' }}>
+            <div style={{ padding: '60px 100px' }}>
                 <h2 style={{ fontSize: '35px', fontWeight: 'bold', marginBottom: '5px', textAlign: 'center' }}>Customer Reviews</h2>
                 <p style={{ marginBottom: 0, textAlign: 'center', color: '#a3a3a3' }}>leave your review below</p>
                 {/* Sample Review */}
-                <div style={{ display: 'flex', justifyContent: 'center', margin: '15px' }}>
+                {/* <div style={{ display: 'flex', justifyContent: 'center', margin: '15px' }}>
                     <Button
                         className='border-black'
                         style={{ borderRadius: '0 !important', border: '1px solid #333' }}
                         variant="outlined">Write a review
                     </Button>
-                </div>
+                </div> */}
                 <div className="flex items-center gap-2 font-bold text-blue-gray-500" style={{ justifyContent: 'center', paddingBottom: '20px', borderBottom: '1px solid rgb(231 231 231)', marginBottom: '20px', fontSize: '22px' }}>
-                    {rated}
+                    {totalReviews}
                     <Rate character={<span className="custom-rate-icon">&#9733;</span>}
-                        value={rated} onChange={(value) => setRated(value)}
+                        value={averageRating} onChange={(value) => setRated(value)}
                         style={{ fontSize: '22px', color: 'black' }}
                         allowHalf
                     />
                     <Typography color="blue-gray" className="font-medium text-blue-gray-500" style={{ marginBottom: '0' }}>
-                        Based on 134 Reviews
+                        Based on {totalReviews} Reviews
                     </Typography>
                 </div>
                 {rate?.map(item => (
-                    <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', marginBottom: '30px' }}>
                         <Avatar alt="User Avatar" src="/static/images/avatar/1.jpg" sx={{ width: 56, height: 56, marginRight: '20px' }} />
                         <div style={{ flex: 1 }}>
-                            <div style={{ display: 'flex', alignItems: 'center', marginBottom: '5px' }}>
-                                <span style={{ fontSize: '16px', fontWeight: 'bold', marginRight: '10px' }}>{item.khachhangten}</span>
-                                <Rate character={<span className="custom-rate-icon">&#9733;</span>}
-                                    allowHalf
-                                    defaultValue={item.sao} />
+                            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', marginBottom: '5px' }}>
+                                    <span style={{ fontSize: '18px', fontWeight: 'bold', marginRight: '10px' }}>{item.khachhangten}</span>
+                                    <Rate character={<span className="custom-rate-icon">&#9733;</span>}
+                                        allowHalf
+                                        defaultValue={item.sao} />
+                                </div>
+                                <span style={{ fontSize: '15px', color: '#474848' }}>{handleformatDate(item.ngaydanhgia)}</span>
                             </div>
-                            <p style={{ marginBottom: 0 }}>{item.noidung}</p>
+                            <p style={{ marginBottom: 0, fontSize: '16px' }}>{item.noidung}</p>
                         </div>
                     </div>
                 ))}

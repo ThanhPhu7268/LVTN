@@ -66,6 +66,12 @@ class filtercpType {
         let data = await filtercpService.findProductBySex()
         res.json(data)
     }
+
+    async findProductByName(req, res) {
+        let ten = req.params.ten
+        let data = await filtercpService.findProductByName(ten)
+        res.json(data)
+    }
 }
 
 module.exports = new filtercpType()

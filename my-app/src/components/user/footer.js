@@ -2,8 +2,8 @@ import { Typography } from "@material-tailwind/react";
 
 const LINKS = [
     {
-        title: "Product",
-        items: ["Overview", "Features", "Solutions", "Tutorials"],
+        title: "Information",
+        items: ["Thanh Phu", "0376 470 797", "B2012244"],
     },
     {
         title: "Company",
@@ -22,9 +22,9 @@ export default function FooterHome() {
         <footer className="relative w-full">
             <div className="mx-auto w-full max-w-7xl px-8" style={{ marginTop: '50px' }}>
                 <div className="grid grid-cols-1 justify-between gap-4 md:grid-cols-2">
-                    <Typography variant="h5" className="mb-6">
+                    <Typography variant="h3" className="mb-6">
                         OTIS WATCH <br />
-                        <div style={{ fontWeight: '100', fontSize: '16px', color: '#a1a3a2' }}>
+                        <div style={{ fontWeight: '100', fontSize: '18px', color: '#747474' }}>
                             Love is like a clock that runs with its own rhythm, requiring precision and <br /> harmony to avoid technical problems preventing harmony.
                         </div>
                     </Typography>
@@ -32,9 +32,9 @@ export default function FooterHome() {
                         {LINKS.map(({ title, items }) => (
                             <ul key={title}>
                                 <Typography
-                                    variant="small"
                                     color="blue-gray"
-                                    className="mb-3 font-medium opacity-40"
+                                    className="mb-3 font-normal"
+                                    style={{ fontWeight: 'bold' }}
                                 >
                                     {title}
                                 </Typography>
@@ -45,6 +45,7 @@ export default function FooterHome() {
                                             href="#"
                                             color="gray"
                                             className="py-1.5 font-normal transition-colors hover:text-blue-gray-900"
+                                            style={{ textDecoration: 'none' }}
                                         >
                                             {link}
                                         </Typography>
@@ -59,7 +60,7 @@ export default function FooterHome() {
                         variant="small"
                         className="mb-4 font-normal text-blue-gray-900 md:mb-0"
                     >
-                        &copy; {currentYear} <a href="https://material-tailwind.com/">ThanhPhu</a>. All
+                        &copy; {currentYear} <a href="https://github.com/ThanhPhu7268">ThanhPhu</a>. All
                         Rights Reserved.
                     </Typography>
                     <div className="flex gap-4 text-blue-gray-900 sm:justify-center">

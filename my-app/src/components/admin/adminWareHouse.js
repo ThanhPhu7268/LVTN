@@ -164,6 +164,7 @@ export default function AdminWareHouse() {
                 setTimeout(() => {
                     setShowSuccessAlert(false);
                 }, 3000);
+                window.location.reload();
             })
             .catch(error => {
                 // Xử lý lỗi

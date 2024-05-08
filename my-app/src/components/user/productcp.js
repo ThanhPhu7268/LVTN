@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Layout, Row, Col, Card, Button, Pagination, Slider, InputNumber, Rate, Radio, Collapse, } from 'antd';
+import { Layout, Row, Col, Card, Button, Pagination, Slider, InputNumber, Rate, Radio, Collapse, Input, } from 'antd';
 import { ShoppingCartOutlined } from '@ant-design/icons';
 import '../../assets/css/product.css'
 import HeaderHome from './header';
@@ -8,14 +8,6 @@ import axios from 'axios';
 const { Content, Sider } = Layout;
 const { Panel } = Collapse;
 
-const getRandomRating = () => {
-    return Math.random() * (5 - 3) + 3; // Generates a random number between 3 and 5
-};
-
-const getReviewCount = () => {
-    const reviewCount = Math.floor(Math.random() * (100 - 10) + 10); // Generates a random number between 10 and 100
-    return `(${reviewCount} reviews)`;
-};
 
 const ProductCouplePage = () => {
     const [currentPage, setCurrentPage] = useState(1); // Trang hiện tại
@@ -138,6 +130,21 @@ const ProductCouplePage = () => {
             console.error('Error fetching data:', error);
         }
     }
+
+    const findProductByName = async (ten) => {
+        try {
+            const response = await axios.get(`http://localhost:8080/api/filtercp/timtheoten/${ten}`);
+            setProducts(response.data);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    }
+
+    const handleChangeName = (event) => {
+        if (event.target.value !== '') {
+            findProductByName(event.target.value);
+        }
+    }
     // Tính toán số trang
     const totalPage = Math.ceil(products.length / pageSize);
     // Lấy danh sách sản phẩm trên trang hiện tại và theo khoảng giá
@@ -225,6 +232,11 @@ const ProductCouplePage = () => {
                         </div>
                     </div>
                     <Button onClick={resetFilters} className='btn-reset'>Reset</Button>
+                    <Input
+                        placeholder='Search'
+                        style={{ borderRadius: 0, height: '40px', marginBottom: '10px' }}
+                        onChange={handleChangeName}
+                    />
                     <Collapse defaultActiveKey={['1', '2', '3', '4', '5']} accordion style={{ borderRadius: '0', backgroundColor: 'white' }}>
                         <Panel header="Brands" key="1">
                             <Radio.Group value={selectedBrand} onChange={(e) => handleFilterOption(e.target.value, 'brand')}>
@@ -312,15 +324,8 @@ const ProductCouplePage = () => {
                                     <Card className="card--product" hoverable cover={<img alt={products.sanphamten} src={`http://localhost:8080/upload/${products.sanphamhinhdaidien}`} className="img-conten" />}>
                                         <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '100%' }}>
                                             <div>
-                                                <h3 style={{ fontSize: '13px', fontWeight: 'bold' }}>{products.sanphamten}</h3>
-                                                <Rate style={{ color: '#000', fontSize: 20 }}
-                                                    character={<span className="custom-rate-icon">&#9733;</span>}
-                                                    allowHalf
-                                                    defaultValue={getRandomRating()} />
-                                                <span className="rating-count" style={{ fontSize: '11px' }}>
-                                                    {getReviewCount()}
-                                                </span>
-                                                <p style={{ fontSize: '22px', fontWeight: 'bold', textAlign: 'center' }} >${products.sanphamgia} <ShoppingCartOutlined /></p>
+                                                <h3 style={{ fontSize: '13px', fontWeight: 'bold', textAlign: 'center' }}>{products.sanphamten}</h3>
+                                                <p style={{ fontSize: '22px', fontWeight: 'bold', textAlign: 'center', color: 'black' }} >${products.sanphamgia} <ShoppingCartOutlined /></p>
                                             </div>
                                         </div>
                                     </Card>

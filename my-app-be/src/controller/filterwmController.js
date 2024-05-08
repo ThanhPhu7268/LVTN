@@ -60,6 +60,12 @@ class filterwmType {
         let data = await filterwmService.findProductByWoman()
         res.json(data)
     }
+
+    async findProductByName(req, res) {
+        let ten = req.params.ten
+        let data = await filterwmService.findProductByName(ten)
+        res.json(data)
+    }
 }
 
 module.exports = new filterwmType()

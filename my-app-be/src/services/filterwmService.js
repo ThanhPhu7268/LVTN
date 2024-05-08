@@ -151,6 +151,18 @@ class filterwmService {
             });
         })
     }
+
+    findProductByName(ten) {
+        return new Promise((resolve, reject) => {
+            con.query(`SELECT * FROM sanpham WHERE sanphamgioitinh = 'Nữ' and sanphamten LIKE '%${ten}%';`, function (error, result, fields) {
+                if (error) {
+                    reject(error);
+                    return;
+                }
+                resolve(result);
+            });
+        })
+    }
 }
 
 module.exports = new filterwmService()

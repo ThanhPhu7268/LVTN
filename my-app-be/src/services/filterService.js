@@ -27,6 +27,18 @@ class filterService {
         })
     }
 
+    findProductByName(ten) {
+        return new Promise((resolve, reject) => {
+            con.query(`SELECT * FROM sanpham WHERE sanphamgioitinh = 'Nam' and sanphamten LIKE '%${ten}%';`, function (error, result, fields) {
+                if (error) {
+                    reject(error);
+                    return;
+                }
+                resolve(result);
+            });
+        })
+    }
+
     findProductByBrand(thuonghieu) {
         return new Promise((resolve, reject) => {
             con.query(`SELECT * FROM sanpham where sanphamgioitinh = 'Nam'
@@ -162,6 +174,8 @@ class filterService {
             });
         })
     }
+
+
 }
 
 module.exports = new filterService()

@@ -9,11 +9,9 @@ router.get('/', orderController.findAll)
 router.get('/history/:id', orderController.findAllByCustomerId)
 router.get('/detail/:id', orderController.findOneById)
 router.get('/productdt/:id', orderController.findProductById)
-// router.get('/tinhtrang', orderController.findAllByTinhTrangId)
-// router.get('/', orderController.findAll)
 router.post('/', orderController.create)
 router.put('/update/:id', orderController.updateTT)
-// router.delete('/:id', orderController.delete)
+router.put('/cancel/:id', orderController.updateCancel)
 
 
 

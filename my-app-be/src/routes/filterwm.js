@@ -15,7 +15,7 @@ router.get('/type', filterwm.findType)
 router.get('/material', filterwm.findMaterial)
 router.get('/thuonghieu', filterwm.findBrand)
 router.get('/nu', filterwm.findProductByWoman)
-
+router.get('/timtheoten/:ten', filterwm.findProductByName)
 
 
 module.exports = router 

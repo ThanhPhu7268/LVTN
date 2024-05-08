@@ -43,7 +43,6 @@ const MyOrder = () => {
     useEffect(() => {
         getOrderDetails(id);
         getProductOrder(id);
-        handleUpdateOrderStatus(id);
     }, []);
 
     const getOrderDetails = async (id) => {
@@ -72,9 +71,21 @@ const MyOrder = () => {
 
     const handleUpdateOrderStatus = async (id) => {
         try {
-            await axios.put(`http://localhost:8080/api/order/update/${id}`, newStatus);
+            // Lấy thông tin chi tiết của đơn hàng
+            const response = await axios.get(`http://localhost:8080/api/order/detail/${id}`);
+            const orderDetail = response.data;
+
+            // Kiểm tra nếu trạng thái của đơn hàng đã là 5 (đã huỷ) thì không cần thực hiện cập nhật
+            if (orderDetail[0].donhangtrangthai === 5) {
+                console.log('Order is already cancelled');
+                return;
+            }
+
+            // Nếu không, thực hiện yêu cầu cập nhật trạng thái của đơn hàng
+            await axios.put(`http://localhost:8080/api/order/cancel/${id}`, newStatus);
             console.log('Update order status successfully');
-            alert('cập nhật thành công')
+            alert('Bạn đã huỷ đơn hàng thành công');
+            window.location.reload();
             // Cập nhật lại trạng thái đơn hàng trong state hoặc tải lại trang để cập nhật dữ liệu mới
         } catch (error) {
             console.error('Error updating order status:', error);
@@ -85,8 +96,14 @@ const MyOrder = () => {
         setShowInvoiceModal(!showInvoiceModal); // Toggle trạng thái hiển thị modal
     };
 
+    const handleCancelConfirmation = (id) => {
+        if (window.confirm('Bạn có chắc chắn muốn hủy đơn hàng này không?')) {
+            handleUpdateOrderStatus(id);
+        }
+    };
+
     return (
-        <div style={{ background: '#dddddd', position: 'absolute' }}>
+        <div style={{ background: '#dddddd', position: 'absolute', width: '100%' }}>
             <div style={{ margin: '20px', width: '55%', margin: 'auto' }}>
                 {order && order.map(orderItem => (
                     <Card key={orderItem.maDH} style={{ marginTop: '20px', marginBottom: '20px', border: 'none' }}>
@@ -106,26 +123,31 @@ const MyOrder = () => {
                             </Link>
                             <Link href="#" className="opacity-40" style={{ color: '#6c6c6c', textDecoration: 'none' }}>{orderItem.maDH}</Link>
                         </Breadcrumbs>
-                        <Steps
-                            size="small"
-                            style={{ marginBottom: '20px', marginTop: '20px' }}
-                            current={orderItem.donhangtrangthai}
-                            items={[
-                                {
-                                    title: 'Processing',
-                                },
-                                {
-                                    title: 'Pending',
-                                },
-                                {
-                                    title: 'Delivering',
-                                },
-                                ,
-                                {
-                                    title: 'Delivered',
-                                }
-                            ]}
-                        />
+                        {orderItem.donhangtrangthai === 5 ?
+                            <p style={{ color: 'red' }}>This order has been cancelled</p> : null
+                        }
+                        {orderItem.donhangtrangthai !== 5 ?
+                            <Steps
+                                size="small"
+                                style={{ marginBottom: '20px', marginTop: '20px' }}
+                                current={orderItem.donhangtrangthai}
+                                items={[
+                                    {
+                                        title: 'Processing',
+                                    },
+                                    {
+                                        title: 'Pending',
+                                    },
+                                    {
+                                        title: 'Delivering',
+                                    },
+                                    ,
+                                    {
+                                        title: 'Delivered',
+                                    }
+                                ]}
+                            /> : null
+                        }
                         <div style={{ display: 'flex', flexDirection: 'column' }}>
                             <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
                                 <p style={{ color: 'black', fontWeight: 'bold', fontSize: '30px' }}>Order ID: {orderItem.maDH}</p>
@@ -161,17 +183,17 @@ const MyOrder = () => {
                                                 className='border-black'
                                                 style={{ borderRadius: '0', height: '40px', marginTop: '2%', }}
                                                 variant="outlined"
-                                                onClick={() => toggleCommentModal(product.idsanpham)}>Write a Comment</Button> : null
+                                                onClick={() => toggleCommentModal(product.idsanpham)}>Comment</Button> : null
                                         }
                                         <Modal
                                             visible={showCommentModal}
                                             onCancel={toggleCommentModal}
                                             footer={[
-                                                <Button key="cancel" onClick={toggleCommentModal}>
+                                                <Button key="cancel" style={{ marginRight: '5px' }} onClick={toggleCommentModal}>
                                                     Cancel
                                                 </Button>,
                                                 <Button key="submit" type="primary" onClick={() => submitComment(productId)}>
-                                                    Submit {productId}
+                                                    Submit
                                                 </Button>,
                                             ]}
                                         >
@@ -179,6 +201,7 @@ const MyOrder = () => {
                                                 <h2>Write a Comment</h2>
                                                 {/* Input field for comment */}
                                                 <textarea
+                                                    style={{ border: '1px solid' }}
                                                     rows={4}
                                                     cols={50}
                                                     value={comment}
@@ -210,7 +233,16 @@ const MyOrder = () => {
                             </Card>
                             <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-around' }}>
                                 {orderItem.donhangtrangthai === 1 || orderItem.donhangtrangthai === 2 ?
-                                    <Button style={{ borderRadius: '0', height: '48px', marginTop: '14%', }} >Cancel Order</Button> : null
+                                    <Button
+                                        style={{ borderRadius: '0', height: '48px', marginTop: '14%' }}
+                                        onClick={() => {
+                                            if (orderItem.donhangtrangthai === 1 || orderItem.donhangtrangthai === 2) {
+                                                handleCancelConfirmation(id);
+                                            }
+                                        }}
+                                    >
+                                        Cancel Order
+                                    </Button> : null
                                 }
                             </div>
                         </div>

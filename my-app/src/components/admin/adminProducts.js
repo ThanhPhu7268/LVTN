@@ -195,6 +195,7 @@ export default function AdminProducts() {
             console.log('Update order status successfully');
             alert('cập nhật thành công');
             setIsEditModalOpen(false);
+            window.location.reload();
             // Cập nhật lại trạng thái đơn hàng trong state hoặc tải lại trang để cập nhật dữ liệu mới
         } catch (error) {
             console.error('Error updating order status:', error);

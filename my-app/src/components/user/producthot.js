@@ -8,6 +8,7 @@ import {
     Typography,
     Button,
 } from "@material-tailwind/react";
+import { Link } from 'react-router-dom';
 
 export default function NewProduct() {
     const [products, setProducts] = useState([]);
@@ -39,7 +40,7 @@ export default function NewProduct() {
                     </CardHeader>
                     <CardBody>
                         <div className="mb-2 items-center justify-between">
-                            <Typography color="blue-gray" className="font-medium">
+                            <Typography color="blue-gray" className="font-medium" style={{ height: '90px', marginBottom: '2px' }}>
                                 {product.sanphamten}
                             </Typography>
                             <Typography color="blue-gray" className="font-medium">
@@ -55,13 +56,15 @@ export default function NewProduct() {
                         </Typography>
                     </CardBody>
                     <CardFooter className="pt-0">
-                        <Button
-                            ripple={false}
-                            fullWidth={true}
-                            className="bg-blue-gray-900/10 text-blue-gray-900 shadow-none hover:scale-105 hover:shadow-none focus:scale-105 focus:shadow-none active:scale-100"
-                        >
-                            Add to Cart
-                        </Button>
+                        <Link to={`/product/${product.idsanpham}`} style={{ textDecoration: 'none' }}>
+                            <Button
+                                ripple={false}
+                                fullWidth={true}
+                                className="bg-blue-gray-900/10 text-blue-gray-900 shadow-none hover:scale-105 hover:shadow-none focus:scale-105 focus:shadow-none active:scale-100"
+                            >
+                                See detail
+                            </Button>
+                        </Link>
                     </CardFooter>
                 </Card>
             ))}

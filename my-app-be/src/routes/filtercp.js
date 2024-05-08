@@ -16,7 +16,7 @@ router.get('/material', filtercp.findMaterial)
 router.get('/thuonghieu', filtercp.findBrand)
 router.get('/gioitinh', filtercp.findProductBySex)
 router.get('/:id', filtercp.findOneById)
-
+router.get('/timtheoten/:ten', filtercp.findProductByName)
 
 
 

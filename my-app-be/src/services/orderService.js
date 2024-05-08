@@ -121,6 +121,38 @@ class orderService {
         })
     }
 
+    updateCancel(maDH) {
+        return new Promise((resolve, reject) => {
+            con.query(`UPDATE donhang
+            SET donhangtrangthai = 5
+            WHERE iddonhang = ${maDH};`, function (error, result, fields) {
+                if (error) {
+                    reject(error);
+                    return;
+                }
+                resolve(result);
+            });
+        })
+    }
+
+    updateCancelQuantity(maDH) {
+        return new Promise((resolve, reject) => {
+            con.query(`UPDATE sanpham sp
+            INNER JOIN (
+                SELECT cd.idsanpham, SUM(cd.chitietdonhangsoluong) AS total_cancelled
+                FROM chitietdonhang cd
+                WHERE cd.iddonhang = ${maDH}
+                GROUP BY cd.idsanpham
+            ) cancelled_orders ON sp.idsanpham = cancelled_orders.idsanpham
+            SET sp.soluongcon = sp.soluongcon + cancelled_orders.total_cancelled;`, function (error, result, fields) {
+                if (error) {
+                    reject(error);
+                    return;
+                }
+                resolve(result);
+            });
+        })
+    }
     // updateTT(thoanhToan, maDH) {
     //     return new Promise((resolve, reject) => {
     //         con.query(`UPDATE donhang

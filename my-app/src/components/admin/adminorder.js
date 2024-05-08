@@ -63,6 +63,7 @@ const AdminOrder = () => {
         setModalVisible(true);
         setStatus(order.orderStatus);
     };
+
     const handleformatDate = (order) => {
         const orderDate = new Date(order);
         const options = { day: 'numeric', month: 'short', year: 'numeric' };
@@ -217,11 +218,11 @@ const AdminOrder = () => {
                                             </Link>
                                         </IconButton>
                                     </Tooltip>
-                                    <Tooltip content="Edit Order Status" >
+                                    {/* <Tooltip content="Edit Order Status" >
                                         <IconButton variant="text" style={{ color: '#7D879C', borderRadius: '50%' }} onClick={() => handleChangeOrderStatus(order)}>
                                             <PencilIcon className="h-4 w-4" />
                                         </IconButton>
-                                    </Tooltip>
+                                    </Tooltip> */}
                                 </td>
                             </tr>
                         ))}

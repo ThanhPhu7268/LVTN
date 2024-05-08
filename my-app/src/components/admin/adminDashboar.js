@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from 'react';
 import {
     Card,
     CardBody,
@@ -7,59 +7,94 @@ import {
     Breadcrumbs,
 } from "@material-tailwind/react";
 import Chart from "react-apexcharts";
-import { BanknotesIcon, ChartBarIcon, CreditCardIcon } from "@heroicons/react/24/outline";
-import { colors } from "@mui/material";
+import { BanknotesIcon, ChartBarIcon, CreditCardIcon, ShoppingBagIcon } from "@heroicons/react/24/outline";
+import axios from "axios";
 
-const lineChartConfig = {
-    type: "line",
-    height: 240,
-    series: [
-        {
-            name: "Sales",
-            data: [50, 40, 300, 320, 500, 350, 200, 230, 500],
-        },
-    ],
-    options: {
-        colors: ['black']
-        // Configuration options for the Line Chart
-        // ...
-    },
-};
-
-const barChartConfig = {
-    type: "bar",
-    height: 240,
-    series: [
-        {
-            name: "Sales",
-            data: [50, 40, 300, 320, 500, 350, 200, 230, 500],
-        },
-    ],
-    options: {
-        colors: ['pink']
-    },
-};
-
-const columnChartConfig = {
-    type: "bar",
-    height: 240,
-    series: [
-        {
-            name: "Sales",
-            data: [50, 40, 300, 320, 500, 350, 200, 230, 500],
-        },
-        {
-            name: "Expense",
-            data: [30, 20, 100, 150, 200, 180, 90, 120, 250],
-        },
-    ],
-    options: {
-        // Configuration options for the Column Chart
-        colors: ['#3bff34', '#F44336']
-    },
-};
 
 export default function Revenue() {
+    const [total, setTotal] = useState([])
+    const [sales, setSales] = useState([])
+    const [all, setAll] = useState([])
+    const [now, setNow] = useState([])
+    useEffect(() => {
+        getTotal()
+    }, []);
+    const getTotal = async () => {
+        try {
+            const response = await axios.get(`http://localhost:8080/api/analyst/total`);
+            const sale = await axios.get(`http://localhost:8080/api/analyst/totalsale`);
+            const revenue = await axios.get(`http://localhost:8080/api/analyst/allrevenue`);
+            const nowmonth = await axios.get(`http://localhost:8080/api/analyst/revenuemonth`);
+            setTotal(response.data);
+            setSales(sale.data);
+            setAll(revenue.data);
+            setNow(nowmonth.data);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    }
+
+    const lineChartConfig = {
+        type: "line",
+        height: 240,
+        series: [
+            {
+                name: "Sales",
+                data: all.map(item => item.revenue),
+            },
+            {
+                name: "Order",
+                data: all.map(item => item.sodonhang),
+            },
+            {
+                name: "Profit",
+                data: all.map(item => item.profit),
+            },
+            {
+                name: "Expense",
+                data: all.map(item => item.expense),
+            },
+        ],
+        options: {
+            colors: ['#437fdf', '#8e31b9', '#1ded81', '#f16e6e']
+            // Configuration options for the Line Chart
+            // ...
+        },
+    };
+
+    const barChartConfig = {
+        type: "bar",
+        height: 240,
+        series: [
+            {
+                name: "Profit",
+                data: all.map(item => item.profit),
+            },
+        ],
+        options: {
+            colors: ['#34ef8e']
+        },
+    };
+
+    const columnChartConfig = {
+        type: "bar",
+        height: 240,
+        series: [
+            {
+                name: "Revenue",
+                data: all.map(item => item.revenue),
+            },
+            {
+                name: "Expense",
+                data: all.map(item => item.expense),
+            },
+        ],
+        options: {
+            // Configuration options for the Column Chart
+            colors: ['#3bff34', '#F44336']
+        },
+    };
+
     return (
         <div className=" w-72" style={{ margin: '20px', width: '72%', marginLeft: 'auto', boxShadow: '0 3px 10px rgba(0, 0, 0, 0.2)' }}>
             <Breadcrumbs className=" w-72 flex" style={{ margin: '20px', background: 'white', color: 'black' }}>
@@ -80,34 +115,7 @@ export default function Revenue() {
                 <a style={{ color: 'black' }} href="#">Analytics</a>
             </Breadcrumbs>
             <div className=" w-72 flex" style={{ margin: '20px', width: '100%', marginLeft: 'auto' }}>
-                {/* Today's Revenue */}
-                <Card style={{ margin: 'auto', borderRadius: '0', border: '1px solid #333', height: '127px' }}>
-                    <CardHeader
-                        floated={false}
-                        shadow={false}
-                        color="transparent"
-                        className="flex flex-col gap-4 rounded-none md:flex-row md:items-center"
-                    >
-                        <div className="w-max rounded-lg bg-gray-900 p-3 text-white">
-                            <BanknotesIcon className="h-6 w-6" />
-                        </div>
-                        <div style={{ textAlign: 'right' }}>
-                            <Typography
-                                variant="small"
-                                color="gray"
-                                className="max-w-sm font-normal"
-                            >
-                                Today money
-                            </Typography>
-                            <Typography variant="h3" color="blue-gray">
-                                $203
-                            </Typography>
-                        </div>
-                    </CardHeader>
-                    <CardBody className="px-2 pb-0">
 
-                    </CardBody>
-                </Card>
                 <Card style={{ margin: 'auto', borderRadius: '0', border: '1px solid #333', height: '127px' }}>
                     <CardHeader
                         floated={false}
@@ -115,19 +123,20 @@ export default function Revenue() {
                         color="transparent"
                         className="flex flex-col gap-4 rounded-none md:flex-row md:items-center"
                     >
-                        <div className="w-max rounded-lg bg-gray-900 p-3 text-white">
-                            <BanknotesIcon className="h-6 w-6" />
+                        <div className="w-max rounded-lg bg-gray-900 p-3 text-white" style={{ background: 'blueviolet' }}>
+                            <ShoppingBagIcon className="h-8 w-8" />
                         </div>
                         <div style={{ textAlign: 'right' }}>
                             <Typography
                                 variant="small"
                                 color="gray"
                                 className="max-w-sm font-normal"
+                                style={{ marginBottom: '0' }}
                             >
                                 Total Order
                             </Typography>
-                            <Typography variant="h3" color="blue-gray">
-                                $203
+                            <Typography variant="h3" color="blue-gray" style={{ textAlign: 'center' }}>
+                                {total[0]?.totalOrder}
                             </Typography>
                         </div>
                     </CardHeader>
@@ -143,19 +152,20 @@ export default function Revenue() {
                         color="transparent"
                         className="flex flex-col gap-4 rounded-none md:flex-row md:items-center"
                     >
-                        <div className="w-max rounded-lg bg-gray-900 p-3 text-white">
-                            <CreditCardIcon className="h-6 w-6" />
+                        <div className="w-max rounded-lg bg-gray-900 p-3 text-white" style={{ background: 'coral' }}>
+                            <CreditCardIcon className="h-8 w-8" />
                         </div>
                         <div>
                             <Typography
                                 variant="small"
                                 color="gray"
                                 className="max-w-sm font-normal"
+                                style={{ marginBottom: '0' }}
                             >
-                                Visualize sold products.
+                                Sold products.
                             </Typography>
-                            <Typography variant="h4" color="blue-gray">
-                                Sold Products
+                            <Typography variant="h3" color="blue-gray" style={{ textAlign: 'center' }}>
+                                {sales[0]?.tongsanpham}
                             </Typography>
                         </div>
                     </CardHeader>
@@ -173,24 +183,54 @@ export default function Revenue() {
                         className="flex flex-col gap-4 rounded-none md:flex-row md:items-center"
                     >
                         <div className="w-max rounded-lg bg-gray-900 p-3 text-white">
-                            <ChartBarIcon className="h-6 w-6" />
+                            <ChartBarIcon className="h-8 w-8" />
                         </div>
                         <div>
                             <Typography
                                 variant="small"
                                 color="gray"
                                 className="max-w-sm font-normal"
+                                style={{ marginBottom: '0', paddingTop: '8px' }}
                             >
-                                Total Revenue
+                                Current month's <br />revenue
                             </Typography>
                             <Typography variant="h3" color="blue-gray">
-                                $4072
+                                ${now[0]?.revenue}
                             </Typography>
 
                         </div>
                     </CardHeader>
                     <CardBody className="px-2 pb-0">
                         {/* Render appropriate chart or data for Total Revenue */}
+                    </CardBody>
+                </Card>
+                {/* Today's Revenue */}
+                <Card style={{ margin: 'auto', borderRadius: '0', border: '1px solid #333', height: '127px' }}>
+                    <CardHeader
+                        floated={false}
+                        shadow={false}
+                        color="transparent"
+                        className="flex flex-col gap-4 rounded-none md:flex-row md:items-center"
+                    >
+                        <div className="w-max rounded-lg bg-gray-900 p-3 text-white">
+                            <BanknotesIcon className="h-8 w-8" />
+                        </div>
+                        <div style={{ textAlign: 'right' }}>
+                            <Typography
+                                variant="small"
+                                color="gray"
+                                className="max-w-sm font-normal"
+                                style={{ marginBottom: '0', paddingTop: '8px' }}
+                            >
+                                Current month's <br />profit
+                            </Typography>
+                            <Typography variant="h3" color="blue-gray">
+                                ${now[0]?.profit}
+                            </Typography>
+                        </div>
+                    </CardHeader>
+                    <CardBody className="px-2 pb-0">
+
                     </CardBody>
                 </Card>
             </div>
@@ -211,8 +251,7 @@ export default function Revenue() {
                                 color="gray"
                                 className="max-w-sm font-normal"
                             >
-
-                                Monthly revenue statistics
+                                Detailed analysis chart
                             </Typography>
                         </div>
                     </CardHeader>
@@ -231,14 +270,14 @@ export default function Revenue() {
 
                         <div>
                             <Typography variant="h6" color="blue-gray">
-                                Quarterly Revenue
+                                Profit
                             </Typography>
                             <Typography
                                 variant="small"
                                 color="gray"
                                 className="max-w-sm font-normal"
                             >
-                                Quarterly revenue statistics
+                                Profit of Otis Watch
                             </Typography>
                         </div>
                     </CardHeader>

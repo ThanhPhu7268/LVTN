@@ -39,12 +39,13 @@ const LoginForm = () => {
                                 // Xử lý lỗi nếu có
                             });
                     }
-
+                    window.location.reload();
                 } else {
                     message.error('Sai Mật Khẩu!');
                 }
             } else {
                 message.warning('Đăng nhập không thành công!');
+
             }
         } catch (error) {
             console.error('Error fetching data:', error);

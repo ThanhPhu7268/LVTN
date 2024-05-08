@@ -104,9 +104,9 @@ const AdminAccount = () => {
         <Layout className=" w-72" style={{ margin: '20px', width: '72%', marginLeft: 'auto', boxShadow: '0 3px 10px rgba(0, 0, 0, 0.2)' }}>
             {/* ... */}
             {/* Nút thêm mới tài khoản */}
-            <Button type="primary" onClick={handleAddAccount} icon={<PlusOutlined />} style={{ width: '20%', margin: '30px' }}>
+            {/* <Button type="primary" onClick={handleAddAccount} icon={<PlusOutlined />} style={{ width: '20%', margin: '30px' }}>
                 Thêm mới tài khoản
-            </Button>
+            </Button> */}
             <Content style={{ margin: '16px' }}>
                 {/* Bảng liệt kê tài khoản */}
                 <Table columns={columns} dataSource={account} />
